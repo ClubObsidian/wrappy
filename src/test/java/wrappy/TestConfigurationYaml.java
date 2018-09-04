@@ -103,4 +103,23 @@ public class TestConfigurationYaml {
 		assertTrue("Config getDoubleList 1 index is not > 1 && < 2", list.get(0) > 1 && list.get(0) < 2);
 		assertTrue("Config getDoubleList size is not 1", list.size() == 1);
 	}
+	
+	@Test
+	public void testGetKeys()
+	{
+		List<String> keys = config.getKeys();
+		assertTrue("Config getKeys is not size 12", keys.size() == 12);
+	}
+	
+	@Test
+	public void testIsEmpty()
+	{
+		assertTrue("Config is empty", !config.isEmpty());
+	}
+	
+	@Test
+	public void testHasKey()
+	{
+		assertTrue("Config does not have the key \"key\"", config.hasKey("key"));
+	}
 }
