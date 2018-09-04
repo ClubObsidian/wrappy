@@ -37,7 +37,7 @@ public class ConfigurationSection {
 		return this.node.getNode(this.parsePath(path)).getString();
 	}
 	
-	public int getInt(String path)
+	public int getInteger(String path)
 	{
 		return this.node.getNode(this.parsePath(path)).getInt();
 	}

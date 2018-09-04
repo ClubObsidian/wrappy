@@ -14,29 +14,33 @@ public class TestFile {
 	public void testLoadYaml()
 	{
 		Configuration config = Configuration.load(new File("test.yml"));
-		assertTrue(config != null);
-		assertTrue(config.getKeys().size() > 0);
+		assertTrue("Yaml configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.yml"));
-		assertTrue(config.getKeys().size() == 0);
+		assertTrue("Empty yaml configuration is not empty", config.getKeys().size() == 0);
 	}
 
 	@Test
 	public void testLoadJson()
 	{
 		Configuration config = Configuration.load(new File("test.json"));
-		assertTrue(config != null);
-		assertTrue(config.getKeys().size() > 0);
+		assertTrue("Json configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.json"));
-		assertTrue(config.getKeys().size() == 0);
+		assertTrue("Empty json configuration is not empty", config.getKeys().size() == 0);
 	}
 	
 	@Test
 	public void testLoadHocon()
 	{
 		Configuration config = Configuration.load(new File("test.hocon"));
-		assertTrue(config != null);
-		assertTrue(config.getKeys().size() > 0);
+		assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.hocon"));
-		assertTrue(config.getKeys().size() == 0);
+		assertTrue("Empty hocon configuration is not empty", config.getKeys().size() == 0);
+	}
+	
+	@Test
+	public void testPath()
+	{
+		Configuration config = Configuration.load(new File("test.yml").toPath());
+		assertTrue("Path config is empty", config.getKeys().size() > 0);
 	}
 }
