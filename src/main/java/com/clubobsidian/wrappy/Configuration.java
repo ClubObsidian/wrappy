@@ -14,16 +14,15 @@ import org.apache.commons.io.FileUtils;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.json.JSONConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.xml.XMLConfigurationLoader;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(File file)
 	{
+		Configuration config = new Configuration();
 		try
 		{
-			Configuration config = new Configuration();
 			String name = file.getName().toLowerCase();
 			ConfigurationLoader<?> loader = null;
 			
@@ -39,10 +38,6 @@ public class Configuration extends ConfigurationSection {
 			{
 				loader = JSONConfigurationLoader.builder().setFile(file).build();
 			}
-			else if(name.endsWith(".xml"))
-			{
-				loader = XMLConfigurationLoader.builder().setFile(file).build();
-			}
 			else
 			{
 				throw new UnknownFileTypeException(file);
@@ -56,7 +51,7 @@ public class Configuration extends ConfigurationSection {
 		{
 			ex.printStackTrace();
 		}
-		return null;
+		return config;
 	}
 	
 	public static Configuration load(Path path)
@@ -125,13 +120,6 @@ public class Configuration extends ConfigurationSection {
 			else if(type == ConfigurationType.JSON)
 			{
 				loader = JSONConfigurationLoader
-						.builder()
-						.setSource(callable)
-						.build();
-			}
-			else if(type == ConfigurationType.XML)
-			{
-				loader = XMLConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();

@@ -27,13 +27,6 @@ public class ConfigurationSection {
 		}
 	}
 	
-	public ConfigurationSection getConfigurationSection(String path)
-	{
-		ConfigurationSection section = new ConfigurationSection();
-		section.node = this.node.getNode(this.parsePath(path));
-		return section;
-	}
-	
 	public Object get(String path)
 	{
 		return this.node.getNode(this.parsePath(path)).getValue();
@@ -82,7 +75,7 @@ public class ConfigurationSection {
 		return null;
 	}
 	
-	public List<Integer> getIntList(String path)
+	public List<Integer> getIntegerList(String path)
 	{
 		try 
 		{
@@ -145,6 +138,13 @@ public class ConfigurationSection {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public ConfigurationSection getConfigurationSection(String path)
+	{
+		ConfigurationSection section = new ConfigurationSection();
+		section.node = this.node.getNode(this.parsePath(path));
+		return section;
 	}
 	
 	public void set(String path, Object toSave)
