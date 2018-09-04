@@ -3,8 +3,6 @@ jdk:
   - oraclejdk8
   - openjdk8
   - oraclejdk9
-  - oraclejdk10
-  - openjdk10
 before_install:
   - chmod +x gradlew
 script:
