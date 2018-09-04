@@ -10,6 +10,7 @@ import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.UnknownFileTypeException;
 
 public class TestFile { 
+
 	
 	@Test
 	public void testLoadYaml()
@@ -39,7 +40,7 @@ public class TestFile {
 	}
 	
 	@Test(expected = UnknownFileTypeException.class)
-	public void testUnknown()
+	public void testUnknownFileTypeException()
 	{
 		Configuration.load(new File("test.jibberish"));
 	}
