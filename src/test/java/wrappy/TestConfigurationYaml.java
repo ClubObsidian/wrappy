@@ -36,8 +36,8 @@ public class TestConfigurationYaml {
 	@Test
 	public void testGetLong()
 	{
-		assertTrue("Config getLong is not 6", config.getInteger("long") == 6);
-		assertTrue("Config getLong is not 0", config.getInteger("non-existent-long") == 0);
+		assertTrue("Config getLong is not 6", config.getLong("long") == 6);
+		assertTrue("Config getLong is not 0", config.getLong("non-existent-long") == 0);
 	}
 	
 	@Test
