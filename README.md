@@ -1,6 +1,7 @@
 # wrappy
 [![Build Status](https://travis-ci.org/ClubObsidian/wrappy.svg?branch=master)](https://travis-ci.org/ClubObsidian/wrappy)
 [![codecov](https://codecov.io/gh/ClubObsidian/wrappy/branch/master/graph/badge.svg)](https://codecov.io/gh/ClubObsidian/wrappy)
+[![](https://jitpack.io/v/clubobsidian/wrappy.svg)](https://jitpack.io/#clubobsidian/wrappy)
 
 A wrapper to simplify the usage of [configurate.](https://github.com/SpongePowered/configurate)
 
