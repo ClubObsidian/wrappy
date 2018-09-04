@@ -2,7 +2,7 @@ package com.clubobsidian.wrappy;
 
 import java.io.File;
 
-public class UnknownFileTypeException extends Exception {
+public class UnknownFileTypeException extends RuntimeException {
 
 	/**
 	 * 

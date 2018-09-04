@@ -47,7 +47,7 @@ public class Configuration extends ConfigurationSection {
 			config.node = loader.load();
 			return config;
 		}
-		catch(IOException | UnknownFileTypeException ex)
+		catch(IOException ex)
 		{
 			ex.printStackTrace();
 		}

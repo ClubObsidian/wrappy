@@ -7,6 +7,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.UnknownFileTypeException;
 
 public class TestFile { 
 	
@@ -35,6 +36,12 @@ public class TestFile {
 		assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.hocon"));
 		assertTrue("Empty hocon configuration is not empty", config.getKeys().size() == 0);
+	}
+	
+	@Test(expected = UnknownFileTypeException.class)
+	public void testUnknown()
+	{
+		Configuration.load(new File("test.jibberish"));
 	}
 	
 	@Test
