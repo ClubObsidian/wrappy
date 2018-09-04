@@ -8,3 +8,59 @@ Supported formats
 * Yaml
 * Json
 * Hocon
+
+
+## Build Artifacts
+
+Build artifacts are hosted via [Jitpack.](https://jitpack.io/#clubobsidian/wrappy/)
+
+## Setting up as a dependency
+
+### Gradle
+
+```
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+
+compile 'com.github.clubobsidian:wrappy:1.0.0'
+```
+
+### Maven
+
+```
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+
+<dependency>
+	<groupId>com.github.clubobsidian</groupId>
+	<artifactId>wrappy</artifactId>
+	<version>1.0.0</version>
+</dependency>
+```
+
+## Dependencies
+
+* [configurate](https://github.com/SpongePowered/configurate)
+
+## Development
+
+### Eclipse
+
+1. Git clone the project
+2. Generate eclipse files with `gradlew eclipse`
+3. Import project
+
+### Intellij
+
+1. Git clone the project
+2. Generate intellij files with `gradlew idea`
+3. Import project
+
+### Building
+
+`gradlew shadowJar`
