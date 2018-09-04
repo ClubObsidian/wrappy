@@ -17,11 +17,14 @@ apply plugin: 'idea'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def configurateVersion = "3.6"
+
 dependencies {
     testImplementation 'junit:junit:4.12'
-    compile 'org.spongepowered:configurate-yaml:3.6'
-    compile 'org.spongepowered:configurate-json:3.6'
-    compile 'org.spongepowered:configurate-hocon:3.6'
+    compile 'org.spongepowered:configurate-yaml:' + configurateVersion
+    compile 'org.spongepowered:configurate-json:' + configurateVersion
+    compile 'org.spongepowered:configurate-hocon:' + configurateVersion
+    compile 'org.spongepowered:configurate-xml:' + configurateVersion
     compile 'commons-io:commons-io:2.6'
 }
 

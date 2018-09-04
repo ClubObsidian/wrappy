@@ -11,11 +11,10 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.json.JSONConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.xml.XMLConfigurationLoader;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 public class Configuration extends ConfigurationSection {
@@ -25,33 +24,32 @@ public class Configuration extends ConfigurationSection {
 		try
 		{
 			Configuration config = new Configuration();
-			ConfigurationNode node = null;
 			String name = file.getName().toLowerCase();
-
+			ConfigurationLoader<?> loader = null;
+			
 			if(name.endsWith(".yml") || name.endsWith(".yaml"))
 			{
-				ConfigurationLoader<ConfigurationNode> loader = YAMLConfigurationLoader.builder().setFile(file).build();
-				node = loader.load();
-				config.loader = loader;
+				loader = YAMLConfigurationLoader.builder().setFile(file).build();
 			}
 			else if(name.endsWith(".hocon"))
 			{
-				ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(file).build();
-				node = loader.load();
-				config.loader = loader;
+				loader = HoconConfigurationLoader.builder().setFile(file).build();
 			}
 			else if(name.endsWith(".json"))
 			{
-				ConfigurationLoader<ConfigurationNode> loader = JSONConfigurationLoader.builder().setFile(file).build();
-				node = loader.load();
-				config.loader = loader;
+				loader = JSONConfigurationLoader.builder().setFile(file).build();
+			}
+			else if(name.endsWith(".xml"))
+			{
+				loader = XMLConfigurationLoader.builder().setFile(file).build();
 			}
 			else
 			{
 				throw new UnknownFileTypeException(file);
 			}
-
-			config.node = node;
+			
+			config.loader = loader;
+			config.node = loader.load();
 			return config;
 		}
 		catch(IOException | UnknownFileTypeException ex)
@@ -94,8 +92,8 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(InputStream stream, ConfigurationType type)
 	{
+		ConfigurationLoader<?> loader = null;
 		Configuration config = new Configuration();
-		ConfigurationNode node = null;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
 		try
@@ -112,33 +110,35 @@ public class Configuration extends ConfigurationSection {
 
 			if(type == ConfigurationType.YAML)
 			{
-				ConfigurationLoader<ConfigurationNode> loader = YAMLConfigurationLoader
+				loader = YAMLConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-				node = loader.load();
-				config.loader = loader;
 			}
 			else if(type == ConfigurationType.HOCON)
 			{
-				ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader
+				loader = HoconConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-				node = loader.load();
-				config.loader = loader;
 			}
 			else if(type == ConfigurationType.JSON)
 			{
-				ConfigurationLoader<ConfigurationNode> loader = JSONConfigurationLoader
+				loader = JSONConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-				node = loader.load();
-				config.loader = loader;
+			}
+			else if(type == ConfigurationType.XML)
+			{
+				loader = XMLConfigurationLoader
+						.builder()
+						.setSource(callable)
+						.build();
 			}
 
-			config.node = node;
+			config.loader = loader;
+			config.node = loader.load();
 		}
 		catch(IOException ex)
 		{
