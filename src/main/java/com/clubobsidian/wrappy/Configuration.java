@@ -82,7 +82,7 @@ public class Configuration extends ConfigurationSection {
 			return Configuration.load(backupFile);
 		}
 
-		return null;
+		return new Configuration();
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type)
