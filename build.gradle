@@ -1,0 +1,39 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+  }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'jacoco'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+    compile 'org.spongepowered:configurate-yaml:3.6'
+    compile 'org.spongepowered:configurate-json:3.6'
+    compile 'org.spongepowered:configurate-hocon:3.6'
+    compile 'commons-io:commons-io:2.6'
+}
+
+shadowJar {
+   baseName = 'wrappy'
+   classifier = null
+   version = null
+   relocate 'ninja.leaping.configurate', 'com.clubobsidian.wrappy.shaded.configurate'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+	maven { url = 'https://repo.spongepowered.org/maven' }
+    mavenCentral()
+}
