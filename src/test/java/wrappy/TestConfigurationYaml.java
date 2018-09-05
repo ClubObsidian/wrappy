@@ -83,6 +83,14 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
+	public void testGetLongList()
+	{
+		List<Long> list = config.getLongList("long-list");
+		assertTrue("Config getIntegerList 1 index is not 5", list.get(0) == 5);
+		assertTrue("Config getIntegerList size is not 1", list.size() == 1);
+	}
+	
+	@Test
 	public void testGetFloatList()
 	{
 		List<Float> list = config.getFloatList("float-list");
