@@ -159,4 +159,10 @@ public class TestConfigurationYaml {
 		config.set("key", "value");
 		config.save();
 	}
+	
+	@Test
+	public void testParsePath()
+	{
+		assertTrue("Path could not be resolved", config.get("section.value") != null);
+	}
 }
