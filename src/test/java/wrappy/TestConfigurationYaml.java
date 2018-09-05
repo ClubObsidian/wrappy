@@ -11,7 +11,8 @@ import com.clubobsidian.wrappy.Configuration;
 
 public class TestConfigurationYaml {
 
-	private static Configuration config = Configuration.load(new File("test.yml"));
+	private static File testFile = new File("test.yml");
+	private static Configuration config = Configuration.load(testFile);
 	
 	@Test
 	public void testGet()
@@ -121,5 +122,24 @@ public class TestConfigurationYaml {
 	public void testHasKey()
 	{
 		assertTrue("Config does not have the key \"key\"", config.hasKey("key"));
+	}
+	
+	@Test
+	public void testSet()
+	{
+		config.set("key", "newvalue");
+		assertTrue("Set was not able to set key to newvalue", config.getString("key").equals("newvalue"));
+		config.set("key", "value");
+	}
+	
+	@Test
+	public void testSave()
+	{
+		config.set("key", "newvalue");
+		config.save();
+		config = Configuration.load(testFile);
+		assertTrue("Save did not save value to key", config.getString("key").equals("newvalue"));
+		config.set("key", "value");
+		config.save();
 	}
 }
