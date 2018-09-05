@@ -64,80 +64,32 @@ public class ConfigurationSection {
 	
 	public List<String> getStringList(String path)
 	{
-		try 
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(String.class));
-		}
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<String>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(String.class));
 	}
 	
 	public List<Integer> getIntegerList(String path)
 	{
-		try 
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(Integer.class));
-		} 
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<Integer>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Integer.class));
 	}
 	
 	public List<Long> getLongList(String path)
 	{
-		try 
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(Long.class));
-		} 
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<Long>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Long.class));
 	}
 	
 	public List<Float> getFloatList(String path)
 	{
-		try 
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(Float.class));
-		}
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<Float>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Float.class));
 	}
 	
 	public List<Boolean> getBooleanList(String path)
 	{
-		try
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(Boolean.class));
-		}
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<Boolean>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Boolean.class));
 	}
 	
 	public List<Double> getDoubleList(String path)
 	{
-		try
-		{
-			return this.node.getNode(this.parsePath(path)).getList(TypeToken.of(Double.class));
-		}
-		catch (ObjectMappingException e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return new ConfigurationList<Double>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Double.class));
 	}
 	
 	public ConfigurationSection getConfigurationSection(String path)
@@ -186,5 +138,21 @@ public class ConfigurationSection {
 			ar[0] = (Object) path;
 		}
 		return ar;
+	}
+	
+	private class ConfigurationList<T>
+	{
+		public List<T> getList(ConfigurationNode node, TypeToken<T> token)
+		{
+			try 
+			{
+				return node.getList(token);
+			} 
+			catch (ObjectMappingException e) 
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
 	}
 }

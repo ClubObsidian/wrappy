@@ -11,7 +11,6 @@ import com.clubobsidian.wrappy.UnknownFileTypeException;
 
 public class TestFile { 
 
-	
 	@Test
 	public void testLoadYaml()
 	{
