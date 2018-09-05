@@ -16,6 +16,8 @@ public class TestFile {
 	public void testLoadYaml()
 	{
 		Configuration config = Configuration.load(new File("test.yml"));
+		assertTrue("Yml configuration is empty", config.getKeys().size() > 0);
+		config = Configuration.load(new File("test.yaml"));
 		assertTrue("Yaml configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.yml"));
 		assertTrue("Empty yaml configuration is not empty", config.getKeys().size() == 0);
