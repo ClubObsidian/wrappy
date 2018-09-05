@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.ConfigurationSection;
 
 public class TestConfigurationYaml {
 
@@ -109,7 +110,7 @@ public class TestConfigurationYaml {
 	public void testGetKeys()
 	{
 		List<String> keys = config.getKeys();
-		assertTrue("Config getKeys is not size 12", keys.size() == 12);
+		assertTrue("Config getKeys is not size 13", keys.size() == 13);
 	}
 	
 	@Test
@@ -122,6 +123,14 @@ public class TestConfigurationYaml {
 	public void testHasKey()
 	{
 		assertTrue("Config does not have the key \"key\"", config.hasKey("key"));
+	}
+	
+	@Test
+	public void testGetConfigurationSection()
+	{
+		ConfigurationSection section = config.getConfigurationSection("section");
+		assertTrue("Section is null", section != null);
+		assertTrue("Section key size is not 1", section.getKeys().size() == 1);
 	}
 	
 	@Test
