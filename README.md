@@ -47,6 +47,9 @@ compile 'com.github.clubobsidian:wrappy:1.0.0'
 ## Dependencies
 
 * [configurate](https://github.com/SpongePowered/configurate)
+  * Yaml
+  * Json
+  * Hocon
 
 ## Development
 
