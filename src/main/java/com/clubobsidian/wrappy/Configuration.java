@@ -26,7 +26,7 @@ public class Configuration extends ConfigurationSection {
 			String name = file.getName().toLowerCase();
 			ConfigurationLoader<?> loader = null;
 			
-			if(name.endsWith(".yml") || name.endsWith(".yaml"))
+			if(name.endsWith(".yml"))
 			{
 				loader = YAMLConfigurationLoader.builder().setFile(file).build();
 			}
