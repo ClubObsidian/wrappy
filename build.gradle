@@ -47,6 +47,6 @@ jacocoTestReport {
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-	maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = 'https://repo.spongepowered.org/maven' }
     mavenCentral()
 }
