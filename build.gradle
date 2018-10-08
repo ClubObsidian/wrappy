@@ -30,11 +30,11 @@ dependencies {
 shadowJar {
    baseName = 'wrappy'
    classifier = null
-   version = '1.3.0'
+   version = '1.3.1'
    relocate 'ninja.leaping', 'com.clubobsidian.wrappy.shaded.ninja.leaping'
    relocate 'org.yaml', 'com.clubobsidian.wrappy.shaded.org.yaml'
    relocate 'org.checkerframework', 'com.clubobsidian.wrappy.shaded.org.checkerframework'
-   relocate 'org.apache.commons.io', 'com.clubobsidian.wrappy.shaded.org.apache.commons.io'
+   relocate 'org.apache', 'com.clubobsidian.wrappy.shaded.org.apache'
    relocate 'com.typesafe', 'com.clubobsidian.wrappy.shaded.com.typesafe'
    relocate 'com.google', 'com.clubobsidian.wrappy.shaded.com.google'
    relocate 'com.fasterxml', 'com.clubobsidian.wrappy.shaded.com.fasterxml'
