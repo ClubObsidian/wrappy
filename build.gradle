@@ -30,7 +30,7 @@ dependencies {
 shadowJar {
    baseName = 'wrappy'
    classifier = null
-   version = null
+   version = '1.1.0'
    relocate 'ninja.leaping.configurate', 'com.clubobsidian.wrappy.shaded.configurate'
 }
 

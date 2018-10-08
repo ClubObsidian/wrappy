@@ -107,6 +107,11 @@ public class ConfigurationSection {
 		return new ConfigurationList<Double>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Double.class));
 	}
 	
+	public ConfigurationSection createConfigurationSection(String path)
+	{
+		return this.getConfigurationSection(path);
+	}
+	
 	public ConfigurationSection getConfigurationSection(String path)
 	{
 		ConfigurationSection section = new ConfigurationSection();

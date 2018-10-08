@@ -149,6 +149,14 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
+	public void testCreateConfigurationSection()
+	{
+		ConfigurationSection section = config.createConfigurationSection("section.does.not.exist");
+		assertTrue("Section is null", section != null);
+		assertTrue("Section key size is not 0", section.getKeys().size() == 0);
+	}
+	
+	@Test
 	public void testGetConfigurationSection()
 	{
 		ConfigurationSection section = config.getConfigurationSection("section");
