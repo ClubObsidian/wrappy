@@ -44,11 +44,15 @@ public class TestBackup {
 		{
 			Configuration config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile);
 			assertTrue("Backup configuration is empty", config.getKeys().size() > 0);
+			config.set("test", 1);
+			config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile);
+			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
 		} 
 		catch (MalformedURLException e) 
 		{
 			e.printStackTrace();
 		}
+		//Cleanup after test
 		try 
 		{
 			if(tempFolder.exists())
