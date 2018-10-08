@@ -1,14 +1,24 @@
 language: java
-jdk:
-  - oraclejdk8
-  - openjdk8
-  - oraclejdk9
-  - openjdk9
-  - oraclejdk10
-  - oraclejdk-ea
-  - openjdk10
-  - openjdk11
+matrix:
+  include:
+    - env: JDK='Oracle JDK 8'
+      jdk: oraclejdk8
+    - env: JDK='OpenJDK 8'
+      jdk: openjdk8
+    - env: JDK='Oracle JDK 9'
+      jdk: oraclejdk9
+    - env: JDK='OpenJDK 9'
+      install: . ./install-jdk.sh -F 9
+    - env: JDK='Oracle JDK 10'
+      install: . ./install-jdk.sh -F 10 -L BCL
+    - env: JDK='OpenJDK 10'
+      install: . ./install-jdk.sh -F 10 -L GPL
+    - env: JDK='Oracle JDK 11-ea'
+      install: . ./install-jdk.sh -L BCL
+    - env: JDK='OpenJDK 11-ea'
+install: . ./install-jdk.sh --verbose
 before_install:
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
   - chmod +x gradlew
 script:
 - ./gradlew test
