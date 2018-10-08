@@ -8,6 +8,9 @@ before_install:
 - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 - chmod +x gradlew
 
+install:
+- . ./install-jdk.sh --verbose
+
 jobs:
   include:
 
