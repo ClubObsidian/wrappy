@@ -34,6 +34,11 @@ shadowJar {
    relocate 'ninja.leaping.configurate', 'com.clubobsidian.wrappy.shaded.configurate'
 }
 
+
+artifacts {
+    archives shadowJar
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true
