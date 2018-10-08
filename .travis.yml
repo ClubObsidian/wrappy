@@ -1,21 +1,13 @@
 language: java
-dist: trusty
-sudo: false
-
-before_install:
-- chmod +x gradlew
-
-os:
-- linux
-
 jdk:
-- oraclejdk8
-- openjdk8
-- oraclejdk9
-
+  - oraclejdk8
+  - openjdk8
+  - oraclejdk9
+  - openjdk10
+before_install:
+  - chmod +x gradlew
 script:
 - ./gradlew test
 - ./gradlew jacocoTestReport
-
 after_success:
 - bash <(curl -s https://codecov.io/bash)
