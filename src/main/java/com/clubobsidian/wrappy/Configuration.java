@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.json.JSONConfigurationLoader;
@@ -43,15 +44,26 @@ public class Configuration extends ConfigurationSection {
 			
 			if(name.endsWith(".yml"))
 			{
-				loader = YAMLConfigurationLoader.builder().setFile(file).build();
+				loader = YAMLConfigurationLoader
+						.builder()
+						.setFlowStyle(FlowStyle.BLOCK)
+						.setIndent(2)
+						.setFile(file)
+						.build();
 			}
 			else if(name.endsWith(".hocon"))
 			{
-				loader = HoconConfigurationLoader.builder().setFile(file).build();
+				loader = HoconConfigurationLoader
+						.builder()
+						.setFile(file)
+						.build();
 			}
 			else if(name.endsWith(".json"))
 			{
-				loader = JSONConfigurationLoader.builder().setFile(file).build();
+				loader = JSONConfigurationLoader
+						.builder()
+						.setFile(file)
+						.build();
 			}
 			else
 			{
