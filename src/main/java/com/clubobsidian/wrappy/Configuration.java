@@ -51,7 +51,7 @@ public class Configuration extends ConfigurationSection {
 						.setFile(file)
 						.build();
 			}
-			else if(name.endsWith(".hocon"))
+			else if(name.endsWith(".conf"))
 			{
 				loader = HoconConfigurationLoader
 						.builder()
