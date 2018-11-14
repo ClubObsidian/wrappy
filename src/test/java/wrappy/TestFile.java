@@ -47,9 +47,9 @@ public class TestFile {
 	@Test
 	public void testLoadHocon()
 	{
-		Configuration config = Configuration.load(new File("test.hocon"));
+		Configuration config = Configuration.load(new File("test.conf"));
 		assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.hocon"));
+		config = Configuration.load(new File("doesnotexist.conf"));
 		assertTrue("Empty hocon configuration is not empty", config.getKeys().size() == 0);
 	}
 	

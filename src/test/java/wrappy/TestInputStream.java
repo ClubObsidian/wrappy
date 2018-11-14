@@ -66,7 +66,7 @@ public class TestInputStream {
 	{
 		try 
 		{
-			InputStream input = new FileInputStream(new File("test.hocon"));
+			InputStream input = new FileInputStream(new File("test.conf"));
 			Configuration config = Configuration.load(input, ConfigurationType.HOCON);
 			assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
 			input.close();
