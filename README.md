@@ -41,7 +41,11 @@ compile 'com.github.clubobsidian:wrappy:1.5.1'
 <dependency>
 	<groupId>com.github.clubobsidian</groupId>
 	<artifactId>wrappy</artifactId>
+<<<<<<< HEAD
 	<version>1.5.1</version>
+=======
+	<version>1.5.0</version>
+>>>>>>> origin/master
 </dependency>
 ```
 
