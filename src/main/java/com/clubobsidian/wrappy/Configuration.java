@@ -25,9 +25,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
+
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -88,13 +93,18 @@ public class Configuration extends ConfigurationSection {
 	{
 		return load(path.toFile());
 	}
-
+	
 	public static Configuration load(URL url, File tempFile, File backupFile)
 	{
-		return load(url, tempFile, backupFile, 10000, 10000);
+		return load(url, tempFile, backupFile, new HashMap<>());
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout)
+	public static Configuration load(URL url, File tempFile, File backupFile, Map<String,String> requestProperties)
+	{
+		return load(url, tempFile, backupFile, 10000, 10000, requestProperties);
+	}
+	
+	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties)
 	{
 		try 
 		{
@@ -109,6 +119,12 @@ public class Configuration extends ConfigurationSection {
 			connection.setReadTimeout(readTimeout);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
+			Iterator<Entry<String,String>> it = requestProperties.entrySet().iterator();
+			while(it.hasNext())
+			{
+				Entry<String,String> next = it.next();
+				connection.setRequestProperty(next.getKey(), next.getValue());
+			}
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
