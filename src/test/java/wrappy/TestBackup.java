@@ -38,14 +38,14 @@ public class TestBackup {
 			tempFolder.delete();
 		}
 		tempFolder.mkdir();
-		File tempFile = new File(tempFolder, "temp.yml");
-		File backupFile = new File("backup.yml");
+		File copyFrom = new File(tempFolder, "temp.yml");
+		File copyTo = new File("backup.yml");
 		try 
 		{
-			Configuration config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile);
+			Configuration config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
 			assertTrue("Backup configuration is empty", config.getKeys().size() > 0);
 			config.set("test", 1);
-			config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile);
+			config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
 			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
 		} 
 		catch (MalformedURLException e) 
@@ -59,10 +59,10 @@ public class TestBackup {
 			{
 				FileUtils.deleteDirectory(tempFolder);
 			}
-			
-			if(backupFile.exists())
+
+			if(copyTo.exists())
 			{
-				backupFile.delete();
+				copyTo.delete();
 			}
 		} 
 		catch (IOException e) 

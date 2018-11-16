@@ -16,11 +16,14 @@
 package com.clubobsidian.wrappy;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
@@ -95,7 +98,32 @@ public class Configuration extends ConfigurationSection {
 	{
 		try 
 		{
-			FileUtils.copyURLToFile(url, tempFile, connectionTimeout, readTimeout);
+			if(tempFile.exists())
+			{
+				tempFile.delete();
+			}
+			tempFile.createNewFile();
+			
+			URLConnection connection = url.openConnection();
+			connection.setConnectTimeout(connectionTimeout);
+			connection.setReadTimeout(readTimeout);
+			connection.setDoInput(true);
+			connection.setUseCaches(false);
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+			
+			String line = null;
+			while((line = reader.readLine()) != null)
+			{
+				writer.write(line);
+				writer.write("\n");
+			}
+			
+			reader.close();
+			writer.close();
+			//FileUtils.copyURLToFile(url, tempFile, connectionTimeout, readTimeout);
 			if(tempFile.length() > 0 && tempFile.length() != backupFile.length())
 			{
 				if(backupFile.exists())
