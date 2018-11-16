@@ -26,10 +26,10 @@ import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
 
-public class TestBackup {
+public class TestURLConfiguration {
 
 	@Test
-	public void setBackupLoad()
+	public void testUrlLoading()
 	{
 		File testFile = new File("test.yml");
 		File tempFolder = new File("temp");

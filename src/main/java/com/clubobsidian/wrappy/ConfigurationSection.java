@@ -18,6 +18,7 @@ package com.clubobsidian.wrappy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.reflect.TypeToken;
 
@@ -79,32 +80,32 @@ public class ConfigurationSection {
 	
 	public List<String> getStringList(String path)
 	{
-		return new ConfigurationList<String>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(String.class));
+		return new NodeHelper<String>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(String.class));
 	}
 	
 	public List<Integer> getIntegerList(String path)
 	{
-		return new ConfigurationList<Integer>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Integer.class));
+		return new NodeHelper<Integer>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Integer.class));
 	}
 	
 	public List<Long> getLongList(String path)
 	{
-		return new ConfigurationList<Long>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Long.class));
+		return new NodeHelper<Long>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Long.class));
 	}
 	
 	public List<Float> getFloatList(String path)
 	{
-		return new ConfigurationList<Float>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Float.class));
+		return new NodeHelper<Float>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Float.class));
 	}
 	
 	public List<Boolean> getBooleanList(String path)
 	{
-		return new ConfigurationList<Boolean>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Boolean.class));
+		return new NodeHelper<Boolean>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Boolean.class));
 	}
 	
 	public List<Double> getDoubleList(String path)
 	{
-		return new ConfigurationList<Double>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Double.class));
+		return new NodeHelper<Double>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Double.class));
 	}
 	
 	public ConfigurationSection createConfigurationSection(String path)
@@ -160,7 +161,7 @@ public class ConfigurationSection {
 		return ar;
 	}
 	
-	private class ConfigurationList<T>
+	private class NodeHelper<T>
 	{
 		public List<T> getList(ConfigurationNode node, TypeToken<T> token)
 		{
