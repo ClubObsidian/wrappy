@@ -88,9 +88,14 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(URL url, File tempFile, File backupFile)
 	{
+		return load(url, tempFile, backupFile, 10000, 10000);
+	}
+	
+	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout)
+	{
 		try 
 		{
-			FileUtils.copyURLToFile(url, tempFile, 10000, 10000);
+			FileUtils.copyURLToFile(url, tempFile, connectionTimeout, readTimeout);
 			if(tempFile.length() > 0 && tempFile.length() != backupFile.length())
 			{
 				if(backupFile.exists())
