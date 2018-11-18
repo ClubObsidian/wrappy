@@ -1,5 +1,9 @@
 language: java
 
+jdk:
+  - oraclejdk8
+  - openjdk8
+
 before_install:
   - chmod +x gradlew
 before_script:
@@ -11,8 +15,6 @@ jobs:
     env: JDK=8
     script: 
     - source install-jdk.sh -C -F 8
-    - ./gradlew test
-    - ./gradlew jacocoTestReport
   - # stage: ...
     env: JDK=9
     script: 
@@ -23,7 +25,7 @@ jobs:
     env: JDK=10
     script: 
     - source install-jdk.sh -C -F 10
-    - ./gradlew test"
+    - ./gradlew test
     - ./gradlew jacocoTestReport
   - # stage: ...
     env: JDK=11
@@ -39,6 +41,10 @@ jobs:
     - ./gradlew jacocoTestReport
     
 
+script:
+- ./gradlew test
+- ./gradlew jacocoTestReport
+    
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 
