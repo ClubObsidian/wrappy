@@ -5,8 +5,45 @@ jdk:
   - oraclejdk9
 before_install:
   - chmod +x gradlew
-script:
-- ./gradlew test
-- ./gradlew jacocoTestReport
+before_script:
+- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+
+jobs:
+  include:
+  - stage: jdk.java.net - OpenJDK - GPL
+    env: JDK=8
+    script: 
+    - source install-jdk.sh -C -F 8
+    - ./gradlew test
+    - ./gradlew jacocoTestReport
+  - # stage: ...
+    env: JDK=9
+    script: 
+    - source install-jdk.sh -C -F 9
+    - ./gradlew test
+    - ./gradlew jacocoTestReport
+  - # stage: ...
+    env: JDK=10
+    script: source install-jdk.sh -C -F 10
+    - ./gradlew test
+    - ./gradlew jacocoTestReport
+  - # stage: ...
+    env: JDK=11
+    script: source install-jdk.sh -C -F 11
+    - ./gradlew test
+    - ./gradlew jacocoTestReport
+  - # stage: ...
+    env: JDK=12
+    script: source install-jdk.sh -C -F 12
+    - ./gradlew test
+    - ./gradlew jacocoTestReport
+    
+
 after_success:
 - bash <(curl -s https://codecov.io/bash)
+
+after_script:
+- echo JAVA_HOME = ${JAVA_HOME}
+- echo PATH = ${PATH}
+- ls ${JAVA_HOME}
+- java -version
