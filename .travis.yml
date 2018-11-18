@@ -12,10 +12,6 @@ before_script:
 jobs:
   include:
   - stage: jdk.java.net - OpenJDK - GPL
-    env: JDK=8
-    script: 
-    - source install-jdk.sh -C -F 8
-  - # stage: ...
     env: JDK=9
     script: 
     - source install-jdk.sh -C -F 9
