@@ -21,17 +21,20 @@ jobs:
     - ./gradlew jacocoTestReport
   - # stage: ...
     env: JDK=10
-    script: source install-jdk.sh -C -F 10
-    - ./gradlew test
+    script: 
+    - source install-jdk.sh -C -F 10
+    - ./gradlew test"
     - ./gradlew jacocoTestReport
   - # stage: ...
     env: JDK=11
-    script: source install-jdk.sh -C -F 11
+    script: 
+    - source install-jdk.sh -C -F 11
     - ./gradlew test
     - ./gradlew jacocoTestReport
   - # stage: ...
     env: JDK=12
-    script: source install-jdk.sh -C -F 12
+    script: 
+    - source install-jdk.sh -C -F 12
     - ./gradlew test
     - ./gradlew jacocoTestReport
     
