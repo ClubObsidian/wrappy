@@ -18,7 +18,7 @@ jobs:
     script: 
     - source install-jdk.sh -C -F 10
     - ./gradlew test
-     - ./gradlew jacocoTestReport
+    - ./gradlew jacocoTestReport
      
   - stage: adoptopenjdk.net - HotSpot - Eclipse OpenJ9
     env: JDK=10 + Hotspot
