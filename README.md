@@ -7,10 +7,9 @@
 A wrapper to simplify the usage of [configurate.](https://github.com/SpongePowered/configurate)
 
 Supported formats
-* Yaml
-* Json
-* Hocon
-
+*  Yaml
+*  Json
+*  Hocon
 
 ## Build Artifacts
 
@@ -20,7 +19,7 @@ Build artifacts are hosted via [Jitpack.](https://jitpack.io/#clubobsidian/wrapp
 
 ### Gradle
 
-```
+``` groovy
 repositories {
 	maven { url 'https://jitpack.io' }
 }
@@ -30,7 +29,7 @@ compile 'com.github.clubobsidian:wrappy:1.6.0'
 
 ### Maven
 
-```
+``` xml
 <repositories>
 	<repository>
 		<id>jitpack.io</id>
@@ -56,15 +55,15 @@ compile 'com.github.clubobsidian:wrappy:1.6.0'
 
 ### Eclipse
 
-1. Git clone the project
-2. Generate eclipse files with `gradlew eclipse`
-3. Import project
+1.  Git clone the project
+2.  Generate eclipse files with `gradlew eclipse`
+3.  Import project
 
 ### Intellij
 
-1. Git clone the project
-2. Generate intellij files with `gradlew idea`
-3. Import project
+1.  Git clone the project
+2.  Generate intellij files with `gradlew idea`
+3.  Import project
 
 ### Building
 
