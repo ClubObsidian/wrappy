@@ -16,6 +16,7 @@
 package wrappy;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.util.List;
@@ -70,7 +71,7 @@ public class TestConfigurationYaml {
 	public void testGetBoolean()
 	{
 		assertTrue("Config getBoolean is not true", config.getBoolean("boolean"));
-		assertTrue("Config getBoolean is not false", config.getBoolean("non-existent-boolean") == false);
+		assertFalse("Config getBoolean is not false", config.getBoolean("non-existent-boolean"));
 	}
 	
 	@Test
@@ -117,7 +118,7 @@ public class TestConfigurationYaml {
 	public void testGetBooleanList()
 	{
 		List<Boolean> list = config.getBooleanList("boolean-list");
-		assertTrue("Config getBooleanList 1 index is not false", list.get(1) == false);
+		assertFalse("Config getBooleanList 1 index is not false", list.get(1));
 		assertTrue("Config getBooleanList size is not 2", list.size() == 2);
 	}
 	
@@ -139,7 +140,7 @@ public class TestConfigurationYaml {
 	@Test
 	public void testIsEmpty()
 	{
-		assertTrue("Config is empty", !config.isEmpty());
+		assertFalse("Config is empty", config.isEmpty());
 	}
 	
 	@Test

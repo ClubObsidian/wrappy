@@ -38,6 +38,7 @@ jobs:
     - source install-jdk.sh -C --url $(curl --silent https://api.adoptopenjdk.net/openjdk10-openj9/nightly/x64_linux/ | grep 'binary_link' | grep -Eo '(http|https)://[^"]+' | head -1)
     - ./gradlew test
     - ./gradlew jacocoTestReport
+    
   - stage: Graal & Zulu
     env: JDK=graalvm-ce-1.0.0-rc6
     script: 
