@@ -57,15 +57,16 @@ compile 'com.github.clubobsidian:wrappy:1.6.0'
 
 ### Eclipse
 
-1.  Git clone the project
-2.  Generate eclipse files with `gradlew eclipse`
-3.  Import project
+1. Git clone the project
+2. Generate eclipse files with `gradlew eclipse`
+3. Import project
+4. Right click project -> Add gradle nature
 
 ### Intellij
 
-1.  Git clone the project
-2.  Generate intellij files with `gradlew idea`
-3.  Import project
+1. Git clone the project
+2. Generate intellij files with `gradlew idea`
+3. Import project
 
 ### Building
 
