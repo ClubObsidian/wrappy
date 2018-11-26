@@ -1,8 +1,9 @@
 # wrappy
 [![Build Status](https://travis-ci.org/ClubObsidian/wrappy.svg?branch=master)](https://travis-ci.org/ClubObsidian/wrappy)
+[![](https://jitpack.io/v/clubobsidian/wrappy.svg)](https://jitpack.io/#clubobsidian/wrappy)
 [![codecov](https://codecov.io/gh/ClubObsidian/wrappy/branch/master/graph/badge.svg)](https://codecov.io/gh/ClubObsidian/wrappy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c01276584f342eba75d5aaa71c85240)](https://www.codacy.com/app/virustotalop/wrappy?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ClubObsidian/wrappy&amp;utm_campaign=Badge_Grade)
-[![](https://jitpack.io/v/clubobsidian/wrappy.svg)](https://jitpack.io/#clubobsidian/wrappy)
+[![Known Vulnerabilities](https://snyk.io/test/github/ClubObsidian/wrappy/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/ClubObsidian/wrappy?targetFile=build.gradle)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A wrapper to simplify the usage of [configurate.](https://github.com/SpongePowered/configurate)
