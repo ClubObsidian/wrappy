@@ -96,18 +96,33 @@ public class Configuration extends ConfigurationSection {
 	
 	public static Configuration load(URL url, File tempFile, File backupFile)
 	{
-		return load(url, tempFile, backupFile, new HashMap<>());
+		return load(url, tempFile, backupFile, new HashMap<>(), true);
+	}
+	
+	public static Configuration load(URL url, File tempFile, File backupFile, boolean overwrite)
+	{
+		return load(url, tempFile, backupFile, new HashMap<>(), overwrite);
 	}
 	
 	public static Configuration load(URL url, File tempFile, File backupFile, Map<String,String> requestProperties)
 	{
-		return load(url, tempFile, backupFile, 10000, 10000, requestProperties);
+		return load(url, tempFile, backupFile, 10000, 10000, requestProperties, true);
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties)
+	public static Configuration load(URL url, File tempFile, File backupFile, Map<String,String> requestProperties, boolean overwrite)
+	{
+		return load(url, tempFile, backupFile, 10000, 10000, requestProperties, overwrite);
+	}
+	
+	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
 	{
 		try 
 		{
+			if(backupFile != null && backupFile.exists() && backupFile.length() > 0 && !overwrite)
+			{
+				return Configuration.load(backupFile);
+			}
+			
 			if(tempFile.exists())
 			{
 				tempFile.delete();

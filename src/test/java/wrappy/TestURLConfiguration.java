@@ -43,7 +43,7 @@ public class TestURLConfiguration {
 		try 
 		{
 			Configuration config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
-			assertTrue("Backup configuration is empty", config.getKeys().size() > 0);
+			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
 			config.set("test", 1);
 			config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
 			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
@@ -69,5 +69,51 @@ public class TestURLConfiguration {
 		{
 			e.printStackTrace();
 		}	
+	}
+	
+	@Test
+	public void backupTest()
+	{
+		File testFile = new File("test.yml");
+		File backupFile = new File("backup.yml");
+		try 
+		{
+			backupFile.createNewFile();
+			Configuration config = Configuration.load(backupFile);
+			config.set("key", "value");
+			config.save();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		File tempFolder = new File("temp");
+		tempFolder.mkdirs();
+		File tempFile = new File(tempFolder, "temp.yml");
+		try 
+		{
+			Configuration config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile, false);
+			assertTrue("Config was overwritten", config.getKeys().size() == 1);
+		} 
+		catch (MalformedURLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(tempFolder.exists())
+		{
+			try 
+			{
+				FileUtils.deleteDirectory(tempFolder);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+			
+			if(backupFile.exists())
+				backupFile.delete();
+		}
+		
 	}
 }
