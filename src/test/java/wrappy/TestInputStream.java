@@ -76,4 +76,20 @@ public class TestInputStream {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testLoadXml()
+	{
+		try 
+		{
+			InputStream input = new FileInputStream(new File("test.xml"));
+			Configuration config = Configuration.load(input, ConfigurationType.XML);
+			assertTrue("XML configuration is empty", config.getKeys().size() > 0);
+			input.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 }

@@ -114,6 +114,5 @@ public class TestURLConfiguration {
 			if(backupFile.exists())
 				backupFile.delete();
 		}
-		
 	}
 }
