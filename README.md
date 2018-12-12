@@ -12,6 +12,7 @@ Supported formats
 * Yaml
 * Json
 * Hocon
+* XML
 
 ## Build Artifacts
 
