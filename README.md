@@ -53,6 +53,7 @@ compile 'com.github.clubobsidian:wrappy:1.7.0'
   * Yaml
   * Json
   * Hocon
+  * XML
 
 ## Development
 
