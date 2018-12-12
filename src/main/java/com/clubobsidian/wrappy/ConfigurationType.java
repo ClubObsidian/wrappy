@@ -19,6 +19,7 @@ public enum ConfigurationType {
 
 	YAML,
 	JSON,
-	HOCON;
+	HOCON,
+	XML;
 
 }

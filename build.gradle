@@ -24,6 +24,7 @@ dependencies {
     compile 'org.spongepowered:configurate-yaml:' + configurateVersion
     compile 'org.spongepowered:configurate-json:' + configurateVersion
     compile 'org.spongepowered:configurate-hocon:' + configurateVersion
+    compile 'org.spongepowered:configurate-xml:' + configurateVersion
     compile 'commons-io:commons-io:2.6'
 }
 

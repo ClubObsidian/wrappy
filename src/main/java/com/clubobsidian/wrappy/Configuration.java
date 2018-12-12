@@ -38,6 +38,7 @@ import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.json.JSONConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.xml.XMLConfigurationLoader;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 public class Configuration extends ConfigurationSection {
@@ -69,6 +70,13 @@ public class Configuration extends ConfigurationSection {
 			else if(name.endsWith(".json"))
 			{
 				loader = JSONConfigurationLoader
+						.builder()
+						.setFile(file)
+						.build();
+			}
+			else if(name.endsWith(".xml"))
+			{
+				loader = XMLConfigurationLoader
 						.builder()
 						.setFile(file)
 						.build();
@@ -199,6 +207,8 @@ public class Configuration extends ConfigurationSection {
 				loader = YAMLConfigurationLoader
 						.builder()
 						.setSource(callable)
+						.setFlowStyle(FlowStyle.BLOCK)
+						.setIndent(2)
 						.build();
 			}
 			else if(type == ConfigurationType.HOCON)
@@ -211,6 +221,13 @@ public class Configuration extends ConfigurationSection {
 			else if(type == ConfigurationType.JSON)
 			{
 				loader = JSONConfigurationLoader
+						.builder()
+						.setSource(callable)
+						.build();
+			}
+			else if(type == ConfigurationType.XML)
+			{
+				loader = XMLConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();

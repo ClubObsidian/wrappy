@@ -138,7 +138,7 @@ public class ConfigurationSection {
 	
 	public boolean hasKey(String key)
 	{
-		return getKeys().contains(key);
+		return this.getKeys().contains(key);
 	}
 	
 	private Object[] parsePath(String path)

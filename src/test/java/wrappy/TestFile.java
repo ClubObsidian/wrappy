@@ -53,6 +53,16 @@ public class TestFile {
 		assertTrue("Empty hocon configuration is not empty", config.getKeys().size() == 0);
 	}
 	
+	/*
+	@Test
+	public void testLoadXml()
+	{
+		Configuration config = Configuration.load(new File("test.xml"));
+		assertTrue("Xml configuration is empty", config.getKeys().size() > 0);
+		config = Configuration.load(new File("doesnotexist.xml"));
+		assertTrue("Empty xml configuration is not empty", config.getKeys().size() == 0);
+	}*/
+	
 	@Test(expected = UnknownFileTypeException.class)
 	public void testUnknownFileTypeException()
 	{
