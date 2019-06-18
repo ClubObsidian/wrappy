@@ -15,8 +15,6 @@
 */
 package com.clubobsidian.wrappy;
 
-import java.io.File;
-
 public class UnknownFileTypeException extends RuntimeException {
 
 	/**
@@ -24,8 +22,8 @@ public class UnknownFileTypeException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 5825723878989203063L;
 	
-	public UnknownFileTypeException(File file)
+	public UnknownFileTypeException(String fileName)
 	{
-		super("Unknown file type for configuration file " + file.getName());
+		super("Unknown file type for configuration file " + fileName);
 	}
 }

@@ -66,7 +66,8 @@ public class TestFile {
 	@Test(expected = UnknownFileTypeException.class)
 	public void testUnknownFileTypeException()
 	{
-		Configuration.load(new File("test.jibberish"));
+		Configuration config = Configuration.load(new File("test.jibberish"));
+		assertTrue("Configuration was not empty for a non-existent file type", config.getKeys().size() == 0);
 	}
 	
 	@Test

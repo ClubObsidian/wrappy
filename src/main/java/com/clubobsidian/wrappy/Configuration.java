@@ -45,45 +45,50 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(File file)
 	{
+		return Configuration.load(file.toPath());
+	}
+	
+	public static Configuration load(Path path)
+	{
 		Configuration config = new Configuration();
 		try
 		{
-			String name = file.getName().toLowerCase();
+			String fileName = path.getFileName().toString();
 			ConfigurationLoader<?> loader = null;
 			
-			if(name.endsWith(".yml"))
+			if(fileName.endsWith(".yml"))
 			{
 				loader = YAMLConfigurationLoader
 						.builder()
 						.setFlowStyle(FlowStyle.BLOCK)
 						.setIndent(2)
-						.setFile(file)
+						.setPath(path)
 						.build();
 			}
-			else if(name.endsWith(".conf"))
+			else if(fileName.endsWith(".conf"))
 			{
 				loader = HoconConfigurationLoader
 						.builder()
-						.setFile(file)
+						.setPath(path)
 						.build();
 			}
-			else if(name.endsWith(".json"))
+			else if(fileName.endsWith(".json"))
 			{
 				loader = JSONConfigurationLoader
 						.builder()
-						.setFile(file)
+						.setPath(path)
 						.build();
 			}
-			else if(name.endsWith(".xml"))
+			else if(fileName.endsWith(".xml"))
 			{
 				loader = XMLConfigurationLoader
 						.builder()
-						.setFile(file)
+						.setPath(path)
 						.build();
 			}
 			else
 			{
-				throw new UnknownFileTypeException(file);
+				throw new UnknownFileTypeException(fileName);
 			}
 			
 			config.loader = loader;
@@ -95,11 +100,6 @@ public class Configuration extends ConfigurationSection {
 			ex.printStackTrace();
 		}
 		return config;
-	}
-	
-	public static Configuration load(Path path)
-	{
-		return load(path.toFile());
 	}
 	
 	public static Configuration load(URL url, File tempFile, File backupFile)
@@ -186,6 +186,7 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(InputStream stream, ConfigurationType type)
 	{
+		
 		ConfigurationLoader<?> loader = null;
 		Configuration config = new Configuration();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
