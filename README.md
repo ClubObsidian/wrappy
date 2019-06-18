@@ -39,10 +39,10 @@ compile 'com.github.clubobsidian:wrappy:1.8.0'
 		<id>jitpack.io</id>
 		<url>https://jitpack.io</url>
 	</repository>
-    <repository>
-        <id>sponge</id>
-        <url>https://repo.spongepowered.org/maven</url>
-    </repository>
+	<repository>
+		<id>sponge</id>
+		<url>https://repo.spongepowered.org/maven</url>
+	</repository>
 </repositories>
 
 <dependency>
