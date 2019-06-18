@@ -25,6 +25,7 @@ Build artifacts are hosted via [Jitpack.](https://jitpack.io/#clubobsidian/wrapp
 ``` groovy
 repositories {
 	maven { url 'https://jitpack.io' }
+	maven { url 'https://repo.spongepowered.org/maven' }
 }
 
 compile 'com.github.clubobsidian:wrappy:1.8.0'
@@ -38,6 +39,10 @@ compile 'com.github.clubobsidian:wrappy:1.8.0'
 		<id>jitpack.io</id>
 		<url>https://jitpack.io</url>
 	</repository>
+    <repository>
+        <id>sponge</id>
+        <url>https://repo.spongepowered.org/maven</url>
+    </repository>
 </repositories>
 
 <dependency>
