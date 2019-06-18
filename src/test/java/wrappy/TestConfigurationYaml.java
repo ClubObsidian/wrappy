@@ -32,6 +32,12 @@ public class TestConfigurationYaml {
 	private static Configuration config = Configuration.load(testFile);
 	
 	@Test
+	public void testNodeNotNull()
+	{
+		assertTrue("Configurate node was null", config.getNode() != null);
+	}
+	
+	@Test
 	public void testGet()
 	{
 		assertTrue("Config get is null", config.get("key") != null);

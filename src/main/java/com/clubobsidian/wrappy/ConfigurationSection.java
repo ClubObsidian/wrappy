@@ -42,6 +42,11 @@ public class ConfigurationSection {
 		}
 	}
 	
+	public ConfigurationNode getNode()
+	{
+		return this.node;
+	}
+	
 	public Object get(String path)
 	{
 		return this.node.getNode(this.parsePath(path)).getValue();
