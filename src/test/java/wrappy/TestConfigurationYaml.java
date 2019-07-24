@@ -25,6 +25,9 @@ import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.ConfigurationSection;
+import com.google.common.reflect.TypeToken;
+
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 public class TestConfigurationYaml {
 
@@ -137,6 +140,29 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
+	public void testGenericBooleanList()
+	{
+		@SuppressWarnings("unchecked")
+		List<Boolean> list = config.getList("boolean-list", TypeToken.of(Boolean.class));
+		assertFalse("Config getBooleanList 1 index is not false", list.get(1));
+		assertTrue("Config getBooleanList size is not 2", list.size() == 2);
+	}
+	
+	@Test
+	public void testFailingGenericList()
+	{
+		List list = null;
+		try
+		{
+			list = config.getList("double-list", TypeToken.of(Object.class));
+		}
+		catch(AssertionError e)
+		{
+			assertTrue("Generic list did not fail and is not null", list == null);
+		}
+	}
+	
+	@Test
 	public void testGetKeys()
 	{
 		List<String> keys = config.getKeys();
@@ -145,6 +171,13 @@ public class TestConfigurationYaml {
 	
 	@Test
 	public void testIsEmpty()
+	{
+		ConfigurationSection section = config.getConfigurationSection("some-empty-section");
+		assertTrue("An empty configuration section was not empty", section.isEmpty());
+	}
+	
+	@Test
+	public void testIsNotEmpty()
 	{
 		assertFalse("Config is empty", config.isEmpty());
 	}

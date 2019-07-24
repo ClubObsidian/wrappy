@@ -112,6 +112,12 @@ public class ConfigurationSection {
 		return new NodeHelper<Double>().getList(this.node.getNode(this.parsePath(path)), TypeToken.of(Double.class));
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List getList(String path, TypeToken typeToken)
+	{
+		return new NodeHelper().getList(this.node.getNode(this.parsePath(path)), typeToken);
+	}
+	
 	public ConfigurationSection createConfigurationSection(String path)
 	{
 		return this.getConfigurationSection(path);
