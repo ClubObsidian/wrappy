@@ -140,12 +140,48 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
+	public void testGenericIntegerList()
+	{
+		@SuppressWarnings("unchecked")
+		List<Integer> list = config.getList("integer-list", Integer.class);
+		assertTrue("Config getIntegerList 1 index is not 7", list.get(1) == 7);
+		assertTrue("Config getIntegerList size is not 2", list.size() == 2);
+	}
+	
+	@Test
+	public void testGenericLongList()
+	{
+		@SuppressWarnings("unchecked")
+		List<Long> list = config.getList("long-list", Long.class);
+		assertTrue("Config getIntegerList 1 index is not 5", list.get(0) == 5);
+		assertTrue("Config getIntegerList size is not 1", list.size() == 1);
+	}
+	
+	@Test
+	public void testGenericFloatList()
+	{
+		@SuppressWarnings("unchecked")
+		List<Float> list = config.getList("float-list", Float.class);
+		assertTrue("Config getFloatList 1 index is not greater than 0", list.get(0) > 0);
+		assertTrue("Config getFloatList size is not 1", list.size() == 1);
+	}
+	
+	@Test
 	public void testGenericBooleanList()
 	{
 		@SuppressWarnings("unchecked")
-		List<Boolean> list = config.getList("boolean-list", TypeToken.of(Boolean.class));
+		List<Boolean> list = config.getList("boolean-list", Boolean.class);
 		assertFalse("Config getBooleanList 1 index is not false", list.get(1));
 		assertTrue("Config getBooleanList size is not 2", list.size() == 2);
+	}
+	
+	@Test
+	public void testGenericDoubleList()
+	{
+		@SuppressWarnings("unchecked")
+		List<Double> list = config.getList("double-list", Double.class);
+		assertTrue("Config getDoubleList 1 index is not > 1 && < 2", list.get(0) > 1 && list.get(0) < 2);
+		assertTrue("Config getDoubleList size is not 1", list.size() == 1);
 	}
 	
 	@Test
@@ -154,7 +190,7 @@ public class TestConfigurationYaml {
 		List list = null;
 		try
 		{
-			list = config.getList("double-list", TypeToken.of(Object.class));
+			list = config.getList("double-list", Object.class);
 		}
 		catch(AssertionError e)
 		{
@@ -180,6 +216,18 @@ public class TestConfigurationYaml {
 	public void testIsNotEmpty()
 	{
 		assertFalse("Config is empty", config.isEmpty());
+	}
+	
+	@Test
+	public void testDoesNotExist()
+	{
+		assertFalse(config.exists("does.not.exist"));
+	}
+	
+	@Test
+	public void testDoesExist()
+	{
+		assertTrue(config.exists("section.value"));
 	}
 	
 	@Test

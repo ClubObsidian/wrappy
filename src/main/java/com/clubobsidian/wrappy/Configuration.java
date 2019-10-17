@@ -90,7 +90,7 @@ public class Configuration extends ConfigurationSection {
 			{
 				throw new UnknownFileTypeException(fileName);
 			}
-			
+		
 			config.loader = loader;
 			config.node = loader.load();
 			return config;
