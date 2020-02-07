@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +36,8 @@ import java.util.concurrent.Callable;
 import org.apache.commons.io.FileUtils;
 
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+
+import com.google.common.io.Files;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.json.JSONConfigurationLoader;
@@ -162,13 +166,16 @@ public class Configuration extends ConfigurationSection {
 			
 			reader.close();
 			writer.close();
-			//FileUtils.copyURLToFile(url, tempFile, connectionTimeout, readTimeout);
-			if(tempFile.length() > 0 && tempFile.length() != backupFile.length())
+			
+			byte[] tempMD5 = getMD5(tempFile);
+			byte[] backupMD5 = getMD5(backupFile);
+			if(tempFile.length() > 0 && tempMD5 != backupMD5)
 			{
 				if(backupFile.exists())
 				{
 					backupFile.delete();
 				}
+				
 				FileUtils.copyFile(tempFile, backupFile);
 			}
 		} 
@@ -254,5 +261,23 @@ public class Configuration extends ConfigurationSection {
 			}
 		}
 		return config;
+	}
+	
+	private static byte[] getMD5(File file)
+	{
+		try 
+		{
+			byte[] fileBytes = Files.toByteArray(file);
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.reset();
+			md.update(fileBytes);
+			return md.digest();
+		} 
+		catch (NoSuchAlgorithmException | IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return new byte[0];
 	}
 }
