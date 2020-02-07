@@ -33,15 +33,17 @@ public class ConfigurationSection {
 	protected ConfigurationNode node;
 	protected ConfigurationLoader<?> loader;
 	
-	public void save()
+	public boolean save()
 	{
 		try 
 		{
 			this.loader.save(this.node);
+			return true;
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
