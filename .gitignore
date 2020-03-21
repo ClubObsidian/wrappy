@@ -51,6 +51,9 @@ local.properties
 .project
 .classpath
 
+# IntelliJ
+/.idea/
+
 # External tool builders
 .externalToolBuilders/
 
