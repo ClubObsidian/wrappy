@@ -176,12 +176,15 @@ public class Configuration extends ConfigurationSection {
 		{
 			e.printStackTrace();
 		}
+		
 		if(backupFile.exists())
 		{
 			return Configuration.load(backupFile);
 		}
-
-		return new Configuration();
+		else
+		{
+			return null;
+		}
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type)
@@ -240,6 +243,7 @@ public class Configuration extends ConfigurationSection {
 		catch(IOException ex)
 		{
 			ex.printStackTrace();
+			return null;
 		}
 		finally
 		{
