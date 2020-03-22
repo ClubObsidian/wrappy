@@ -163,7 +163,7 @@ public class Configuration extends ConfigurationSection {
 			reader.close();
 			writer.close();
 			//FileUtils.copyURLToFile(url, tempFile, connectionTimeout, readTimeout);
-			if(tempFile.length() > 0 && tempFile.length() != backupFile.length())
+			if(tempFile.length() > 0 && !FileUtils.contentEquals(tempFile, backupFile))
 			{
 				if(backupFile.exists())
 				{
