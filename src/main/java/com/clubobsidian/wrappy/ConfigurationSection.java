@@ -35,6 +35,11 @@ public class ConfigurationSection {
 	
 	public boolean save()
 	{
+		if(!this.loader.canSave())
+		{
+			return false;
+		}
+		
 		try 
 		{
 			this.loader.save(this.node);

@@ -255,18 +255,23 @@ public class TestConfigurationYaml {
 	@Test
 	public void testSet()
 	{
-		config.set("key", "newvalue");
-		assertTrue("Set was not able to set key to newvalue", config.getString("key").equals("newvalue"));
+		config.set("key", "newvalueset");
+		assertTrue("Set was not able to set key to newvalueset", config.getString("key").equals("newvalueset"));
 		config.set("key", "value");
 	}
 	
 	@Test
 	public void testSave()
 	{
-		config.set("key", "newvalue");
+		config.set("key", "newvaluesave");
+		System.out.println(config.getString("key"));
+		
+		
 		config.save();
 		config = Configuration.load(testFile);
-		assertTrue("Save did not save value to key", config.getString("key").equals("newvalue"));
+		System.out.println(config.getString("key"));
+		
+		assertTrue("Save did not save value to key", config.getString("key").equals("newvaluesave"));
 		config.set("key", "value");
 		config.save();
 	}

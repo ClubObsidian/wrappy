@@ -16,14 +16,13 @@
 package com.clubobsidian.wrappy;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -126,13 +125,13 @@ public class Configuration extends ConfigurationSection {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 	
-	public static Configuration load(URL url, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
+	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
 	{
 		try 
 		{
-			if(backupFile != null && backupFile.exists() && backupFile.length() > 0 && !overwrite)
+			if(file != null && file.exists() && file.length() > 0 && !overwrite)
 			{
-				return Configuration.load(backupFile);
+				return Configuration.load(file);
 			}
 			
 			URLConnection connection = url.openConnection();
@@ -149,29 +148,33 @@ public class Configuration extends ConfigurationSection {
 			
 			InputStream inputStream = connection.getInputStream();
 			InputStreamReader reader = new InputStreamReader(inputStream);
-			char[] data = new char[inputStream.available()];
-			reader.read(data);
+			char[] charData = new char[inputStream.available()];
+			reader.read(charData);
 			
+			byte[] data = new String(charData).getBytes(StandardCharsets.UTF_8);
 			
-			byte[] tempMD5 = getMD5(tempFile);
-			byte[] backupMD5 = getMD5(backupFile);
-			if(tempFile.length() > 0 && tempMD5 != backupMD5)
+			byte[] tempMD5 = getMD5(data);
+			byte[] backupMD5 = getMD5(file);
+			if(charData.length > 0 && tempMD5 != backupMD5)
 			{
-				if(backupFile.exists())
+				if(file.exists())
 				{
-					backupFile.delete();
+					file.delete();
 				}
 				
-				FileUtils.copyFile(tempFile, backupFile);
+				file.createNewFile();
+				FileUtils.writeByteArrayToFile(file, data);
 			}
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			return null;
 		}
-		if(backupFile.exists())
+		
+		if(file.exists())
 		{
-			return Configuration.load(backupFile);
+			return Configuration.load(file);
 		}
 
 		return new Configuration();

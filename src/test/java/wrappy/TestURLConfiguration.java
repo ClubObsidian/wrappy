@@ -32,49 +32,29 @@ public class TestURLConfiguration {
 	public void testUrlLoading()
 	{
 		File testFile = new File("test.yml");
-		File tempFolder = new File("temp");
-		if(tempFolder.exists())
-		{
-			tempFolder.delete();
-		}
-		tempFolder.mkdir();
-		File copyFrom = new File(tempFolder, "temp.yml");
 		File copyTo = new File("backup.yml");
 		try 
 		{
-			Configuration config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
+			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo);
 			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
 			config.set("test", 1);
-			config = Configuration.load(testFile.toURI().toURL(), copyFrom, copyTo);
+			config = Configuration.load(testFile.toURI().toURL(), copyTo);
 			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
 		} 
 		catch (MalformedURLException e) 
 		{
 			e.printStackTrace();
 		}
-		//Cleanup after test
-		try 
+		
+		if(copyTo.exists())
 		{
-			if(tempFolder.exists())
-			{
-				FileUtils.deleteDirectory(tempFolder);
-			}
-
-			if(copyTo.exists())
-			{
-				copyTo.delete();
-			}
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
+			copyTo.delete();
 		}	
 	}
 	
 	@Test
 	public void backupTest()
 	{
-		File testFile = new File("test.yml");
 		File backupFile = new File("backup.yml");
 		try 
 		{
@@ -87,32 +67,20 @@ public class TestURLConfiguration {
 		{
 			e.printStackTrace();
 		}
-		File tempFolder = new File("temp");
-		tempFolder.mkdirs();
-		File tempFile = new File(tempFolder, "temp.yml");
 		try 
 		{
-			Configuration config = Configuration.load(testFile.toURI().toURL(), tempFile, backupFile, false);
+			File testFile = new File("test.yml");
+			Configuration config = Configuration.load(testFile.toURI().toURL(), backupFile, false);
 			assertTrue("Config was overwritten", config.getKeys().size() == 1);
 		} 
 		catch (MalformedURLException e) 
 		{
 			e.printStackTrace();
 		}
-		
-		if(tempFolder.exists())
+
+		if(backupFile.exists())
 		{
-			try 
-			{
-				FileUtils.deleteDirectory(tempFolder);
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			if(backupFile.exists())
-				backupFile.delete();
+			backupFile.delete();
 		}
 	}
 }
