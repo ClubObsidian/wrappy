@@ -106,27 +106,27 @@ public class Configuration extends ConfigurationSection {
 		return config;
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile)
+	public static Configuration load(URL url, File backupFile)
 	{
-		return load(url, tempFile, backupFile, new HashMap<>(), true);
+		return load(url, backupFile, new HashMap<>(), true);
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, boolean overwrite)
+	public static Configuration load(URL url, File backupFile, boolean overwrite)
 	{
-		return load(url, tempFile, backupFile, new HashMap<>(), overwrite);
+		return load(url, backupFile, new HashMap<>(), overwrite);
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, Map<String,String> requestProperties)
+	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties)
 	{
-		return load(url, tempFile, backupFile, 10000, 10000, requestProperties, true);
+		return load(url, backupFile, 10000, 10000, requestProperties, true);
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, Map<String,String> requestProperties, boolean overwrite)
+	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties, boolean overwrite)
 	{
-		return load(url, tempFile, backupFile, 10000, 10000, requestProperties, overwrite);
+		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 	
-	public static Configuration load(URL url, File tempFile, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
+	public static Configuration load(URL url, File backupFile, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
 	{
 		try 
 		{
@@ -134,12 +134,6 @@ public class Configuration extends ConfigurationSection {
 			{
 				return Configuration.load(backupFile);
 			}
-			
-			if(tempFile.exists())
-			{
-				tempFile.delete();
-			}
-			tempFile.createNewFile();
 			
 			URLConnection connection = url.openConnection();
 			connection.setConnectTimeout(connectionTimeout);
@@ -153,19 +147,11 @@ public class Configuration extends ConfigurationSection {
 				connection.setRequestProperty(next.getKey(), next.getValue());
 			}
 			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader reader = new InputStreamReader(inputStream);
+			char[] data = new char[inputStream.available()];
+			reader.read(data);
 			
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-			
-			String line = null;
-			while((line = reader.readLine()) != null)
-			{
-				writer.write(line);
-				writer.write("\n");
-			}
-			
-			reader.close();
-			writer.close();
 			
 			byte[] tempMD5 = getMD5(tempFile);
 			byte[] backupMD5 = getMD5(backupFile);
@@ -268,12 +254,28 @@ public class Configuration extends ConfigurationSection {
 		try 
 		{
 			byte[] fileBytes = Files.toByteArray(file);
+			return getMD5(fileBytes);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return new byte[0];
+	}
+	
+	
+	
+	private static byte[] getMD5(byte[] data)
+	{
+		try 
+		{
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.reset();
-			md.update(fileBytes);
+			md.update(data);
 			return md.digest();
 		} 
-		catch (NoSuchAlgorithmException | IOException e) 
+		catch (NoSuchAlgorithmException e) 
 		{
 			e.printStackTrace();
 		}
