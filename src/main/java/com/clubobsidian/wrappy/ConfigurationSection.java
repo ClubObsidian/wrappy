@@ -27,6 +27,7 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 import com.clubobsidian.wrappy.helper.NodeHelper;
+import com.clubobsidian.wrappy.helper.NodeUtil;
 
 public class ConfigurationSection {
 
@@ -52,92 +53,92 @@ public class ConfigurationSection {
 	}
 	
 	public Object get(String path) {
-		return this.node.getNode(this.parsePath(path)).getValue();
+		return new NodeHelper<Object>(this.node).get(path, Object.class);
 	}
 	
 	public String getString(String path) {
-		return this.node.getNode(this.parsePath(path)).getString();
+		return new NodeHelper<String>(this.node).get(path, String.class);
 	}
 	
 	public int getInteger(String path) {
-		return this.node.getNode(this.parsePath(path)).getInt();
+		return NodeUtil.parsePath(this.node, path).getInt();
 	}
 	
 	public long getLong(String path) {
-		return this.node.getNode(this.parsePath(path)).getLong();
+		return NodeUtil.parsePath(this.node, path).getLong();
 	}
 	
 	public float getFloat(String path) {
-		return this.node.getNode(this.parsePath(path)).getFloat();
+		return NodeUtil.parsePath(this.node, path).getFloat();
 	}
 	
 	public boolean getBoolean(String path) {
-		return this.node.getNode(this.parsePath(path)).getBoolean();
+		return NodeUtil.parsePath(this.node, path).getBoolean();
 	}
 	
 	public double getDouble(String path) {
-		return this.node.getNode(this.parsePath(path)).getDouble();
+		return NodeUtil.parsePath(this.node, path).getDouble();
 	}
 	
 	public URI getURI(String path) {
-		return new NodeHelper<URI>().get(this.node.getNode(this.parsePath(path)), URI.class);
+		return new NodeHelper<URI>(this.node).get(path, URI.class);
 	}
 	
 	public URL getURL(String path) {
-		return new NodeHelper<URL>().get(this.node.getNode(this.parsePath(path)), URL.class);
+		return new NodeHelper<URL>(this.node).get(path, URL.class);
 	}
 	
 	public UUID getUUID(String path) {
-		return new NodeHelper<UUID>().get(this.node.getNode(this.parsePath(path)), UUID.class);
+		return new NodeHelper<UUID>(this.node).get(path, UUID.class);
 	}
 	
 	public Pattern getPattern(String path) {
-		return new NodeHelper<Pattern>().get(this.node.getNode(this.parsePath(path)), Pattern.class);
+		return new NodeHelper<Pattern>(this.node).get(path, Pattern.class);
 	}
 	
 	public List<String> getStringList(String path) {
-		return new NodeHelper<String>().getList(this.node.getNode(this.parsePath(path)), String.class);
+		return new NodeHelper<String>(this.node).getList(path, String.class);
 	}
 	
 	public List<Integer> getIntegerList(String path) {
-		return new NodeHelper<Integer>().getList(this.node.getNode(this.parsePath(path)), Integer.class);
+		return new NodeHelper<Integer>(this.node).getList(path, Integer.class);
 	}
 	
 	public List<Long> getLongList(String path) {
-		return new NodeHelper<Long>().getList(this.node.getNode(this.parsePath(path)), Long.class);
+		return new NodeHelper<Long>(this.node).getList(path, Long.class);
 	}
 	
 	public List<Float> getFloatList(String path) {
-		return new NodeHelper<Float>().getList(this.node.getNode(this.parsePath(path)), Float.class);
+		return new NodeHelper<Float>(this.node).getList(path, Float.class);
 	}
 	
 	public List<Boolean> getBooleanList(String path) {
-		return new NodeHelper<Boolean>().getList(this.node.getNode(this.parsePath(path)), Boolean.class);
+		return new NodeHelper<Boolean>(this.node).getList(path, Boolean.class);
 	}
 	
 	public List<Double> getDoubleList(String path) {
-		return new NodeHelper<Double>().getList(this.node.getNode(this.parsePath(path)), Double.class);
+		return new NodeHelper<Double>(this.node).getList(path, Double.class);
 	}
 	
 	public List<URI> getURIList(String path) {
-		return new NodeHelper<URI>().getList(this.node.getNode(this.parsePath(path)), URI.class);
+		return new NodeHelper<URI>(this.node).getList(path, URI.class);
 	}
 	
 	public List<URL> getURLList(String path) {
-		return new NodeHelper<URL>().getList(this.node.getNode(this.parsePath(path)), URL.class);
+		return new NodeHelper<URL>(this.node).getList(path, URL.class);
 	}
 	
 	public List<UUID> getUUIDList(String path) {
-		return new NodeHelper<UUID>().getList(this.node.getNode(this.parsePath(path)), UUID.class);
+		return new NodeHelper<UUID>(this.node).getList(path, UUID.class);
 	}
 	
 	public List<Pattern> getPatternList(String path) {
-		return new NodeHelper<Pattern>().getList(this.node.getNode(this.parsePath(path)), Pattern.class);
+		return new NodeHelper<Pattern>(this.node).getList(path, Pattern.class);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List getList(String path, Class<?> clazz) {
-		return new NodeHelper().getList(this.node.getNode(this.parsePath(path)), clazz);
+		return new NodeHelper(this.node).getList(path, clazz);
 	}
 	
 	public ConfigurationSection createConfigurationSection(String path) {
@@ -146,16 +147,16 @@ public class ConfigurationSection {
 	
 	public ConfigurationSection getConfigurationSection(String path) {
 		ConfigurationSection section = new ConfigurationSection();
-		section.node = this.node.getNode(this.parsePath(path));
+		section.node = NodeUtil.parsePath(this.node, path);
 		return section;
 	}
 	
 	public boolean exists(String path) {
-		return !this.node.getNode(this.parsePath(path)).isVirtual();
+		return !NodeUtil.parsePath(this.node, path).isVirtual();
 	}
 	
 	public void set(String path, Object toSave) {
-		this.node.getNode(this.parsePath(path)).setValue(toSave);
+		NodeUtil.parsePath(this.node, path).setValue(toSave);
 	}
 	
 	public List<String> getKeys() {	
@@ -170,19 +171,5 @@ public class ConfigurationSection {
 	
 	public boolean hasKey(String key) {
 		return this.getKeys().contains(key);
-	}
-	
-	private Object[] parsePath(String path) {
-		Object[] ar = new Object[1];
-		if(path.contains(".")) {
-			String[] split = path.split("\\.");
-			ar = new Object[split.length];
-			for(int i = 0; i < split.length; i++) {
-				ar[i] = (Object) split[i];
-			}
-		} else {
-			ar[0] = (Object) path;
-		}
-		return ar;
 	}
 }

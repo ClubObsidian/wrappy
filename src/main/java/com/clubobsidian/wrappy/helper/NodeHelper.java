@@ -24,18 +24,27 @@ import io.leangen.geantyref.TypeToken;
 
 
 public class NodeHelper<T> {
-	public T get(ConfigurationNode node, Class<T> clazz) {
+	
+	private ConfigurationNode node;
+	
+	public NodeHelper(ConfigurationNode node) {
+		this.node = node;
+	}
+	
+	public T get(String path, Class<T> clazz) {
 		try {
-			return node.getValue(clazz);
+			ConfigurationNode parsed = NodeUtil.parsePath(node, path);
+			return parsed.getValue(TypeToken.get(clazz));
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public List<T> getList(ConfigurationNode node, Class<T> clazz) {
+	public List<T> getList(String path, Class<T> clazz) {
 		try {
-			return node.getList(TypeToken.get(clazz));
+			ConfigurationNode parsed = NodeUtil.parsePath(node, path);
+			return parsed.getList(TypeToken.get(clazz));
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
