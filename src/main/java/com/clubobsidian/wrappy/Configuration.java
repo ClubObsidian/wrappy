@@ -46,91 +46,70 @@ import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 public class Configuration extends ConfigurationSection {
 
-	public static Configuration load(File file)
-	{
+	public static Configuration load(File file) {
 		return Configuration.load(file.toPath());
 	}
 	
-	public static Configuration load(Path path)
-	{
+	public static Configuration load(Path path) {
 		Configuration config = new Configuration();
-		try
-		{
+		try {
 			String fileName = path.getFileName().toString();
 			ConfigurationLoader<?> loader = null;
 			
-			if(fileName.endsWith(".yml"))
-			{
+			if(fileName.endsWith(".yml")) {
 				loader = YAMLConfigurationLoader
 						.builder()
 						.setFlowStyle(FlowStyle.BLOCK)
 						.setIndent(2)
 						.setPath(path)
 						.build();
-			}
-			else if(fileName.endsWith(".conf"))
-			{
+			} else if(fileName.endsWith(".conf")) {
 				loader = HoconConfigurationLoader
 						.builder()
 						.setPath(path)
 						.build();
-			}
-			else if(fileName.endsWith(".json"))
-			{
+			} else if(fileName.endsWith(".json")) {
 				loader = JSONConfigurationLoader
 						.builder()
 						.setPath(path)
 						.build();
-			}
-			else if(fileName.endsWith(".xml"))
-			{
+			} else if(fileName.endsWith(".xml")) {
 				loader = XMLConfigurationLoader
 						.builder()
 						.setPath(path)
 						.build();
-			}
-			else
-			{
+			} else {
 				throw new UnknownFileTypeException(fileName);
 			}
 		
 			config.loader = loader;
 			config.node = loader.load();
 			return config;
-		}
-		catch(IOException ex)
-		{
+		} catch(IOException ex) {
 			ex.printStackTrace();
 		}
 		return config;
 	}
 	
-	public static Configuration load(URL url, File backupFile)
-	{
+	public static Configuration load(URL url, File backupFile) {
 		return load(url, backupFile, new HashMap<>(), true);
 	}
 	
-	public static Configuration load(URL url, File backupFile, boolean overwrite)
-	{
+	public static Configuration load(URL url, File backupFile, boolean overwrite) {
 		return load(url, backupFile, new HashMap<>(), overwrite);
 	}
 	
-	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties)
-	{
+	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties) {
 		return load(url, backupFile, 10000, 10000, requestProperties, true);
 	}
 	
-	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties, boolean overwrite)
-	{
+	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties, boolean overwrite) {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 	
-	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite)
-	{
-		try 
-		{
-			if(file != null && file.exists() && file.length() > 0 && !overwrite)
-			{
+	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite) {
+		try  {
+			if(file != null && file.exists() && file.length() > 0 && !overwrite) {
 				return Configuration.load(file);
 			}
 			
@@ -140,8 +119,7 @@ public class Configuration extends ConfigurationSection {
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
 			Iterator<Entry<String,String>> it = requestProperties.entrySet().iterator();
-			while(it.hasNext())
-			{
+			while(it.hasNext()) {
 				Entry<String,String> next = it.next();
 				connection.setRequestProperty(next.getKey(), next.getValue());
 			}
@@ -150,139 +128,92 @@ public class Configuration extends ConfigurationSection {
 			InputStreamReader reader = new InputStreamReader(inputStream);
 			char[] charData = new char[inputStream.available()];
 			reader.read(charData);
-			
 			byte[] data = new String(charData).getBytes(StandardCharsets.UTF_8);
-			
 			byte[] tempMD5 = getMD5(data);
 			byte[] backupMD5 = getMD5(file);
-			if(charData.length > 0 && tempMD5 != backupMD5)
-			{
-				if(file.exists())
-				{
+			if(charData.length > 0 && tempMD5 != backupMD5) {
+				if(file.exists()) {
 					file.delete();
 				}
 				
 				file.createNewFile();
 				FileUtils.writeByteArrayToFile(file, data);
 			}
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 		
-		if(file.exists())
-		{
+		if(file.exists()) {
 			return Configuration.load(file);
 		}
 
 		return new Configuration();
 	}
 
-	public static Configuration load(InputStream stream, ConfigurationType type)
-	{
-		
+	public static Configuration load(InputStream stream, ConfigurationType type) {	
 		ConfigurationLoader<?> loader = null;
 		Configuration config = new Configuration();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-		try
-		{
-			Callable<BufferedReader> callable = new Callable<BufferedReader>() 
-			{
-
-				@Override
-				public BufferedReader call()
-				{
-					return reader;
-				}
-			};
-
-			if(type == ConfigurationType.YAML)
-			{
+		try {
+			Callable<BufferedReader> callable = () -> reader;
+			if(type == ConfigurationType.YAML) {
 				loader = YAMLConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.setFlowStyle(FlowStyle.BLOCK)
 						.setIndent(2)
 						.build();
-			}
-			else if(type == ConfigurationType.HOCON)
-			{
+			} else if(type == ConfigurationType.HOCON) {
 				loader = HoconConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-			}
-			else if(type == ConfigurationType.JSON)
-			{
+			} else if(type == ConfigurationType.JSON) {
 				loader = JSONConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-			}
-			else if(type == ConfigurationType.XML)
-			{
+			} else if(type == ConfigurationType.XML) {
 				loader = XMLConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
 			}
-
 			config.loader = loader;
 			config.node = loader.load();
-		}
-		catch(IOException ex)
-		{
+		} catch(IOException ex) {
 			ex.printStackTrace();
-		}
-		finally
-		{
-			try 
-			{
+		} finally {
+			try {
 				reader.close();
 				stream.close();
-			} 
-			catch (IOException e) 
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return config;
 	}
 	
-	private static byte[] getMD5(File file)
-	{
-		try 
-		{
+	private static byte[] getMD5(File file) {
+		try {
 			byte[] fileBytes = Files.toByteArray(file);
 			return getMD5(fileBytes);
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		return new byte[0];
 	}
 	
-	
-	
-	private static byte[] getMD5(byte[] data)
-	{
-		try 
-		{
+	private static byte[] getMD5(byte[] data) {
+		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.reset();
 			md.update(data);
 			return md.digest();
-		} 
-		catch (NoSuchAlgorithmException e) 
-		{
+		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
 		return new byte[0];
 	}
 }
