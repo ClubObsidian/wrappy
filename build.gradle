@@ -12,7 +12,7 @@ targetCompatibility = 1.8
 def configurateVersion = "4.0.0-SNAPSHOT"
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     compile 'org.spongepowered:configurate-yaml:' + configurateVersion
     compile 'org.spongepowered:configurate-jackson:' + configurateVersion
     compile 'org.spongepowered:configurate-hocon:' + configurateVersion
