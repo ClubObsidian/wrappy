@@ -1,5 +1,5 @@
 # wrappy
-[![Build Status](https://travis-ci.org/ClubObsidian/wrappy.svg?branch=master)](https://travis-ci.org/ClubObsidian/wrappy)
+![build](https://github.com/ClubObsidian/wrappy/workflows/build/badge.svg)
 [![](https://jitpack.io/v/clubobsidian/wrappy.svg)](https://jitpack.io/#clubobsidian/wrappy)
 [![codecov](https://codecov.io/gh/ClubObsidian/wrappy/branch/master/graph/badge.svg)](https://codecov.io/gh/ClubObsidian/wrappy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c01276584f342eba75d5aaa71c85240)](https://www.codacy.com/app/virustotalop/wrappy?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ClubObsidian/wrappy&amp;utm_campaign=Badge_Grade)
