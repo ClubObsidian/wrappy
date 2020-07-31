@@ -17,7 +17,7 @@ dependencies {
     compile 'org.spongepowered:configurate-jackson:' + configurateVersion
     compile 'org.spongepowered:configurate-hocon:' + configurateVersion
     compile 'org.spongepowered:configurate-xml:' + configurateVersion
-    compile 'commons-io:commons-io:2.6'
+    compile 'commons-io:commons-io:2.7'
 }
 
 shadowJar {
