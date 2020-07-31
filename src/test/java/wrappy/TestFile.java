@@ -27,8 +27,7 @@ import com.clubobsidian.wrappy.UnknownFileTypeException;
 public class TestFile { 
 
 	@Test
-	public void testLoadYaml()
-	{
+	public void testLoadYaml() {
 		Configuration config = Configuration.load(new File("test.yml"));
 		assertTrue("Yml configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.yml"));
@@ -36,8 +35,7 @@ public class TestFile {
 	}
 
 	@Test
-	public void testLoadJson()
-	{
+	public void testLoadJson() {
 		Configuration config = Configuration.load(new File("test.json"));
 		assertTrue("Json configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.json"));
@@ -45,8 +43,7 @@ public class TestFile {
 	}
 	
 	@Test
-	public void testLoadHocon()
-	{
+	public void testLoadHocon() {
 		Configuration config = Configuration.load(new File("test.conf"));
 		assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.conf"));
@@ -55,8 +52,7 @@ public class TestFile {
 	
 	
 	@Test
-	public void testLoadXml()
-	{
+	public void testLoadXml() {
 		Configuration config = Configuration.load(new File("test.xml"));
 		assertTrue("Xml configuration is empty", config.getKeys().size() > 0);
 		config = Configuration.load(new File("doesnotexist.xml"));
@@ -64,15 +60,13 @@ public class TestFile {
 	}
 	
 	@Test(expected = UnknownFileTypeException.class)
-	public void testUnknownFileTypeException()
-	{
+	public void testUnknownFileTypeException() {
 		Configuration config = Configuration.load(new File("test.jibberish"));
 		assertTrue("Configuration was not empty for a non-existent file type", config.getKeys().size() == 0);
 	}
 	
 	@Test
-	public void testPath()
-	{
+	public void testPath() {
 		Configuration config = Configuration.load(new File("test.yml").toPath());
 		assertTrue("Path config is empty", config.getKeys().size() > 0);
 	}

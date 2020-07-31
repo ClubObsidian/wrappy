@@ -33,113 +33,98 @@ public class TestConfigurationYaml {
 	private static Configuration config = Configuration.load(testFile);
 	
 	@Test
-	public void testNodeNotNull()
-	{
+	public void testNodeNotNull() {
 		assertTrue("Configurate node was null", config.getNode() != null);
 	}
 	
 	@Test
-	public void testGet()
-	{
+	public void testGet() {
 		assertTrue("Config get is null", config.get("key") != null);
 		assertTrue("Config get is not null", config.get("non-existent-key") == null);
 	}
 	
 	@Test
-	public void testGetString()
-	{
+	public void testGetString() {
 		assertTrue("Config getString is null", config.getString("key") != null);
 		assertTrue("Config getString is not null", config.getString("non-existent-key") == null);
 	}
 
 	@Test
-	public void testGetInteger()
-	{
+	public void testGetInteger() {
 		assertTrue("Config getInteger is 0", config.getInteger("integer") == 5);
 		assertTrue("Config getInteger is not 0", config.getInteger("non-existent-integer") == 0);
 	}
 	
 	@Test
-	public void testGetLong()
-	{
+	public void testGetLong() {
 		assertTrue("Config getLong is not 6", config.getLong("long") == 6);
 		assertTrue("Config getLong is not 0", config.getLong("non-existent-long") == 0);
 	}
 	
 	@Test
-	public void testGetFloat()
-	{
+	public void testGetFloat() {
 		float fl = config.getFloat("float");
 		assertTrue("Config getFloat is not between 0.7 and 0.9", fl < 0.9 && fl > 0.7);
 		assertTrue("Config getFloat is not 0", config.getFloat("non-existent-float") == 0);
 	}
 	
 	@Test
-	public void testGetBoolean()
-	{
+	public void testGetBoolean() {
 		assertTrue("Config getBoolean is not true", config.getBoolean("boolean"));
 		assertFalse("Config getBoolean is not false", config.getBoolean("non-existent-boolean"));
 	}
 	
 	@Test
-	public void testGetDouble()
-	{
+	public void testGetDouble() {
 		double dub = config.getDouble("double");
 		assertTrue("Config getDouble is not between 0.6 and 0.8", dub < 0.8 && dub > 0.6);
 		assertTrue("Config getDouble is not 0", config.getFloat("non-existent-double") == 0);
 	}
 	
 	@Test
-	public void testGetStringList()
-	{
+	public void testGetStringList() {
 		List<String> list = config.getStringList("string-list");
 		assertTrue("Config getStringList 0 index is not asdf", list.get(0).equals("asdf"));
 		assertTrue("Config getStringList size is not 1", list.size() == 1);
 	}
 	
 	@Test
-	public void testGetIntegerList()
-	{
+	public void testGetIntegerList() {
 		List<Integer> list = config.getIntegerList("integer-list");
 		assertTrue("Config getIntegerList 1 index is not 7", list.get(1) == 7);
 		assertTrue("Config getIntegerList size is not 2", list.size() == 2);
 	}
 	
 	@Test
-	public void testGetLongList()
-	{
+	public void testGetLongList() {
 		List<Long> list = config.getLongList("long-list");
 		assertTrue("Config getIntegerList 1 index is not 5", list.get(0) == 5);
 		assertTrue("Config getIntegerList size is not 1", list.size() == 1);
 	}
 	
 	@Test
-	public void testGetFloatList()
-	{
+	public void testGetFloatList() {
 		List<Float> list = config.getFloatList("float-list");
 		assertTrue("Config getFloatList 1 index is not greater than 0", list.get(0) > 0);
 		assertTrue("Config getFloatList size is not 1", list.size() == 1);
 	}
 	
 	@Test
-	public void testGetBooleanList()
-	{
+	public void testGetBooleanList() {
 		List<Boolean> list = config.getBooleanList("boolean-list");
 		assertFalse("Config getBooleanList 1 index is not false", list.get(1));
 		assertTrue("Config getBooleanList size is not 2", list.size() == 2);
 	}
 	
 	@Test
-	public void testGetDoubleList()
-	{
+	public void testGetDoubleList() {
 		List<Double> list = config.getDoubleList("double-list");
 		assertTrue("Config getDoubleList 1 index is not > 1 && < 2", list.get(0) > 1 && list.get(0) < 2);
 		assertTrue("Config getDoubleList size is not 1", list.size() == 1);
 	}
 	
 	@Test
-	public void testGenericIntegerList()
-	{
+	public void testGenericIntegerList() {
 		@SuppressWarnings("unchecked")
 		List<Integer> list = config.getList("integer-list", Integer.class);
 		assertTrue("Config getIntegerList 1 index is not 7", list.get(1) == 7);
@@ -147,8 +132,7 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testGenericLongList()
-	{
+	public void testGenericLongList() {
 		@SuppressWarnings("unchecked")
 		List<Long> list = config.getList("long-list", Long.class);
 		assertTrue("Config getIntegerList 1 index is not 5", list.get(0) == 5);
@@ -156,8 +140,7 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testGenericFloatList()
-	{
+	public void testGenericFloatList() {
 		@SuppressWarnings("unchecked")
 		List<Float> list = config.getList("float-list", Float.class);
 		assertTrue("Config getFloatList 1 index is not greater than 0", list.get(0) > 0);
@@ -165,8 +148,7 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testGenericBooleanList()
-	{
+	public void testGenericBooleanList() {
 		@SuppressWarnings("unchecked")
 		List<Boolean> list = config.getList("boolean-list", Boolean.class);
 		assertFalse("Config getBooleanList 1 index is not false", list.get(1));
@@ -174,8 +156,7 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testGenericDoubleList()
-	{
+	public void testGenericDoubleList() {
 		@SuppressWarnings("unchecked")
 		List<Double> list = config.getList("double-list", Double.class);
 		assertTrue("Config getDoubleList 1 index is not > 1 && < 2", list.get(0) > 1 && list.get(0) < 2);
@@ -183,8 +164,8 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testFailingGenericList()
-	{
+	public void testFailingGenericList() {
+		@SuppressWarnings("rawtypes")
 		List list = null;
 		try
 		{
@@ -197,70 +178,60 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testGetKeys()
-	{
+	public void testGetKeys() {
 		List<String> keys = config.getKeys();
 		assertTrue("Config getKeys is not size 13", keys.size() == 13);
 	}
 	
 	@Test
-	public void testIsEmpty()
-	{
+	public void testIsEmpty() {
 		ConfigurationSection section = config.getConfigurationSection("some-empty-section");
 		assertTrue("An empty configuration section was not empty", section.isEmpty());
 	}
 	
 	@Test
-	public void testIsNotEmpty()
-	{
+	public void testIsNotEmpty() {
 		assertFalse("Config is empty", config.isEmpty());
 	}
 	
 	@Test
-	public void testDoesNotExist()
-	{
+	public void testDoesNotExist() {
 		assertFalse(config.exists("does.not.exist"));
 	}
 	
 	@Test
-	public void testDoesExist()
-	{
+	public void testDoesExist() {
 		assertTrue(config.exists("section.value"));
 	}
 	
 	@Test
-	public void testHasKey()
-	{
+	public void testHasKey() {
 		assertTrue("Config does not have the key \"key\"", config.hasKey("key"));
 	}
 	
 	@Test
-	public void testCreateConfigurationSection()
-	{
+	public void testCreateConfigurationSection() {
 		ConfigurationSection section = config.createConfigurationSection("section.does.not.exist");
 		assertTrue("Section is null", section != null);
 		assertTrue("Section key size is not 0", section.getKeys().size() == 0);
 	}
 	
 	@Test
-	public void testGetConfigurationSection()
-	{
+	public void testGetConfigurationSection() {
 		ConfigurationSection section = config.getConfigurationSection("section");
 		assertTrue("Section is null", section != null);
 		assertTrue("Section key size is not 1", section.getKeys().size() == 1);
 	}
 	
 	@Test
-	public void testSet()
-	{
+	public void testSet() {
 		config.set("key", "newvalueset");
 		assertTrue("Set was not able to set key to newvalueset", config.getString("key").equals("newvalueset"));
 		config.set("key", "value");
 	}
 	
 	@Test
-	public void testSave()
-	{
+	public void testSave() {
 		File saveFile = new File("saveconfig.yml");
 		if(saveFile.exists()) {
 			saveFile.delete();
@@ -278,8 +249,7 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testParsePath()
-	{
+	public void testParsePath() {
 		assertTrue("Path could not be resolved", config.get("section.value") != null);
 	}
 }
