@@ -1,5 +1,5 @@
 /*  
-   Copyright 2018 Club Obsidian and contributors.
+   Copyright 2020 Club Obsidian and contributors.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package wrappy;
+package com.clubobsidian.wrappy.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -30,65 +30,49 @@ import com.clubobsidian.wrappy.ConfigurationType;
 public class TestInputStream {
 
 	@Test
-	public void testLoadYaml()
-	{
-		try 
-		{
+	public void testLoadYaml() {
+		try {
 			InputStream input = new FileInputStream(new File("test.yml"));
 			Configuration config = Configuration.load(input, ConfigurationType.YAML);
 			assertTrue("Yml configuration is empty", config.getKeys().size() > 0);
 			input.close();
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Test
-	public void testLoadJson()
-	{
-		try 
-		{
+	public void testLoadJson() {
+		try {
 			InputStream input = new FileInputStream(new File("test.json"));
 			Configuration config = Configuration.load(input, ConfigurationType.JSON);
 			assertTrue("Json configuration is empty", config.getKeys().size() > 0);
 			input.close();
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Test
-	public void testLoadHocon()
-	{
-		try 
-		{
+	public void testLoadHocon() {
+		try {
 			InputStream input = new FileInputStream(new File("test.conf"));
 			Configuration config = Configuration.load(input, ConfigurationType.HOCON);
 			assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
 			input.close();
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Test
-	public void testLoadXml()
-	{
-		try 
-		{
+	public void testLoadXml() {
+		try {
 			InputStream input = new FileInputStream(new File("test.xml"));
 			Configuration config = Configuration.load(input, ConfigurationType.XML);
 			assertTrue("XML configuration is empty", config.getKeys().size() > 0);
 			input.close();
-		} 
-		catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -1,5 +1,5 @@
 /*  
-   Copyright 2018 Club Obsidian and contributors.
+   Copyright 2020 Club Obsidian and contributors.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,13 +24,11 @@ public class UnknownFileTypeException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 5825723878989203063L;
 	
-	public UnknownFileTypeException(File file)
-	{
+	public UnknownFileTypeException(File file) {
 		this(file.getName());
 	}
 	
-	public UnknownFileTypeException(String fileName)
-	{
+	public UnknownFileTypeException(String fileName) {
 		super("Unknown file type for configuration file " + fileName);
 	}
 }
