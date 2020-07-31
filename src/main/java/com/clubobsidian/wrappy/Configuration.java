@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,15 +35,12 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
 
-import org.yaml.snakeyaml.DumperOptions.FlowStyle;
-
-import com.google.common.io.Files;
-
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import ninja.leaping.configurate.json.JSONConfigurationLoader;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.xml.XMLConfigurationLoader;
-import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.xml.XmlConfigurationLoader;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 public class Configuration extends ConfigurationSection {
 
@@ -57,9 +55,9 @@ public class Configuration extends ConfigurationSection {
 			ConfigurationLoader<?> loader = null;
 			
 			if(fileName.endsWith(".yml")) {
-				loader = YAMLConfigurationLoader
+				loader = YamlConfigurationLoader
 						.builder()
-						.setFlowStyle(FlowStyle.BLOCK)
+						.setNodeStyle(NodeStyle.BLOCK)
 						.setIndent(2)
 						.setPath(path)
 						.build();
@@ -69,12 +67,12 @@ public class Configuration extends ConfigurationSection {
 						.setPath(path)
 						.build();
 			} else if(fileName.endsWith(".json")) {
-				loader = JSONConfigurationLoader
+				loader = JacksonConfigurationLoader
 						.builder()
 						.setPath(path)
 						.build();
 			} else if(fileName.endsWith(".xml")) {
-				loader = XMLConfigurationLoader
+				loader = XmlConfigurationLoader
 						.builder()
 						.setPath(path)
 						.build();
@@ -158,10 +156,10 @@ public class Configuration extends ConfigurationSection {
 		try {
 			Callable<BufferedReader> callable = () -> reader;
 			if(type == ConfigurationType.YAML) {
-				loader = YAMLConfigurationLoader
+				loader = YamlConfigurationLoader
 						.builder()
 						.setSource(callable)
-						.setFlowStyle(FlowStyle.BLOCK)
+						.setNodeStyle(NodeStyle.BLOCK)
 						.setIndent(2)
 						.build();
 			} else if(type == ConfigurationType.HOCON) {
@@ -170,12 +168,12 @@ public class Configuration extends ConfigurationSection {
 						.setSource(callable)
 						.build();
 			} else if(type == ConfigurationType.JSON) {
-				loader = JSONConfigurationLoader
+				loader = JacksonConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
 			} else if(type == ConfigurationType.XML) {
-				loader = XMLConfigurationLoader
+				loader = XmlConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
@@ -197,7 +195,7 @@ public class Configuration extends ConfigurationSection {
 	
 	private static byte[] getMD5(File file) {
 		try {
-			byte[] fileBytes = Files.toByteArray(file);
+			byte[] fileBytes = Files.readAllBytes(file.toPath());
 			return getMD5(fileBytes);
 		} catch (IOException e) {
 			e.printStackTrace();

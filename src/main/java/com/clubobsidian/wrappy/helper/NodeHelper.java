@@ -17,34 +17,26 @@ package com.clubobsidian.wrappy.helper;
 
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.objectmapping.ObjectMappingException;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import io.leangen.geantyref.TypeToken;
 
-public class NodeHelper<T>
-{
-	public T get(ConfigurationNode node, Class<T> clazz)
-	{
-		try 
-		{
-			return node.getValue(TypeToken.of(clazz));
-		} 
-		catch (ObjectMappingException e) 
-		{
+
+public class NodeHelper<T> {
+	public T get(ConfigurationNode node, Class<T> clazz) {
+		try {
+			return node.getValue(clazz);
+		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public List<T> getList(ConfigurationNode node, Class<T> clazz)
-	{
-		try 
-		{
-			return node.getList(TypeToken.of(clazz));
-		} 
-		catch (ObjectMappingException e) 
-		{
+	public List<T> getList(ConfigurationNode node, Class<T> clazz) {
+		try {
+			return node.getList(TypeToken.get(clazz));
+		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
 		return null;

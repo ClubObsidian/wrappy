@@ -4,11 +4,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
-import com.google.common.io.Files;
 
 public class TestInvalidLoading {
 
@@ -26,7 +27,7 @@ public class TestInvalidLoading {
 		File copyFile = new File("test-invalid-copy.yml");
 		try 
 		{
-			Files.copy(originalFile, copyFile);
+			Files.copy(originalFile.toPath(), copyFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} 
 		catch (IOException e) 
 		{

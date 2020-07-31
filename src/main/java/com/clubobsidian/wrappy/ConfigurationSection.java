@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import com.clubobsidian.wrappy.helper.NodeHelper;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
+import com.clubobsidian.wrappy.helper.NodeHelper;
 
 public class ConfigurationSection {
 

@@ -25,9 +25,7 @@ import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.ConfigurationSection;
-import com.google.common.reflect.TypeToken;
 
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 public class TestConfigurationYaml {
 
@@ -263,17 +261,20 @@ public class TestConfigurationYaml {
 	@Test
 	public void testSave()
 	{
-		config.set("key", "newvaluesave");
-		System.out.println(config.getString("key"));
+		File saveFile = new File("saveconfig.yml");
+		if(saveFile.exists()) {
+			saveFile.delete();
+		}
+		Configuration saveConfig = Configuration.load(saveFile);
+		saveConfig.set("key", "newvaluesave");
 		
 		
-		config.save();
-		config = Configuration.load(testFile);
-		System.out.println(config.getString("key"));
+		saveConfig.save();
+		saveConfig = Configuration.load(saveFile);
 		
-		assertTrue("Save did not save value to key", config.getString("key").equals("newvaluesave"));
-		config.set("key", "value");
-		config.save();
+		assertTrue("Save did not save value to key", saveConfig.getString("key").equals("newvaluesave"));
+		saveConfig.set("key", "value");
+		saveConfig.save();
 	}
 	
 	@Test
