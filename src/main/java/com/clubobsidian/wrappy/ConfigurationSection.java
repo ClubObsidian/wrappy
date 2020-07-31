@@ -53,11 +53,11 @@ public class ConfigurationSection {
 	}
 	
 	public Object get(String path) {
-		return new NodeHelper<Object>(this.node).get(path, Object.class);
+		return NodeUtil.parsePath(this.node, path).getValue();
 	}
 	
 	public String getString(String path) {
-		return new NodeHelper<String>(this.node).get(path, String.class);
+		return NodeUtil.parsePath(this.node, path).getString();
 	}
 	
 	public int getInteger(String path) {
