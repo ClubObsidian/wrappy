@@ -27,7 +27,7 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 import com.clubobsidian.wrappy.helper.NodeHelper;
-import com.clubobsidian.wrappy.helper.NodeUtil;
+import com.clubobsidian.wrappy.util.NodeUtil;
 
 public class ConfigurationSection {
 

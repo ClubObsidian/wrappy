@@ -20,6 +20,8 @@ import java.util.List;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.objectmapping.ObjectMappingException;
 
+import com.clubobsidian.wrappy.util.NodeUtil;
+
 import io.leangen.geantyref.TypeToken;
 
 

@@ -1,4 +1,4 @@
-package com.clubobsidian.wrappy.helper;
+package com.clubobsidian.wrappy.util;
 
 import org.spongepowered.configurate.ConfigurationNode;
 
