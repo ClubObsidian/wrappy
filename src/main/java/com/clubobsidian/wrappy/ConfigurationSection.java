@@ -156,7 +156,13 @@ public class ConfigurationSection {
 	}
 	
 	public void set(String path, Object toSave) {
-		NodeUtil.parsePath(this.node, path).setValue(toSave);
+		Object saveToPath = toSave;
+		if(saveToPath instanceof List) {
+			saveToPath = this.convertList(saveToPath);
+		} else if(this.isSpecial(saveToPath)) {
+			saveToPath = saveToPath.toString();
+		}
+		NodeUtil.parsePath(this.node, path).setValue(saveToPath);
 	}
 	
 	public List<String> getKeys() {	
@@ -171,5 +177,32 @@ public class ConfigurationSection {
 	
 	public boolean hasKey(String key) {
 		return this.getKeys().contains(key);
+	}
+	
+	public List<?> convertList(Object obj) {
+		List<?> convertList = (List<?>) obj;
+		if(convertList.size() == 0 || !this.isSpecial(convertList.get(0))) {
+			return convertList;
+		}
+		List<String> newList = new ArrayList<>();
+		if(convertList.size() > 0) {
+			for(Object o : convertList) {
+				newList.add(o.toString());
+			}
+		}
+		return newList;
+	}
+	
+	public boolean isSpecial(Object obj) {
+		if(obj instanceof URI) {
+			return true;
+		} else if(obj instanceof URL) {
+			return true;
+		} else if(obj instanceof UUID) {
+			return true;
+		} else if(obj instanceof Pattern) {
+			return true;
+		}
+		return false;
 	}
 }

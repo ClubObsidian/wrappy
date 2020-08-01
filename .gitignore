@@ -1,4 +1,8 @@
 saveconfig.yml
+testuri.yml
+testurl.yml
+testuuid.yml
+testpattern.yml
 
 # Compiled class file
 *.class
