@@ -97,48 +97,47 @@ public class ConfigurationSection {
 	}
 	
 	public List<String> getStringList(String path) {
-		return new NodeHelper<String>(this.node).getList(path, String.class);
+		return this.getList(path, String.class);
 	}
 	
 	public List<Integer> getIntegerList(String path) {
-		return new NodeHelper<Integer>(this.node).getList(path, Integer.class);
+		return this.getList(path, Integer.class);
 	}
 	
 	public List<Long> getLongList(String path) {
-		return new NodeHelper<Long>(this.node).getList(path, Long.class);
+		return this.getList(path, Long.class);
 	}
 	
 	public List<Float> getFloatList(String path) {
-		return new NodeHelper<Float>(this.node).getList(path, Float.class);
+		return this.getList(path, Float.class);
 	}
 	
 	public List<Boolean> getBooleanList(String path) {
-		return new NodeHelper<Boolean>(this.node).getList(path, Boolean.class);
+		return this.getList(path, Boolean.class);
 	}
 	
 	public List<Double> getDoubleList(String path) {
-		return new NodeHelper<Double>(this.node).getList(path, Double.class);
+		return this.getList(path, Double.class);
 	}
 	
 	public List<URI> getURIList(String path) {
-		return new NodeHelper<URI>(this.node).getList(path, URI.class);
+		return this.getList(path, URI.class);
 	}
 	
 	public List<URL> getURLList(String path) {
-		return new NodeHelper<URL>(this.node).getList(path, URL.class);
+		return this.getList(path, URL.class);
 	}
 	
 	public List<UUID> getUUIDList(String path) {
-		return new NodeHelper<UUID>(this.node).getList(path, UUID.class);
+		return this.getList(path, UUID.class);
 	}
 	
 	public List<Pattern> getPatternList(String path) {
-		return new NodeHelper<Pattern>(this.node).getList(path, Pattern.class);
+		return this.getList(path, Pattern.class);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List getList(String path, Class<?> clazz) {
-		return new NodeHelper(this.node).getList(path, clazz);
+	public <T> List<T> getList(String path, Class<T> clazz) {
+		return new NodeHelper<T>(this.node).getList(path, clazz);
 	}
 	
 	public ConfigurationSection createConfigurationSection(String path) {
