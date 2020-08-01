@@ -2,8 +2,10 @@ package com.clubobsidian.wrappy.helper;
 
 import org.spongepowered.configurate.ConfigurationNode;
 
-public class NodeUtil {
+public final class NodeUtil {
 
+	private NodeUtil() {}
+	
 	public static ConfigurationNode parsePath(ConfigurationNode node, String path) {
 		Object[] ar = new Object[1];
 		if(path.contains(".")) {
