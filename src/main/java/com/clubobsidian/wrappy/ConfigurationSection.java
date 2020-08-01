@@ -53,7 +53,11 @@ public class ConfigurationSection {
 	}
 	
 	public Object get(String path) {
-		return NodeUtil.parsePath(this.node, path).getValue();
+		return this.get(path, Object.class);
+	}
+	
+	public <T> T get(String path, Class<T> clazz) {
+		return new NodeHelper<T>(this.node).get(path, clazz);
 	}
 	
 	public String getString(String path) {
