@@ -19,4 +19,12 @@ public class NodeHelperTest {
 		NodeHelper<Double> helper = new NodeHelper<>(node);
 		assertTrue(helper.get("key", Double.class) == null);
 	}
+	
+	@Test
+	public void testInvalidWithDefault() {
+		Configuration config = Configuration.load(new File("test.yml"));
+		ConfigurationNode node = config.getNode();
+		NodeHelper<Double> helper = new NodeHelper<>(node);
+		assertTrue(helper.get("key", Double.class, null) == null);
+	}
 }

@@ -35,8 +35,18 @@ public class NodeHelper<T> {
 	
 	public T get(String path, Class<T> clazz) {
 		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(node, path);
+			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
 			return parsed.getValue(TypeToken.get(clazz));
+		} catch (ObjectMappingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public T get(String path, Class<T> clazz, T defaultValue) {
+		try {
+			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
+			return parsed.getValue(TypeToken.get(clazz), defaultValue);
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +55,7 @@ public class NodeHelper<T> {
 	
 	public List<T> getList(String path, Class<T> clazz) {
 		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(node, path);
+			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
 			return parsed.getList(TypeToken.get(clazz));
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();

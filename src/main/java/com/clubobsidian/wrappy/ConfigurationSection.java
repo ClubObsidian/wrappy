@@ -57,47 +57,54 @@ public class ConfigurationSection {
 	}
 	
 	public <T> T get(String path, Class<T> clazz) {
-		return new NodeHelper<T>(this.node).get(path, clazz);
+		return this.get(path, clazz, null);
+	}
+	
+	public <T> T get(String path, Class<T> clazz, T defaultValue) {
+		if(defaultValue == null) {
+			return new NodeHelper<T>(this.node).get(path, clazz);
+		}
+		return new NodeHelper<T>(this.node).get(path, clazz, defaultValue);
 	}
 	
 	public String getString(String path) {
-		return NodeUtil.parsePath(this.node, path).getString();
+		return this.get(path, String.class);
 	}
 	
 	public int getInteger(String path) {
-		return NodeUtil.parsePath(this.node, path).getInt();
+		return this.get(path, int.class, 0);
 	}
 	
 	public long getLong(String path) {
-		return NodeUtil.parsePath(this.node, path).getLong();
+		return this.get(path, long.class, 0L);
 	}
 	
 	public float getFloat(String path) {
-		return NodeUtil.parsePath(this.node, path).getFloat();
+		return this.get(path, float.class, 0f);
 	}
 	
 	public boolean getBoolean(String path) {
-		return NodeUtil.parsePath(this.node, path).getBoolean();
+		return this.get(path, boolean.class, false);
 	}
 	
 	public double getDouble(String path) {
-		return NodeUtil.parsePath(this.node, path).getDouble();
+		return this.get(path, double.class, 0.0);
 	}
 	
 	public URI getURI(String path) {
-		return new NodeHelper<URI>(this.node).get(path, URI.class);
+		return this.get(path, URI.class);
 	}
 	
 	public URL getURL(String path) {
-		return new NodeHelper<URL>(this.node).get(path, URL.class);
+		return this.get(path, URL.class);
 	}
 	
 	public UUID getUUID(String path) {
-		return new NodeHelper<UUID>(this.node).get(path, UUID.class);
+		return this.get(path, UUID.class);
 	}
 	
 	public Pattern getPattern(String path) {
-		return new NodeHelper<Pattern>(this.node).get(path, Pattern.class);
+		return this.get(path, Pattern.class);
 	}
 	
 	public List<String> getStringList(String path) {
