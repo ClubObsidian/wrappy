@@ -15,6 +15,7 @@
 */
 package com.clubobsidian.wrappy.test.config;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -71,6 +72,18 @@ public class TestInputStream {
 			InputStream input = new FileInputStream(new File("test.xml"));
 			Configuration config = Configuration.load(input, ConfigurationType.XML);
 			assertTrue("XML configuration is empty", config.getKeys().size() > 0);
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testInputStreamSaving() {
+		try {
+			InputStream input = new FileInputStream(new File("test.yml"));
+			Configuration config = Configuration.load(input, ConfigurationType.YAML);
+			assertFalse(config.save());
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
