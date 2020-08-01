@@ -170,12 +170,12 @@ public class Configuration extends ConfigurationSection {
 						.builder()
 						.setSource(callable)
 						.build();
-			} else if(type == ConfigurationType.XML) {
+			} else {
 				loader = XmlConfigurationLoader
 						.builder()
 						.setSource(callable)
 						.build();
-			}
+			} 
 			config.loader = loader;
 			config.node = loader.load();
 		} catch(IOException ex) {
