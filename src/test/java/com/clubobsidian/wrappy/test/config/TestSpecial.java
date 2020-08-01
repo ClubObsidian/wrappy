@@ -1,4 +1,4 @@
-package com.clubobsidian.wrappy.test;
+package com.clubobsidian.wrappy.test.config;
 
 import static org.junit.Assert.assertTrue;
 

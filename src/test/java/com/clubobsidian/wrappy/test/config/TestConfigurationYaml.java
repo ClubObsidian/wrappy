@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package com.clubobsidian.wrappy.test;
+package com.clubobsidian.wrappy.test.config;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -167,11 +167,9 @@ public class TestConfigurationYaml {
 	public void testFailingGenericList() {
 		@SuppressWarnings("rawtypes")
 		List list = null;
-		try
-		{
+		try {
 			list = config.getList("double-list", Object.class);
-		}
-		catch(AssertionError e)
+		} catch(AssertionError e)
 		{
 			assertTrue("Generic list did not fail and is not null", list == null);
 		}

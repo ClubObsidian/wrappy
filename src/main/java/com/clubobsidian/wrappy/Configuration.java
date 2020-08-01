@@ -23,10 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,13 +31,14 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
-
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+
+import com.clubobsidian.wrappy.util.HashUtil;
 
 public class Configuration extends ConfigurationSection {
 
@@ -127,8 +125,8 @@ public class Configuration extends ConfigurationSection {
 			char[] charData = new char[inputStream.available()];
 			reader.read(charData);
 			byte[] data = new String(charData).getBytes(StandardCharsets.UTF_8);
-			byte[] tempMD5 = getMD5(data);
-			byte[] backupMD5 = getMD5(file);
+			byte[] tempMD5 = HashUtil.getMD5(data);
+			byte[] backupMD5 = HashUtil.getMD5(file);
 			if(charData.length > 0 && tempMD5 != backupMD5) {
 				if(file.exists()) {
 					file.delete();
@@ -191,27 +189,5 @@ public class Configuration extends ConfigurationSection {
 			}
 		}
 		return config;
-	}
-	
-	private static byte[] getMD5(File file) {
-		try {
-			byte[] fileBytes = Files.readAllBytes(file.toPath());
-			return getMD5(fileBytes);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return new byte[0];
-	}
-	
-	private static byte[] getMD5(byte[] data) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.reset();
-			md.update(data);
-			return md.digest();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return new byte[0];
 	}
 }
