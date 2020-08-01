@@ -28,7 +28,7 @@ repositories {
 	maven { url 'https://repo.spongepowered.org/maven' }
 }
 
-compile 'com.github.clubobsidian:wrappy:1.8.0'
+compile 'com.github.clubobsidian:wrappy:2.0.0'
 ```
 
 ### Maven
@@ -48,7 +48,7 @@ compile 'com.github.clubobsidian:wrappy:1.8.0'
 <dependency>
 	<groupId>com.github.clubobsidian</groupId>
 	<artifactId>wrappy</artifactId>
-	<version>1.8.0</version>
+	<version>2.0.0</version>
 </dependency>
 ```
 
