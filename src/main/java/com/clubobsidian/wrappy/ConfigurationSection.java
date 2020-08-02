@@ -189,7 +189,7 @@ public class ConfigurationSection {
 		return this.getKeys().contains(key);
 	}
 	
-	public List<?> convertList(Object obj) {
+	private List<?> convertList(Object obj) {
 		List<?> convertList = (List<?>) obj;
 		if(convertList.size() == 0 || !this.isSpecial(convertList.get(0))) {
 			return convertList;
@@ -203,7 +203,7 @@ public class ConfigurationSection {
 		return newList;
 	}
 	
-	public boolean isSpecial(Object obj) {
+	private boolean isSpecial(Object obj) {
 		if(obj instanceof URI) {
 			return true;
 		} else if(obj instanceof URL) {
