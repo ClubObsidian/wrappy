@@ -20,6 +20,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -33,6 +35,26 @@ public class TestURLConfiguration {
 		File copyTo = new File("backup.yml");
 		try {
 			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo);
+			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
+			config.set("test", 1);
+			config = Configuration.load(testFile.toURI().toURL(), copyTo);
+			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		if(copyTo.exists()) {
+			copyTo.delete();
+		}	
+	}
+	
+	@Test
+	public void testUrlLoadingWithProperties() {
+		File testFile = new File("test.yml");
+		File copyTo = new File("backup.yml");
+		try {
+			Map<String, String> properties = new HashMap<>();
+			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo, properties);
 			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
 			config.set("test", 1);
 			config = Configuration.load(testFile.toURI().toURL(), copyTo);
