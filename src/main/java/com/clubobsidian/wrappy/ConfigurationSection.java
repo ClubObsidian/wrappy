@@ -176,7 +176,7 @@ public class ConfigurationSection {
 	}
 	
 	public List<String> getKeys() {	
-		List<String> keys = new ArrayList<String>();
+		List<String> keys = new ArrayList<>();
 		this.node.getChildrenMap().keySet().forEach(n -> keys.add((String) n));
 		return keys;
 	}
