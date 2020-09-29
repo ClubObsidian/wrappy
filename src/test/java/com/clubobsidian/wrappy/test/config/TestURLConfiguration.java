@@ -20,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,19 +51,31 @@ public class TestURLConfiguration {
 	
 	@Test
 	public void testUrlLoadingWithProperties() {
-		File testFile = new File("test.yml");
 		File copyTo = new File("backup.yml");
 		try {
 			Map<String, String> properties = new HashMap<>();
-			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo, properties);
-			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
-			config.set("test", 1);
-			config = Configuration.load(testFile.toURI().toURL(), copyTo);
-			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
+			URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/test.yml");
+			Configuration config = Configuration.load(url, copyTo, properties);
+			assertTrue(config.getInteger("rows") == 5);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
+		if(copyTo.exists()) {
+			copyTo.delete();
+		}	
+	}
+	
+	@Test
+	public void testUrlLoadingBigFile() {
+		File copyTo = new File("backup.yml");
+		try {
+			Map<String, String> properties = new HashMap<>();
+			URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/bigtest%2Cyml");
+			Configuration config = Configuration.load(url, copyTo, properties);
+			assertTrue(config.getInteger("rows") == 7);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 		if(copyTo.exists()) {
 			copyTo.delete();
 		}	

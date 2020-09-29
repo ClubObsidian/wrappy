@@ -20,12 +20,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
@@ -108,6 +111,9 @@ public class Configuration extends ConfigurationSection {
 			if(file != null && file.exists() && file.length() > 0 && !overwrite) {
 				return Configuration.load(file);
 			}
+			if(!file.exists()) {
+				file.createNewFile();
+			}
 			
 			URLConnection connection = url.openConnection();
 			connection.setConnectTimeout(connectionTimeout);
@@ -122,12 +128,16 @@ public class Configuration extends ConfigurationSection {
 			
 			InputStream inputStream = connection.getInputStream();
 			InputStreamReader reader = new InputStreamReader(inputStream);
-			char[] charData = new char[inputStream.available()];
-			reader.read(charData);
-			byte[] data = new String(charData).getBytes(StandardCharsets.UTF_8);
+			StringBuilder sb = new StringBuilder();
+			int read = -1;
+			while((read = reader.read()) != -1) {
+				sb.append((char) read);
+			}
+			
+			byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
 			byte[] tempMD5 = HashUtil.getMD5(data);
 			byte[] backupMD5 = HashUtil.getMD5(file);
-			if(charData.length > 0 && tempMD5 != backupMD5) {
+			if(data.length > 0 && tempMD5 != backupMD5) {
 				if(file.exists()) {
 					file.delete();
 				}
