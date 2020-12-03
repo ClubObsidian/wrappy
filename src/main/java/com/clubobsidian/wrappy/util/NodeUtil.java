@@ -17,6 +17,6 @@ public final class NodeUtil {
 		} else {
 			ar[0] = (Object) path;
 		}
-		return node.getNode(ar);
+		return node.node(ar);
 	}
 }

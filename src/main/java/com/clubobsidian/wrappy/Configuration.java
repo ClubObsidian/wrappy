@@ -55,24 +55,24 @@ public class Configuration extends ConfigurationSection {
 			if(fileName.endsWith(".yml")) {
 				loader = YamlConfigurationLoader
 						.builder()
-						.setNodeStyle(NodeStyle.BLOCK)
-						.setIndent(2)
-						.setPath(path)
+						.nodeStyle(NodeStyle.BLOCK)
+						.indent(2)
+						.path(path)
 						.build();
 			} else if(fileName.endsWith(".conf")) {
 				loader = HoconConfigurationLoader
 						.builder()
-						.setPath(path)
+						.path(path)
 						.build();
 			} else if(fileName.endsWith(".json")) {
 				loader = JacksonConfigurationLoader
 						.builder()
-						.setPath(path)
+						.path(path)
 						.build();
 			} else if(fileName.endsWith(".xml")) {
 				loader = XmlConfigurationLoader
 						.builder()
-						.setPath(path)
+						.path(path)
 						.build();
 			} else {
 				throw new UnknownFileTypeException(fileName);
@@ -163,24 +163,24 @@ public class Configuration extends ConfigurationSection {
 			if(type == ConfigurationType.YAML) {
 				loader = YamlConfigurationLoader
 						.builder()
-						.setSource(callable)
-						.setNodeStyle(NodeStyle.BLOCK)
-						.setIndent(2)
+						.source(callable)
+						.nodeStyle(NodeStyle.BLOCK)
+						.indent(2)
 						.build();
 			} else if(type == ConfigurationType.HOCON) {
 				loader = HoconConfigurationLoader
 						.builder()
-						.setSource(callable)
+						.source(callable)
 						.build();
 			} else if(type == ConfigurationType.JSON) {
 				loader = JacksonConfigurationLoader
 						.builder()
-						.setSource(callable)
+						.source(callable)
 						.build();
 			} else {
 				loader = XmlConfigurationLoader
 						.builder()
-						.setSource(callable)
+						.source(callable)
 						.build();
 			} 
 			config.loader = loader;

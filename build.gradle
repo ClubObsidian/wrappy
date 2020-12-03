@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-def configurateVersion = "4.0.0-SNAPSHOT"
+def configurateVersion = "4.0.0"
 
 dependencies {
     testImplementation 'junit:junit:4.12'
@@ -23,7 +23,7 @@ dependencies {
 shadowJar {
    baseName = 'wrappy'
    classifier = null
-   version = '2.0.1'
+   version = '2.1.0'
 }
 
 artifacts {

@@ -18,11 +18,11 @@ package com.clubobsidian.wrappy.helper;
 import java.util.List;
 
 import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.objectmapping.ObjectMappingException;
 
 import com.clubobsidian.wrappy.util.NodeUtil;
 
 import io.leangen.geantyref.TypeToken;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 
 public class NodeHelper<T> {
@@ -36,8 +36,8 @@ public class NodeHelper<T> {
 	public T get(String path, Class<T> clazz) {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
-			return parsed.getValue(TypeToken.get(clazz));
-		} catch (ObjectMappingException e) {
+			return parsed.get(TypeToken.get(clazz));
+		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -46,8 +46,8 @@ public class NodeHelper<T> {
 	public T get(String path, Class<T> clazz, T defaultValue) {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
-			return parsed.getValue(TypeToken.get(clazz), defaultValue);
-		} catch (ObjectMappingException e) {
+			return parsed.get(TypeToken.get(clazz), defaultValue);
+		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -57,7 +57,7 @@ public class NodeHelper<T> {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
 			return parsed.getList(TypeToken.get(clazz));
-		} catch (ObjectMappingException e) {
+		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
 		return null;

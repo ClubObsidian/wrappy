@@ -28,6 +28,7 @@ import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 import com.clubobsidian.wrappy.helper.NodeHelper;
 import com.clubobsidian.wrappy.util.NodeUtil;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class ConfigurationSection {
 
@@ -50,6 +51,10 @@ public class ConfigurationSection {
 	
 	public ConfigurationNode getNode() {
 		return this.node;
+	}
+
+	public ConfigurationLoader getLoader() {
+		return this.loader;
 	}
 	
 	public Object get(String path) {
@@ -162,7 +167,7 @@ public class ConfigurationSection {
 	}
 	
 	public boolean exists(String path) {
-		return !NodeUtil.parsePath(this.node, path).isVirtual();
+		return !NodeUtil.parsePath(this.node, path).virtual();
 	}
 	
 	public void set(String path, Object toSave) {
@@ -172,12 +177,16 @@ public class ConfigurationSection {
 		} else if(this.isSpecial(saveToPath)) {
 			saveToPath = saveToPath.toString();
 		}
-		NodeUtil.parsePath(this.node, path).setValue(saveToPath);
+		try {
+			NodeUtil.parsePath(this.node, path).set(saveToPath);
+		} catch (SerializationException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<String> getKeys() {	
 		List<String> keys = new ArrayList<>();
-		this.node.getChildrenMap().keySet().forEach(n -> keys.add((String) n));
+		this.node.childrenMap().keySet().forEach(n -> keys.add((String) n));
 		return keys;
 	}
 	

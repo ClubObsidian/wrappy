@@ -59,6 +59,8 @@ local.properties
 
 # IntelliJ
 /.idea/
+*.iml
+
 
 # External tool builders
 .externalToolBuilders/

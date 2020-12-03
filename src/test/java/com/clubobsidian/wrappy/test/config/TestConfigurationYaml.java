@@ -36,7 +36,12 @@ public class TestConfigurationYaml {
 	public void testNodeNotNull() {
 		assertTrue("Configurate node was null", config.getNode() != null);
 	}
-	
+
+	@Test
+	public void testLoaderNotNull() {
+		assertTrue("Configurate loader was null", config.getLoader() != null);
+	}
+
 	@Test
 	public void testGet() {
 		assertTrue("Config get is null", config.get("key") != null);
@@ -159,19 +164,8 @@ public class TestConfigurationYaml {
 	}
 	
 	@Test
-	public void testFailingGenericList() {
-		@SuppressWarnings("rawtypes")
-		List list = null;
-		try {
-			list = config.getList("double-list", Object.class);
-		} catch(AssertionError e)
-		{
-			assertTrue("Generic list did not fail and is not null", list == null);
-		}
-	}
-	
-	@Test
 	public void testGetKeys() {
+		config = Configuration.load(testFile);
 		List<String> keys = config.getKeys();
 		assertTrue("Config getKeys is not size 13", keys.size() == 13);
 	}
