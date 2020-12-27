@@ -32,6 +32,6 @@ public class TestInvalidLoading {
 	@Test
 	public void testLoadingIOException() {
 		Configuration config = Configuration.load(new File("test-invalid.yml"));
-		assertTrue("Node exists after throwing IOException", config.getNode() == null);
+		assertTrue(config == null);
 	}
 }
