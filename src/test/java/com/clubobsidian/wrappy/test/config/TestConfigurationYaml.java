@@ -15,9 +15,6 @@
 */
 package com.clubobsidian.wrappy.test.config;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
 import java.io.File;
 import java.util.List;
 
@@ -25,6 +22,8 @@ import org.junit.Test;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.ConfigurationSection;
+
+import static org.junit.Assert.*;
 
 
 public class TestConfigurationYaml {
@@ -238,5 +237,10 @@ public class TestConfigurationYaml {
 	@Test
 	public void testParsePath() {
 		assertTrue("Path could not be resolved", config.get("section.value") != null);
+	}
+
+	@Test
+	public void testGetName() {
+		assertEquals(config.getConfigurationSection("section").getName(), "section");
 	}
 }

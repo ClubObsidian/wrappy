@@ -56,7 +56,11 @@ public class ConfigurationSection {
 	public ConfigurationLoader getLoader() {
 		return this.loader;
 	}
-	
+
+	public String getName() {
+		return (String) this.node.key();
+	}
+
 	public Object get(String path) {
 		return this.get(path, Object.class);
 	}
