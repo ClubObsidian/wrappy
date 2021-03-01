@@ -15,14 +15,12 @@
 */
 package com.clubobsidian.wrappy.helper;
 
-import java.util.List;
-
-import org.spongepowered.configurate.ConfigurationNode;
-
 import com.clubobsidian.wrappy.util.NodeUtil;
-
 import io.leangen.geantyref.TypeToken;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
+
+import java.util.List;
 
 
 public class NodeHelper<T> {

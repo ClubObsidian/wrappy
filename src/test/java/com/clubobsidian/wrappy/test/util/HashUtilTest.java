@@ -1,13 +1,12 @@
 package com.clubobsidian.wrappy.test.util;
 
-import static org.junit.Assert.assertTrue;
+import com.clubobsidian.wrappy.util.HashUtil;
+import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
-
-import com.clubobsidian.wrappy.util.HashUtil;
+import static org.junit.Assert.assertTrue;
 
 public class HashUtilTest {
 

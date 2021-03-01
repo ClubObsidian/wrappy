@@ -1,4 +1,4 @@
-/*  
+/*
    Copyright 2020 Club Obsidian and contributors.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,20 +13,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package com.clubobsidian.wrappy.test.config;
+package com.clubobsidian.wrappy.inject;
 
-import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import java.io.File;
-
-import static org.junit.Assert.assertTrue;
-
-public class TestInvalidLoading {
-
-	@Test
-	public void testLoadingIOException() {
-		Configuration config = Configuration.load(new File("test-invalid.yml"));
-		assertTrue(config == null);
-	}
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Node {
+    String value();
 }

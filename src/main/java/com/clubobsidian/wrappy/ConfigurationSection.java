@@ -15,20 +15,22 @@
 */
 package com.clubobsidian.wrappy;
 
+import com.clubobsidian.wrappy.helper.NodeHelper;
+import com.clubobsidian.wrappy.inject.ConfigurationInjector;
+import com.clubobsidian.wrappy.transformer.NodeTransformer;
+import com.clubobsidian.wrappy.util.NodeUtil;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.serialize.SerializationException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.loader.ConfigurationLoader;
-
-import com.clubobsidian.wrappy.helper.NodeHelper;
-import com.clubobsidian.wrappy.util.NodeUtil;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 public class ConfigurationSection {
 
@@ -201,7 +203,24 @@ public class ConfigurationSection {
 	public boolean hasKey(String key) {
 		return this.getKeys().contains(key);
 	}
-	
+
+	public void inject(Class<?> injectInto) {
+		this.inject(injectInto, new ArrayList<>());
+	}
+
+	public void inject(Class<?> injectInto, Collection<NodeTransformer> transformers) {
+		this.inject((Object) injectInto, transformers);
+	}
+
+	public void inject(Object injectInto) {
+		this.inject(injectInto, new ArrayList<>());
+	}
+
+	public void inject(Object injectInto, Collection<NodeTransformer> transformers) {
+		ConfigurationInjector injector = new ConfigurationInjector(this, injectInto);
+		injector.inject(transformers);
+	}
+
 	private List<?> convertList(Object obj) {
 		List<?> convertList = (List<?>) obj;
 		if(convertList.size() == 0 || !this.isSpecial(convertList.get(0))) {

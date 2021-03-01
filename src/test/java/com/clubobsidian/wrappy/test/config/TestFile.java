@@ -15,14 +15,13 @@
 */
 package com.clubobsidian.wrappy.test.config;
 
-import static org.junit.Assert.assertTrue;
+import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.UnknownFileTypeException;
+import org.junit.Test;
 
 import java.io.File;
 
-import org.junit.Test;
-
-import com.clubobsidian.wrappy.Configuration;
-import com.clubobsidian.wrappy.UnknownFileTypeException;
+import static org.junit.Assert.assertTrue;
 
 public class TestFile { 
 

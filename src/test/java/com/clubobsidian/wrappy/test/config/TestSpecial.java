@@ -1,6 +1,8 @@
 package com.clubobsidian.wrappy.test.config;
 
-import static org.junit.Assert.assertTrue;
+import com.clubobsidian.wrappy.Configuration;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,10 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.clubobsidian.wrappy.Configuration;
+import static org.junit.Assert.assertTrue;
 
 public class TestSpecial {
 

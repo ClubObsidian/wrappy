@@ -1,4 +1,4 @@
-/*  
+/*
    Copyright 2020 Club Obsidian and contributors.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,20 +13,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package com.clubobsidian.wrappy.test.config;
+package com.clubobsidian.wrappy.test.mock;
 
-import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import com.clubobsidian.wrappy.transformer.NodeTransformer;
 
-import java.io.File;
+public class StringNodeTransformerMock extends NodeTransformer<String> {
 
-import static org.junit.Assert.assertTrue;
+    public StringNodeTransformerMock() {
+        super(String.class);
+    }
 
-public class TestInvalidLoading {
-
-	@Test
-	public void testLoadingIOException() {
-		Configuration config = Configuration.load(new File("test-invalid.yml"));
-		assertTrue(config == null);
-	}
+    @Override
+    public String transform(String transform) {
+        return "a" + transform;
+    }
 }

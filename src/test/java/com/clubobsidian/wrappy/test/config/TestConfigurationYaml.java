@@ -15,13 +15,12 @@
 */
 package com.clubobsidian.wrappy.test.config;
 
-import java.io.File;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.ConfigurationSection;
+import org.junit.Test;
+
+import java.io.File;
+import java.util.List;
 
 import static org.junit.Assert.*;
 

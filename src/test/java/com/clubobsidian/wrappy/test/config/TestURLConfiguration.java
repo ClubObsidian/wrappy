@@ -15,7 +15,8 @@
 */
 package com.clubobsidian.wrappy.test.config;
 
-import static org.junit.Assert.assertTrue;
+import com.clubobsidian.wrappy.Configuration;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +25,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-
-import com.clubobsidian.wrappy.Configuration;
+import static org.junit.Assert.assertTrue;
 
 public class TestURLConfiguration {
 

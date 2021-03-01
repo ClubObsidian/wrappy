@@ -1,16 +1,15 @@
 package com.clubobsidian.wrappy.test.helper;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
+import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.helper.NodeHelper;
 import org.junit.Test;
 import org.spongepowered.configurate.ConfigurationNode;
 
-import com.clubobsidian.wrappy.Configuration;
-import com.clubobsidian.wrappy.helper.NodeHelper;
+import java.io.File;
 
-public class NodeHelperTest {
+import static org.junit.Assert.assertTrue;
+
+public class TestNodeHelper {
 
 	@Test
 	public void testInvalid() {
