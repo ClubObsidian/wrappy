@@ -17,7 +17,6 @@ package com.clubobsidian.wrappy.inject;
 
 import com.clubobsidian.wrappy.ConfigurationSection;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
-import com.clubobsidian.wrappy.util.ReflectionUtil;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -50,7 +49,12 @@ public class ConfigurationInjector {
                         nodeValue = transformer.transform(nodeValue);
                     }
                 }
-                ReflectionUtil.set(field, this.injectInto, nodeValue);
+                try {
+                    field.setAccessible(true);
+                    field.set(this.injectInto, nodeValue);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
         }
