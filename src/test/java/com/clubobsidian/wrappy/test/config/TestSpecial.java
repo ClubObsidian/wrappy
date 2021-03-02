@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestSpecial {
@@ -26,6 +28,14 @@ public class TestSpecial {
 		if(!testFolder.exists()) {
 			testFolder.mkdirs();
 		}
+	}
+
+	@Test
+	public void testGetEnum() {
+		File enumFile = new File(this.testFolder, "test-enum.yml");
+		Configuration config = Configuration.load(enumFile);
+		DayOfWeek day = config.getEnum("day", DayOfWeek.class);
+		assertEquals(DayOfWeek.FRIDAY, day);
 	}
 
 	@Test
@@ -108,6 +118,29 @@ public class TestSpecial {
 			e.printStackTrace();
 		}
 	}
+
+	@Test
+	public void testGetEnumList() {
+		try {
+			List<DayOfWeek> list = new ArrayList<>();
+			DayOfWeek day = DayOfWeek.FRIDAY;
+			list.add(day);
+			File enumFile = new File(this.testFolder, "test-enum.yml");
+			if(enumFile.exists()) {
+				enumFile.delete();
+			}
+			enumFile.createNewFile();
+			Configuration config = Configuration.load(enumFile);
+			config.set("day", list);
+			config.save();
+			config = Configuration.load(enumFile);
+			List<DayOfWeek> newEnumList = config.getEnumList("day", DayOfWeek.class);
+			assertEquals(day, newEnumList.get(0));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	@Test
 	public void testURIList() {

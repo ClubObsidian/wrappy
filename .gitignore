@@ -3,6 +3,7 @@ testuri.yml
 testurl.yml
 testuuid.yml
 testpattern.yml
+test-enum.yml
 
 # Compiled class file
 *.class

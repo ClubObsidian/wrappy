@@ -101,6 +101,10 @@ public class ConfigurationSection {
 	public double getDouble(String path) {
 		return this.get(path, double.class, 0.0);
 	}
+
+	public <T extends Enum> T getEnum(String path, Class<T> enumClass) {
+		return this.get(path, enumClass, null);
+	}
 	
 	public URI getURI(String path) {
 		return this.get(path, URI.class);
@@ -117,7 +121,7 @@ public class ConfigurationSection {
 	public Pattern getPattern(String path) {
 		return this.get(path, Pattern.class);
 	}
-	
+
 	public List<String> getStringList(String path) {
 		return this.getList(path, String.class);
 	}
@@ -140,6 +144,10 @@ public class ConfigurationSection {
 	
 	public List<Double> getDoubleList(String path) {
 		return this.getList(path, Double.class);
+	}
+
+	public <T extends Enum> List<T> getEnumList(String path, Class<T> enumClass) {
+		return this.getList(path, enumClass);
 	}
 	
 	public List<URI> getURIList(String path) {
@@ -236,15 +244,7 @@ public class ConfigurationSection {
 	}
 	
 	private boolean isSpecial(Object obj) {
-		if(obj instanceof URI) {
-			return true;
-		} else if(obj instanceof URL) {
-			return true;
-		} else if(obj instanceof UUID) {
-			return true;
-		} else if(obj instanceof Pattern) {
-			return true;
-		}
-		return false;
+		Class<?> clazz = obj.getClass();
+		return !clazz.isPrimitive() && !clazz.equals(String.class);
 	}
 }
