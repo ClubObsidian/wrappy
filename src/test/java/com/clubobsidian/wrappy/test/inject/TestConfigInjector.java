@@ -27,6 +27,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -83,5 +84,19 @@ public class TestConfigInjector {
         transformers.add(new StringNodeTransformerMock());
         config.inject(ConfigHolderStaticMock.class, transformers);
         assertEquals("abar", ConfigHolderStaticMock.foo);
+    }
+
+    @Test
+    public void testInjectorPrimitive() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(2, mock.getNum());
+    }
+
+    @Test
+    public void testInjectorNonStringObject() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(UUID.fromString("8ad24b1a-963a-4b0e-b776-1befdc81f5d2"), mock.getUUID());
     }
 }

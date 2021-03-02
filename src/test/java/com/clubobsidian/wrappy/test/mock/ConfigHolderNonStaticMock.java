@@ -17,12 +17,26 @@ package com.clubobsidian.wrappy.test.mock;
 
 import com.clubobsidian.wrappy.inject.Node;
 
+import java.util.UUID;
+
 public class ConfigHolderNonStaticMock {
 
     @Node("foo")
     private String foo;
+    @Node("num")
+    private int num;
+    @Node("uuid")
+    private UUID uuid;
 
     public String getFoo() {
         return this.foo;
+    }
+
+    public int getNum() {
+        return this.num;
+    }
+
+    public UUID getUUID() {
+        return this.uuid;
     }
 }

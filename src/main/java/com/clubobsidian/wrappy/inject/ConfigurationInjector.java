@@ -43,7 +43,7 @@ public class ConfigurationInjector {
             for(Node node : field.getAnnotationsByType(Node.class)) {
                 Class<?> fieldClazz= field.getType();
                 String nodeName = node.value();
-                Object nodeValue = this.config.get(nodeName);
+                Object nodeValue = this.config.get(nodeName, fieldClazz);
                 for(NodeTransformer transformer : transformers) {
                     if(transformer.getClassToTransform().equals(fieldClazz)) {
                         nodeValue = transformer.transform(nodeValue);
