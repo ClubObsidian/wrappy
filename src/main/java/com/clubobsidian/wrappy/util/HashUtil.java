@@ -24,14 +24,16 @@ import java.security.NoSuchAlgorithmException;
 
 public final class HashUtil {
 
+	private static final String MD5 = "MD5";
+
 	private HashUtil() {}
 	
 	public static byte[] getMD5(File file) {
-		return getHash("MD5", file);
+		return getHash(MD5, file);
 	}
 	
 	public static byte[] getMD5(byte[] data) {
-		return getHash("MD5", data);
+		return getHash(MD5, data);
 	}
 	
 	private static byte[] getHash(String hash, File file) {
