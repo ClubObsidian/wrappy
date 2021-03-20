@@ -26,10 +26,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class ConfigurationSection {
@@ -76,6 +73,14 @@ public class ConfigurationSection {
 			return new NodeHelper<T>(this.node).get(path, clazz);
 		}
 		return new NodeHelper<T>(this.node).get(path, clazz, defaultValue);
+	}
+
+	public <K, V> Map<K, V> getMap(String path) {
+		Object objMap = this.get(path);
+		if(objMap == null || !(objMap instanceof Map)) {
+			return null;
+		}
+		return (Map<K, V>) objMap;
 	}
 	
 	public String getString(String path) {

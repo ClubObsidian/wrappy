@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.io.File;
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -46,7 +47,25 @@ public class TestConfigurationYaml {
 		assertTrue("Config get is null", config.get("key") != null);
 		assertTrue("Config get is not null", config.get("non-existent-key") == null);
 	}
-	
+
+	@Test
+	public void testGetMap() {
+		Map<String, Integer> map = config.getMap("section");
+		assertTrue(7 == map.get("value"));
+	}
+
+	@Test
+	public void testSectionThatDoesNotExist() {
+		Map<String, Integer> map = config.getMap("non-existent-section");
+		assertEquals(null, map);
+	}
+
+	@Test
+	public void testValueAsMap() {
+		Map<String, Integer> map = config.getMap("key");
+		assertEquals(null, map);
+	}
+
 	@Test
 	public void testGetString() {
 		assertTrue("Config getString is null", config.getString("key") != null);
