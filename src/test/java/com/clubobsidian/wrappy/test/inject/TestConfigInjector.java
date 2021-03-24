@@ -99,4 +99,11 @@ public class TestConfigInjector {
         config.inject(mock);
         assertEquals(UUID.fromString("8ad24b1a-963a-4b0e-b776-1befdc81f5d2"), mock.getUUID());
     }
+
+    @Test
+    public void testInjectorStringList() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals("foobar", mock.getStrList().get(0));
+    }
 }

@@ -17,6 +17,7 @@ package com.clubobsidian.wrappy.test.mock;
 
 import com.clubobsidian.wrappy.inject.Node;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ConfigHolderNonStaticMock {
@@ -27,6 +28,8 @@ public class ConfigHolderNonStaticMock {
     private int num;
     @Node("uuid")
     private UUID uuid;
+    @Node(value = "str-list", type = String.class)
+    private List<String> strList;
 
     public String getFoo() {
         return this.foo;
@@ -38,5 +41,9 @@ public class ConfigHolderNonStaticMock {
 
     public UUID getUUID() {
         return this.uuid;
+    }
+
+    public List<String> getStrList() {
+        return this.strList;
     }
 }

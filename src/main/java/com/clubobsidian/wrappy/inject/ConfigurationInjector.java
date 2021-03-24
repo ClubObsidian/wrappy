@@ -20,6 +20,7 @@ import com.clubobsidian.wrappy.transformer.NodeTransformer;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 
 public class ConfigurationInjector {
 
@@ -41,9 +42,14 @@ public class ConfigurationInjector {
         }
         for(Field field: injectClazz.getDeclaredFields()) {
             for(Node node : field.getAnnotationsByType(Node.class)) {
-                Class<?> fieldClazz= field.getType();
-                String nodeName = node.value();
-                Object nodeValue = this.config.get(nodeName, fieldClazz);
+                Class<?> fieldClazz = field.getType();
+                String nodePath = node.value();
+                Object nodeValue;
+                if(fieldClazz.equals(List.class)) {
+                    nodeValue = this.config.getList(nodePath, node.type());
+                } else {
+                    nodeValue = this.config.get(nodePath, fieldClazz);
+                }
                 for(NodeTransformer transformer : transformers) {
                     if(transformer.getClassToTransform().equals(fieldClazz)) {
                         nodeValue = transformer.transform(nodeValue);

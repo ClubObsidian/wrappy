@@ -21,4 +21,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Node {
     String value();
+    Class<?> type() default Object.class;
 }
