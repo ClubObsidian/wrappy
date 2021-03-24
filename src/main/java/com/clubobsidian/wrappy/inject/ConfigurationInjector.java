@@ -45,6 +45,10 @@ public class ConfigurationInjector {
                 Class<?> fieldClazz = field.getType();
                 String nodePath = node.value();
                 Object nodeValue;
+                if(nodePath.equals("%key%")) {
+                    this.setField(field, this.config.getName());
+                    break;
+                }
                 if(fieldClazz.equals(List.class)) {
                     nodeValue = this.config.getList(nodePath, node.type());
                 } else {
@@ -55,14 +59,18 @@ public class ConfigurationInjector {
                         nodeValue = transformer.transform(nodeValue);
                     }
                 }
-                try {
-                    field.setAccessible(true);
-                    field.set(this.injectInto, nodeValue);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                this.setField(field, nodeValue);
                 break;
             }
+        }
+    }
+
+    private void setField(Field field, Object nodeValue) {
+        try {
+            field.setAccessible(true);
+            field.set(this.injectInto, nodeValue);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

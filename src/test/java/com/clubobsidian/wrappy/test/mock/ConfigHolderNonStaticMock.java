@@ -30,6 +30,8 @@ public class ConfigHolderNonStaticMock {
     private UUID uuid;
     @Node(value = "str-list", type = String.class)
     private List<String> strList;
+    @Node("%key%")
+    private String key;
 
     public String getFoo() {
         return this.foo;
@@ -45,5 +47,9 @@ public class ConfigHolderNonStaticMock {
 
     public List<String> getStrList() {
         return this.strList;
+    }
+
+    public String getKey() {
+        return this.key;
     }
 }

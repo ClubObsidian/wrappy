@@ -16,6 +16,7 @@
 package com.clubobsidian.wrappy.test.inject;
 
 import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.ConfigurationSection;
 import com.clubobsidian.wrappy.inject.ConfigurationInjector;
 import com.clubobsidian.wrappy.test.mock.ConfigHolderNonStaticMock;
 import com.clubobsidian.wrappy.test.mock.ConfigHolderStaticMock;
@@ -33,11 +34,12 @@ import static org.junit.Assert.assertEquals;
 
 public class TestConfigInjector {
 
-    private static Configuration config;
+    private static ConfigurationSection config;
 
     @Before
     public void setup() {
         config = Configuration.load(new File("test", "test-inject.yml"));
+        config = config.getConfigurationSection("test");
     }
 
     @Test
@@ -105,5 +107,12 @@ public class TestConfigInjector {
         ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
         config.inject(mock);
         assertEquals("foobar", mock.getStrList().get(0));
+    }
+
+    @Test
+    public void testInjectorKey() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals("test", mock.getKey());
     }
 }
