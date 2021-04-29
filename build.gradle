@@ -23,7 +23,7 @@ dependencies {
 shadowJar {
    baseName = 'wrappy'
    classifier = null
-   version = '2.3.0'
+   version = '2.3.1'
 }
 
 artifacts {

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ConfigurationInjector {
 
-    private ConfigurationSection config;
+    private final ConfigurationSection config;
     private Object injectInto;
 
     public ConfigurationInjector(ConfigurationSection config, Object injectInto) {
@@ -35,7 +35,7 @@ public class ConfigurationInjector {
     public void inject(Collection<NodeTransformer> transformers) {
         Class<?> injectClazz;
         if(this.injectInto instanceof Class) {
-            injectClazz = (Class) injectInto;
+            injectClazz = (Class<?>) injectInto;
             this.injectInto = null;
         } else {
             injectClazz = this.injectInto.getClass();
