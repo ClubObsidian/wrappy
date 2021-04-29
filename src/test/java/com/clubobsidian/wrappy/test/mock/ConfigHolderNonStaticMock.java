@@ -32,6 +32,8 @@ public class ConfigHolderNonStaticMock {
     private List<String> strList;
     @Node("%key%")
     private String key;
+    @Node("non-existent")
+    private String nonExistent;
 
     public String getFoo() {
         return this.foo;
@@ -51,5 +53,9 @@ public class ConfigHolderNonStaticMock {
 
     public String getKey() {
         return this.key;
+    }
+
+    public String getNonExistent() {
+        return this.nonExistent;
     }
 }

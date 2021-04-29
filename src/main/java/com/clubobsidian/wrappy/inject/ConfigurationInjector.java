@@ -33,7 +33,7 @@ public class ConfigurationInjector {
     }
 
     public void inject(Collection<NodeTransformer> transformers) {
-        Class<?> injectClazz = null;
+        Class<?> injectClazz;
         if(this.injectInto instanceof Class) {
             injectClazz = (Class) injectInto;
             this.injectInto = null;
@@ -54,9 +54,11 @@ public class ConfigurationInjector {
                 } else {
                     nodeValue = this.config.get(nodePath, fieldClazz);
                 }
-                for(NodeTransformer transformer : transformers) {
-                    if(transformer.getClassToTransform().equals(fieldClazz)) {
-                        nodeValue = transformer.transform(nodeValue);
+                if(nodeValue != null) {
+                    for (NodeTransformer transformer : transformers) {
+                        if (transformer.getClassToTransform().equals(fieldClazz)) {
+                            nodeValue = transformer.transform(nodeValue);
+                        }
                     }
                 }
                 this.setField(field, nodeValue);

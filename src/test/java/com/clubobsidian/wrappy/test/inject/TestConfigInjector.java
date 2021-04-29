@@ -115,4 +115,11 @@ public class TestConfigInjector {
         config.inject(mock);
         assertEquals("test", mock.getKey());
     }
+
+    @Test
+    public void testInjectorNonExistent() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(null, mock.getNonExistent());
+    }
 }
