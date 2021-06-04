@@ -15,6 +15,7 @@
  */
 package com.clubobsidian.wrappy.helper;
 
+import com.clubobsidian.wrappy.ConfigurationSection;
 import com.clubobsidian.wrappy.util.NodeUtil;
 import io.leangen.geantyref.TypeToken;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -24,27 +25,21 @@ import java.util.List;
 
 
 public class NodeHelper<T> {
+
+	private final ConfigurationSection section;
 	
-	private ConfigurationNode node;
-	
-	public NodeHelper(ConfigurationNode node) {
-		this.node = node;
-	}
-	
-	public T get(String path, Class<T> clazz) {
-		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
-			return parsed.get(TypeToken.get(clazz));
-		} catch (SerializationException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public NodeHelper(ConfigurationSection section) {
+		this.section = section;
 	}
 	
 	public T get(String path, Class<T> clazz, T defaultValue) {
 		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
-			return parsed.get(TypeToken.get(clazz), defaultValue);
+			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
+			TypeToken<T> type = TypeToken.get(clazz);
+			if(defaultValue == null) {
+				return parsed.get(type);
+			}
+			return parsed.get(type, defaultValue);
 		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
@@ -53,7 +48,7 @@ public class NodeHelper<T> {
 	
 	public List<T> getList(String path, Class<T> clazz) {
 		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
+			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
 			return parsed.getList(TypeToken.get(clazz));
 		} catch (SerializationException e) {
 			e.printStackTrace();

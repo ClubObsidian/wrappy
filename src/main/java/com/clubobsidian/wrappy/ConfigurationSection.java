@@ -38,7 +38,6 @@ public class ConfigurationSection {
 		if(!this.loader.canSave()) {
 			return false;
 		}
-		
 		try {
 			this.loader.save(this.node);
 			return true;
@@ -69,10 +68,7 @@ public class ConfigurationSection {
 	}
 	
 	public <T> T get(String path, Class<T> clazz, T defaultValue) {
-		if(defaultValue == null) {
-			return new NodeHelper<T>(this.node).get(path, clazz);
-		}
-		return new NodeHelper<T>(this.node).get(path, clazz, defaultValue);
+		return new NodeHelper<T>(this).get(path, clazz, defaultValue);
 	}
 
 	public <K, V> Map<K, V> getMap(String path) {
@@ -172,7 +168,7 @@ public class ConfigurationSection {
 	}
 	
 	public <T> List<T> getList(String path, Class<T> clazz) {
-		return new NodeHelper<T>(this.node).getList(path, clazz);
+		return new NodeHelper<T>(this).getList(path, clazz);
 	}
 	
 	public ConfigurationSection createConfigurationSection(String path) {
