@@ -59,6 +59,13 @@ public class TestConfigInjector {
     }
 
     @Test
+    public void testInjectStaticEnumList() {
+        ConfigurationInjector injector = new ConfigurationInjector(config, ConfigHolderStaticMock.class);
+        injector.inject(new ArrayList<>());
+        assertEquals(DayOfWeek.FRIDAY, ConfigHolderStaticMock.dayList.get(0));
+    }
+
+    @Test
     public void testInjectNonStaticConfig() {
         ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
         config.inject(mock);

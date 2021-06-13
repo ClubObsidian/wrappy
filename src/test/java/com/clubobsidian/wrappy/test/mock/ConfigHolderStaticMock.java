@@ -17,8 +17,14 @@ package com.clubobsidian.wrappy.test.mock;
 
 import com.clubobsidian.wrappy.inject.Node;
 
+import java.time.DayOfWeek;
+import java.util.List;
+
 public class ConfigHolderStaticMock {
 
     @Node("foo")
     public static String foo;
+
+    @Node(value = "day-list", type = DayOfWeek.class)
+    public static List<DayOfWeek> dayList;
 }
