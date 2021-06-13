@@ -190,6 +190,12 @@ public class Configuration extends ConfigurationSection {
 		return config;
 	}
 
+	public static Configuration load(ConfigurationLoader<?> loader) {
+		Configuration config = new Configuration();
+		modifyNode(config, loader);
+		return config;
+	}
+
 	private static boolean modifyNode(Configuration config, ConfigurationLoader<?> loader) {
 		try {
 			config.loader = loader;
