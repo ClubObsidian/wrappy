@@ -3,4 +3,7 @@ test:
   num: 2
   uuid: 8ad24b1a-963a-4b0e-b776-1befdc81f5d2
   str-list:
-  - "foobar"
+    - "foobar"
+  day-list:
+    - "FRIDAY"
+    - "SATURDAY"

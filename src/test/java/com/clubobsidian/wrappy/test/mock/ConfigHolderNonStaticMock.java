@@ -17,6 +17,7 @@ package com.clubobsidian.wrappy.test.mock;
 
 import com.clubobsidian.wrappy.inject.Node;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +31,8 @@ public class ConfigHolderNonStaticMock {
     private UUID uuid;
     @Node(value = "str-list", type = String.class)
     private List<String> strList;
+    @Node(value = "day-list", type = DayOfWeek.class)
+    private List<DayOfWeek> dayList;
     @Node("%key%")
     private String key;
     @Node("non-existent")
@@ -49,6 +52,10 @@ public class ConfigHolderNonStaticMock {
 
     public List<String> getStrList() {
         return this.strList;
+    }
+
+    public List<DayOfWeek> getDayList() {
+        return this.dayList;
     }
 
     public String getKey() {

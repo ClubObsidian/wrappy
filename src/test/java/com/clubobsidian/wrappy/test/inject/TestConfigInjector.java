@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -107,6 +108,13 @@ public class TestConfigInjector {
         ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
         config.inject(mock);
         assertEquals("foobar", mock.getStrList().get(0));
+    }
+
+    @Test
+    public void testInjectorEnumList() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(DayOfWeek.FRIDAY, mock.getDayList().get(0));
     }
 
     @Test
