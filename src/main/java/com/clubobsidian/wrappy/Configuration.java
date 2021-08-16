@@ -137,7 +137,6 @@ public class Configuration extends ConfigurationSection {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
 		
 		if(file.exists()) {
