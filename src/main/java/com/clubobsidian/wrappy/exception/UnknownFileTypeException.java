@@ -13,28 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.clubobsidian.wrappy;
+package com.clubobsidian.wrappy.exception;
 
-public enum ConfigurationType {
+public class UnknownFileTypeException extends RuntimeException {
 
-	YAML,
-	JSON,
-	HOCON,
-	XML,
-	UNKNOWN;
-
-	public static ConfigurationType fromString(final String name) {
-		if(name != null) {
-			if(name.endsWith(".yml")) {
-				return YAML;
-			} else if(name.endsWith(".conf")) {
-				return HOCON;
-			} else if(name.endsWith(".json")) {
-				return JSON;
-			} else if(name.endsWith(".xml")) {
-				return XML;
-			}
-		}
-		return UNKNOWN;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5825723878989203063L;
+	
+	public UnknownFileTypeException() {
+		super("Unknown file type for configuration file");
 	}
 }

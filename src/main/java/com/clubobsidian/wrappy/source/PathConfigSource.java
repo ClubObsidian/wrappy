@@ -13,22 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.clubobsidian.wrappy;
 
-import java.io.File;
+package com.clubobsidian.wrappy.source;
 
-public class UnknownFileTypeException extends RuntimeException {
+import com.clubobsidian.wrappy.ConfigSource;
+import com.clubobsidian.wrappy.Configuration;
+import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5825723878989203063L;
-	
-	public UnknownFileTypeException(File file) {
-		this(file.getName());
-	}
-	
-	public UnknownFileTypeException(String fileName) {
-		super("Unknown file type for configuration file " + fileName);
-	}
+import java.nio.file.Path;
+
+public class PathConfigSource extends ConfigSource<Path> {
+
+    public PathConfigSource(Path source) {
+        super(source);
+    }
+
+    @Override
+    public void load(Configuration.BuilderOpts opts, AbstractConfigurationLoader.Builder<?, ?> loader) {
+        loader.path(this.getSource());
+    }
 }

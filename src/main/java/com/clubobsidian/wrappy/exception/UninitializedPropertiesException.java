@@ -13,28 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.clubobsidian.wrappy;
 
-public enum ConfigurationType {
+package com.clubobsidian.wrappy.exception;
 
-	YAML,
-	JSON,
-	HOCON,
-	XML,
-	UNKNOWN;
+public class UninitializedPropertiesException extends Exception {
 
-	public static ConfigurationType fromString(final String name) {
-		if(name != null) {
-			if(name.endsWith(".yml")) {
-				return YAML;
-			} else if(name.endsWith(".conf")) {
-				return HOCON;
-			} else if(name.endsWith(".json")) {
-				return JSON;
-			} else if(name.endsWith(".xml")) {
-				return XML;
-			}
-		}
-		return UNKNOWN;
-	}
+
+
 }

@@ -15,17 +15,27 @@
  */
 package com.clubobsidian.wrappy;
 
+import com.clubobsidian.wrappy.exception.UninitializedPropertiesException;
+import com.clubobsidian.wrappy.exception.UnknownFileTypeException;
+import com.clubobsidian.wrappy.source.InputStreamConfigSource;
+import com.clubobsidian.wrappy.source.PathConfigSource;
+import com.clubobsidian.wrappy.source.URLConfigSource;
 import com.clubobsidian.wrappy.util.HashUtil;
 import org.apache.commons.io.FileUtils;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
+import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -34,50 +44,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 
 public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(File file) {
-		return Configuration.load(file.toPath());
+		try {
+			return new Builder().file(file).build(ConfigurationType.fromString(file.getName()));
+		} catch(UninitializedPropertiesException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static Configuration load(Path path) {
-		Configuration config = new Configuration();
-		String fileName = path.getFileName().toString();
-		ConfigurationLoader<?> loader = null;
-
-		if(fileName.endsWith(".yml")) {
-			loader = YamlConfigurationLoader
-					.builder()
-					.nodeStyle(NodeStyle.BLOCK)
-					.indent(2)
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".conf")) {
-			loader = HoconConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".json")) {
-			loader = JacksonConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".xml")) {
-			loader = XmlConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else {
-			throw new UnknownFileTypeException(fileName);
-		}
-		boolean modified = modifyNode(config, loader);
-		if(!modified) {
+		try {
+			return new Builder().path(path).build(ConfigurationType.fromString(path.getFileName().toString()));
+		} catch(UninitializedPropertiesException e) {
+			e.printStackTrace();
 			return null;
 		}
-
-		return config;
 	}
 
 	public static Configuration load(URL url, File backupFile) {
@@ -117,7 +102,7 @@ public class Configuration extends ConfigurationSection {
 			}
 			
 			InputStream inputStream = connection.getInputStream();
-			InputStreamReader reader = new InputStreamReader(inputStream);
+			Reader reader = new InputStreamReader(inputStream);
 			StringBuilder sb = new StringBuilder();
 			int read = -1;
 			while((read = reader.read()) != -1) {
@@ -147,46 +132,12 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type) {
-		ConfigurationLoader<?> loader = null;
-		Configuration config = new Configuration();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-		Callable<BufferedReader> callable = () -> reader;
-		if(type == ConfigurationType.YAML) {
-			loader = YamlConfigurationLoader
-					.builder()
-					.source(callable)
-					.nodeStyle(NodeStyle.BLOCK)
-					.indent(2)
-					.build();
-		} else if(type == ConfigurationType.HOCON) {
-			loader = HoconConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		} else if(type == ConfigurationType.JSON) {
-			loader = JacksonConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		} else {
-			loader = XmlConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		}
-		boolean modified = modifyNode(config, loader);
 		try {
-			reader.close();
-			stream.close();
-		} catch (IOException e) {
+			return new Builder().stream(stream).build(type);
+		} catch(UninitializedPropertiesException e) {
 			e.printStackTrace();
-		}
-		if(!modified) {
 			return null;
 		}
-
-		return config;
 	}
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
@@ -195,14 +146,99 @@ public class Configuration extends ConfigurationSection {
 		return config;
 	}
 
-	private static boolean modifyNode(Configuration config, ConfigurationLoader<?> loader) {
-		try {
-			config.loader = loader;
-			config.node = loader.load();
-			return true;
-		} catch (ConfigurateException e) {
-			e.printStackTrace();
-			return false;
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		private final BuilderOpts opts = new BuilderOpts();
+		private ConfigSource<?> source;
+
+		Builder() {
+
+		}
+
+		public Builder path(Path path) {
+			this.source = new PathConfigSource(path);
+			return this;
+		}
+
+		public Builder file(File file) {
+			return this.path(file.toPath());
+		}
+
+		public Builder url(URL url) {
+			this.source = new URLConfigSource(url);
+			return this;
+		}
+
+		public Builder stream(InputStream stream) {
+			this.source = new InputStreamConfigSource(stream);
+			return this;
+		}
+
+		public Builder source(ConfigSource<?> source) {
+			this.source = source;
+			return this;
+		}
+
+		public BuilderOpts options() {
+			return this.opts;
+		}
+
+		public Configuration build(ConfigurationType type) throws UninitializedPropertiesException {
+			if(source == null) {
+				throw new UninitializedPropertiesException(); //TODO - Description
+			}
+
+			Configuration config = new Configuration();
+			AbstractConfigurationLoader.Builder<?,?> builder;
+			if(type == ConfigurationType.YAML) {
+				builder = YamlConfigurationLoader
+						.builder()
+						.nodeStyle(NodeStyle.BLOCK)
+						.indent(2);
+			} else if(type == ConfigurationType.HOCON) {
+				builder = HoconConfigurationLoader
+						.builder();
+			} else if(type == ConfigurationType.JSON) {
+				builder = JacksonConfigurationLoader
+						.builder();
+			} else if(type == ConfigurationType.XML) {
+				builder = XmlConfigurationLoader
+						.builder();
+			} else {
+				throw new UnknownFileTypeException();
+			}
+
+			this.source.load(this.opts, builder);
+			ConfigurationLoader<?> loader = builder.build();
+
+			try {
+				config.loader = loader;
+				config.node = loader.load();
+				return config;
+			} catch (ConfigurateException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+
+	public static class BuilderOpts {
+
+		private int connectionTimeout = 10000;
+		private int readTimeout = 10000;
+
+		public BuilderOpts setConnectionTimeout(int timeout) {
+			this.connectionTimeout = timeout;
+			return this;
+		}
+
+		public BuilderOpts setReadTimeout(int timeout) {
+			this.readTimeout = timeout;
+			return this;
 		}
 	}
 }

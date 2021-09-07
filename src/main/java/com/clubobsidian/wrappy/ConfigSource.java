@@ -13,28 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy;
 
-public enum ConfigurationType {
+import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
-	YAML,
-	JSON,
-	HOCON,
-	XML,
-	UNKNOWN;
+public abstract class ConfigSource<T> {
 
-	public static ConfigurationType fromString(final String name) {
-		if(name != null) {
-			if(name.endsWith(".yml")) {
-				return YAML;
-			} else if(name.endsWith(".conf")) {
-				return HOCON;
-			} else if(name.endsWith(".json")) {
-				return JSON;
-			} else if(name.endsWith(".xml")) {
-				return XML;
-			}
-		}
-		return UNKNOWN;
-	}
+    private final T source;
+    private final Class<T> clazz;
+
+    public ConfigSource(T source) {
+        this.source = source;
+        this.clazz = (Class<T>) source.getClass();
+    }
+
+    protected T getSource() {
+        return this.source;
+    }
+
+    public abstract void load(Configuration.BuilderOpts opts, AbstractConfigurationLoader.Builder<?,?> loader);
 }

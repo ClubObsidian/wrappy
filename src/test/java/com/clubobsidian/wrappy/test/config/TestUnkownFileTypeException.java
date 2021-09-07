@@ -15,7 +15,7 @@
  */
 package com.clubobsidian.wrappy.test.config;
 
-import com.clubobsidian.wrappy.UnknownFileTypeException;
+import com.clubobsidian.wrappy.exception.UnknownFileTypeException;
 import org.junit.Test;
 
 import java.io.File;
