@@ -19,6 +19,7 @@ package com.clubobsidian.wrappy.source;
 import com.clubobsidian.wrappy.ConfigSource;
 import com.clubobsidian.wrappy.Configuration;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 import java.net.URL;
 
@@ -29,8 +30,9 @@ public class URLConfigSource extends ConfigSource<URL> {
     }
 
     @Override
-    public void load(Configuration.BuilderOpts opts, AbstractConfigurationLoader.Builder<?, ?> loader) {
-
+    public ConfigurationLoader<?> load(Configuration.Options opts, AbstractConfigurationLoader.Builder<?, ?> builder) {
+        //TODO
+        return null;
     }
 
 

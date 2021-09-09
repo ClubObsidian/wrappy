@@ -15,6 +15,11 @@
  */
 package com.clubobsidian.wrappy;
 
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
+import org.spongepowered.configurate.xml.XmlConfigurationLoader;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+
 public enum ConfigurationType {
 
 	YAML,
@@ -36,5 +41,18 @@ public enum ConfigurationType {
 			}
 		}
 		return UNKNOWN;
+	}
+
+	public static ConfigurationType fromClass(Class<?> clazz) {
+		if(clazz.equals(YamlConfigurationLoader.class)) {
+			return YAML;
+		} else if(clazz.equals(JacksonConfigurationLoader.class)) {
+			return JSON;
+		} else if(clazz.equals(HoconConfigurationLoader.class)) {
+			return HOCON;
+		} else if(clazz.equals(XmlConfigurationLoader.class)) {
+			return XML;
+		}
+		return null;
 	}
 }

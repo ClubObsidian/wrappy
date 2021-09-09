@@ -21,17 +21,14 @@ import com.clubobsidian.wrappy.Configuration;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 
-import java.nio.file.Path;
+public class ConfigLoaderSource extends ConfigSource<ConfigurationLoader<?>> {
 
-public class PathConfigSource extends ConfigSource<Path> {
-
-    public PathConfigSource(Path source) {
+    public ConfigLoaderSource(ConfigurationLoader<?> source) {
         super(source);
     }
 
     @Override
     public ConfigurationLoader<?> load(Configuration.Options opts, AbstractConfigurationLoader.Builder<?, ?> builder) {
-        builder.path(this.getSource());
-        return builder.build();
+        return this.getSource();
     }
 }

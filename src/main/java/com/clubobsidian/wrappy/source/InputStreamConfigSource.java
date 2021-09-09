@@ -19,6 +19,7 @@ package com.clubobsidian.wrappy.source;
 import com.clubobsidian.wrappy.ConfigSource;
 import com.clubobsidian.wrappy.Configuration;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -32,9 +33,10 @@ public class InputStreamConfigSource extends ConfigSource<InputStream> {
     }
 
     @Override
-    public void load(Configuration.BuilderOpts opts, AbstractConfigurationLoader.Builder<?, ?> loader) {
+    public ConfigurationLoader<?> load(Configuration.Options opts, AbstractConfigurationLoader.Builder<?, ?> builder) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(this.getSource()));
         Callable<BufferedReader> callable = () -> reader;
-        loader.source(callable);
+        builder.source(callable);
+        return builder.build();
     }
 }

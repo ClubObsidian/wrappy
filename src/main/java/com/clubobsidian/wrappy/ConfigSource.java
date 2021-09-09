@@ -17,6 +17,7 @@
 package com.clubobsidian.wrappy;
 
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
 
 public abstract class ConfigSource<T> {
 
@@ -32,5 +33,6 @@ public abstract class ConfigSource<T> {
         return this.source;
     }
 
-    public abstract void load(Configuration.BuilderOpts opts, AbstractConfigurationLoader.Builder<?,?> loader);
+    public abstract ConfigurationLoader<?> load(Configuration.Options opts,
+                                                AbstractConfigurationLoader.Builder<?,?> builder);
 }

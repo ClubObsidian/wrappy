@@ -17,6 +17,7 @@ package com.clubobsidian.wrappy;
 
 import com.clubobsidian.wrappy.exception.UninitializedPropertiesException;
 import com.clubobsidian.wrappy.exception.UnknownFileTypeException;
+import com.clubobsidian.wrappy.source.ConfigLoaderSource;
 import com.clubobsidian.wrappy.source.InputStreamConfigSource;
 import com.clubobsidian.wrappy.source.PathConfigSource;
 import com.clubobsidian.wrappy.source.URLConfigSource;
@@ -49,7 +50,7 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(File file) {
 		try {
-			return new Builder().file(file).build(ConfigurationType.fromString(file.getName()));
+			return builder().file(file).build(ConfigurationType.fromString(file.getName()));
 		} catch(UninitializedPropertiesException e) {
 			e.printStackTrace();
 			return null;
@@ -58,7 +59,7 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(Path path) {
 		try {
-			return new Builder().path(path).build(ConfigurationType.fromString(path.getFileName().toString()));
+			return builder().path(path).build(ConfigurationType.fromString(path.getFileName().toString()));
 		} catch(UninitializedPropertiesException e) {
 			e.printStackTrace();
 			return null;
@@ -133,7 +134,7 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(InputStream stream, ConfigurationType type) {
 		try {
-			return new Builder().stream(stream).build(type);
+			return builder().stream(stream).build(type);
 		} catch(UninitializedPropertiesException e) {
 			e.printStackTrace();
 			return null;
@@ -141,9 +142,12 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
-		Configuration config = new Configuration();
-		modifyNode(config, loader);
-		return config;
+		try {
+			return builder().loader(loader).build(ConfigurationType.fromClass(loader.getClass()));
+		} catch(UninitializedPropertiesException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static Builder builder() {
@@ -152,7 +156,7 @@ public class Configuration extends ConfigurationSection {
 
 	public static class Builder {
 
-		private final BuilderOpts opts = new BuilderOpts();
+		private final Options opts = new Options();
 		private ConfigSource<?> source;
 
 		Builder() {
@@ -183,7 +187,12 @@ public class Configuration extends ConfigurationSection {
 			return this;
 		}
 
-		public BuilderOpts options() {
+		public Builder loader(ConfigurationLoader<?> loader) {
+			this.source = new ConfigLoaderSource(loader);
+			return this;
+		}
+
+		public Options options() {
 			return this.opts;
 		}
 
@@ -200,20 +209,16 @@ public class Configuration extends ConfigurationSection {
 						.nodeStyle(NodeStyle.BLOCK)
 						.indent(2);
 			} else if(type == ConfigurationType.HOCON) {
-				builder = HoconConfigurationLoader
-						.builder();
+				builder = HoconConfigurationLoader.builder();
 			} else if(type == ConfigurationType.JSON) {
-				builder = JacksonConfigurationLoader
-						.builder();
+				builder = JacksonConfigurationLoader.builder();
 			} else if(type == ConfigurationType.XML) {
-				builder = XmlConfigurationLoader
-						.builder();
+				builder = XmlConfigurationLoader.builder();
 			} else {
 				throw new UnknownFileTypeException();
 			}
 
-			this.source.load(this.opts, builder);
-			ConfigurationLoader<?> loader = builder.build();
+			ConfigurationLoader<?> loader = this.source.load(this.opts, builder);
 
 			try {
 				config.loader = loader;
@@ -226,17 +231,21 @@ public class Configuration extends ConfigurationSection {
 		}
 	}
 
-	public static class BuilderOpts {
+	public static class Options {
 
 		private int connectionTimeout = 10000;
 		private int readTimeout = 10000;
 
-		public BuilderOpts setConnectionTimeout(int timeout) {
+		Options() {
+			
+		}
+
+		public Options setConnectionTimeout(int timeout) {
 			this.connectionTimeout = timeout;
 			return this;
 		}
 
-		public BuilderOpts setReadTimeout(int timeout) {
+		public Options setReadTimeout(int timeout) {
 			this.readTimeout = timeout;
 			return this;
 		}
