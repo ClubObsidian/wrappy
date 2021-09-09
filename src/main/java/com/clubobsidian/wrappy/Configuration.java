@@ -237,7 +237,7 @@ public class Configuration extends ConfigurationSection {
 		private int readTimeout = 10000;
 
 		Options() {
-			
+
 		}
 
 		public Options setConnectionTimeout(int timeout) {
