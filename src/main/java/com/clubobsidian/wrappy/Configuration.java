@@ -82,7 +82,7 @@ public class Configuration extends ConfigurationSection {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 	
-	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite) {
+	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String, String> requestProperties, boolean overwrite) {
 		try  {
 			if(file != null && file.exists() && file.length() > 0 && !overwrite) {
 				return Configuration.load(file);
@@ -90,7 +90,7 @@ public class Configuration extends ConfigurationSection {
 			if(!file.exists()) {
 				file.createNewFile();
 			}
-			
+
 			URLConnection connection = url.openConnection();
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(readTimeout);
@@ -101,7 +101,7 @@ public class Configuration extends ConfigurationSection {
 				Entry<String,String> next = it.next();
 				connection.setRequestProperty(next.getKey(), next.getValue());
 			}
-			
+
 			InputStream inputStream = connection.getInputStream();
 			Reader reader = new InputStreamReader(inputStream);
 			StringBuilder sb = new StringBuilder();
@@ -109,7 +109,7 @@ public class Configuration extends ConfigurationSection {
 			while((read = reader.read()) != -1) {
 				sb.append((char) read);
 			}
-			
+
 			byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
 			byte[] tempMD5 = HashUtil.getMD5(data);
 			byte[] backupMD5 = HashUtil.getMD5(file);
@@ -117,7 +117,7 @@ public class Configuration extends ConfigurationSection {
 				if(file.exists()) {
 					file.delete();
 				}
-				
+
 				file.createNewFile();
 				FileUtils.writeByteArrayToFile(file, data);
 			}
@@ -164,8 +164,7 @@ public class Configuration extends ConfigurationSection {
 		}
 
 		public Builder path(Path path) {
-			this.source = new PathConfigSource(path);
-			return this;
+			return this.source(new PathConfigSource(path));
 		}
 
 		public Builder file(File file) {
@@ -173,13 +172,11 @@ public class Configuration extends ConfigurationSection {
 		}
 
 		public Builder url(URL url) {
-			this.source = new URLConfigSource(url);
-			return this;
+			return this.source(new URLConfigSource(url));
 		}
 
 		public Builder stream(InputStream stream) {
-			this.source = new InputStreamConfigSource(stream);
-			return this;
+			return this.source(new InputStreamConfigSource(stream));
 		}
 
 		public Builder source(ConfigSource<?> source) {
@@ -197,8 +194,8 @@ public class Configuration extends ConfigurationSection {
 		}
 
 		public Configuration build(ConfigurationType type) throws UninitializedPropertiesException {
-			if(source == null) {
-				throw new UninitializedPropertiesException(); //TODO - Description
+			if(this.source == null) {
+				throw new UninitializedPropertiesException();
 			}
 
 			Configuration config = new Configuration();
@@ -233,21 +230,39 @@ public class Configuration extends ConfigurationSection {
 
 	public static class Options {
 
-		private int connectionTimeout = 10000;
+		private int connectTimeout = 10000;
 		private int readTimeout = 10000;
+		private final Map<String, String> requestProperties = new HashMap<>();
 
 		Options() {
 
 		}
 
-		public Options setConnectionTimeout(int timeout) {
-			this.connectionTimeout = timeout;
+		public Options setConnectTimeout(int timeout) {
+			this.connectTimeout = timeout;
 			return this;
 		}
 
 		public Options setReadTimeout(int timeout) {
 			this.readTimeout = timeout;
 			return this;
+		}
+
+		public Options addRequestProperty(String key, String value) {
+			this.requestProperties.put(key, value);
+			return this;
+		}
+
+		public int getConnectTimeout() {
+			return this.connectTimeout;
+		}
+
+		public int getReadTimeout() {
+			return this.readTimeout;
+		}
+
+		public Map<String, String> getRequestProperties() {
+			return this.requestProperties;
 		}
 	}
 }
