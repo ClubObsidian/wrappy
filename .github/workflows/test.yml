@@ -19,7 +19,9 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2.5.0
       with:
+        distribution: 'adopt'
         java-version: ${{ matrix.java }}
+        cache: 'gradle'
     - run: ./gradlew test  
     - name: Gradle jacoco test report
       run: ./gradlew jacocoTestReport
