@@ -19,7 +19,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2.5.0
       with:
-        distribution: 'microsoft'
+        distribution: 'zulu'
         java-version: ${{ matrix.java }}
     - run: ./gradlew clean
     - run: ./gradlew test  
