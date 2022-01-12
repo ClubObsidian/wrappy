@@ -21,7 +21,6 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: ${{ matrix.java }}
-        cache: 'gradle'
     - run: ./gradlew test  
     - name: Gradle jacoco test report
       run: ./gradlew jacocoTestReport
