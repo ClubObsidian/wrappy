@@ -19,8 +19,6 @@ package com.clubobsidian.wrappy.util;
 import org.spongepowered.configurate.ConfigurationNode;
 
 public final class NodeUtil {
-
-	private NodeUtil() {}
 	
 	public static ConfigurationNode parsePath(ConfigurationNode node, String path) {
 		Object[] ar = new Object[1];
@@ -28,11 +26,14 @@ public final class NodeUtil {
 			String[] split = path.split("\\.");
 			ar = new Object[split.length];
 			for(int i = 0; i < split.length; i++) {
-				ar[i] = (Object) split[i];
+				ar[i] = split[i];
 			}
 		} else {
-			ar[0] = (Object) path;
+			ar[0] = path;
 		}
 		return node.node(ar);
+	}
+
+	private NodeUtil() {
 	}
 }

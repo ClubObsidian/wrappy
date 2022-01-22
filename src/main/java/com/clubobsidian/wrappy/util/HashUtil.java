@@ -25,8 +25,6 @@ import java.security.NoSuchAlgorithmException;
 public final class HashUtil {
 
 	private static final String MD5 = "MD5";
-
-	private HashUtil() {}
 	
 	public static byte[] getMD5(File file) {
 		return getHash(MD5, file);
@@ -56,5 +54,8 @@ public final class HashUtil {
 			e.printStackTrace();
 		}
 		return new byte[0];
+	}
+
+	private HashUtil() {
 	}
 }

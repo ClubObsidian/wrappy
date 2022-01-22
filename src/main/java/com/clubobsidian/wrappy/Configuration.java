@@ -105,7 +105,7 @@ public class Configuration extends ConfigurationSection {
 			InputStream inputStream = connection.getInputStream();
 			Reader reader = new InputStreamReader(inputStream);
 			StringBuilder sb = new StringBuilder();
-			int read = -1;
+			int read;
 			while((read = reader.read()) != -1) {
 				sb.append((char) read);
 			}
@@ -216,6 +216,7 @@ public class Configuration extends ConfigurationSection {
 			}
 
 			ConfigurationLoader<?> loader = this.source.load(this.opts, builder);
+			loader.defaultOptions().shouldCopyDefaults(true);
 
 			try {
 				config.loader = loader;
