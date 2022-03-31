@@ -20,7 +20,6 @@ import com.clubobsidian.wrappy.ConfigurationSection;
 import org.junit.Test;
 
 import java.io.File;
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
 
@@ -261,5 +260,17 @@ public class TestConfigurationYaml {
 	@Test
 	public void testGetName() {
 		assertEquals(config.getConfigurationSection("section").getName(), "section");
+	}
+
+	@Test
+	public void testCombine() {
+		ConfigurationSection first = config.getConfigurationSection("section");
+		ConfigurationSection second = config.getConfigurationSection("section2");
+		second.combine(first);
+		assertNotEquals(5, first.getInteger("value2"));
+		assertEquals(7, second.getInteger("value"));
+		assertEquals(5, second.getInteger("value2"));
+		assertEquals(1, second.getInteger("map-value.test"));
+		assertEquals("section2", second.getName());
 	}
 }

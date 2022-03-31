@@ -1,5 +1,9 @@
 section:
   value: 7
+  map-value:
+    test: 1
+section2:
+  value2: 5
 key: value
 integer: 5
 long: 6

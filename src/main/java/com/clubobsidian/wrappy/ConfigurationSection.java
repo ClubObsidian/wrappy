@@ -180,6 +180,11 @@ public class ConfigurationSection {
 		section.node = NodeUtil.parsePath(this.node, path);
 		return section;
 	}
+
+	public ConfigurationSection combine(ConfigurationSection from) {
+		this.node.mergeFrom(from.node);
+		return this;
+	}
 	
 	public boolean exists(String path) {
 		return !NodeUtil.parsePath(this.node, path).virtual();
