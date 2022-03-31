@@ -224,7 +224,7 @@ public class TestConfigurationYaml {
 	public void testGetConfigurationSection() {
 		ConfigurationSection section = config.getConfigurationSection("section");
 		assertTrue("Section is null", section != null);
-		assertTrue("Section key size is not 1", section.getKeys().size() == 1);
+		assertTrue("Section key size is not 2", section.getKeys().size() == 2);
 	}
 	
 	@Test
@@ -267,7 +267,7 @@ public class TestConfigurationYaml {
 		ConfigurationSection first = config.getConfigurationSection("section");
 		ConfigurationSection second = config.getConfigurationSection("section2");
 		second.combine(first);
-		assertNotEquals(5, first.getInteger("value2"));
+		assertFalse(first.hasKey("value2"));
 		assertEquals(7, second.getInteger("value"));
 		assertEquals(5, second.getInteger("value2"));
 		assertEquals(1, second.getInteger("map-value.test"));
