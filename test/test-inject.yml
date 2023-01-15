@@ -9,3 +9,5 @@ test:
     - "SATURDAY"
   day-map:
     FRIDAY: 5
+  holder:
+    num: 5

@@ -15,9 +15,10 @@
  */
 package com.clubobsidian.wrappy.test.mock;
 
+import com.clubobsidian.wrappy.ConfigHolder;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
 
-public class StringNodeTransformerMock extends NodeTransformer<String> {
+public class StringNodeTransformerMock extends NodeTransformer<String> implements ConfigHolder {
 
     public StringNodeTransformerMock() {
         super(String.class);

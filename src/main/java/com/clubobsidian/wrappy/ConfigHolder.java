@@ -13,19 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.clubobsidian.wrappy.test.mock;
 
-import com.clubobsidian.wrappy.ConfigHolder;
-import com.clubobsidian.wrappy.inject.Node;
+package com.clubobsidian.wrappy;
 
-import java.time.DayOfWeek;
-import java.util.List;
-
-public class ConfigHolderStaticMock implements ConfigHolder {
-
-    @Node("foo")
-    public static String foo;
-
-    @Node(value = "day-list", type = DayOfWeek.class)
-    public static List<DayOfWeek> dayList;
+public interface ConfigHolder {
 }

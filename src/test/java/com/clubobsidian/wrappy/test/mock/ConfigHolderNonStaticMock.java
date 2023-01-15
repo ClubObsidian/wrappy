@@ -15,6 +15,7 @@
  */
 package com.clubobsidian.wrappy.test.mock;
 
+import com.clubobsidian.wrappy.ConfigHolder;
 import com.clubobsidian.wrappy.inject.Node;
 
 import java.time.DayOfWeek;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ConfigHolderNonStaticMock {
+public class ConfigHolderNonStaticMock implements ConfigHolder {
 
     @Node("foo")
     private String foo;
@@ -41,6 +42,9 @@ public class ConfigHolderNonStaticMock {
 
     @Node(value = "day-map", type = DayOfWeek.class, valueType = Integer.class)
     private Map<DayOfWeek, Integer> dayMap;
+
+    @Node(value = "holder")
+    private MockHolder holder = new MockHolder();
 
     public String getFoo() {
         return this.foo;
@@ -72,5 +76,9 @@ public class ConfigHolderNonStaticMock {
 
     public String getNonExistent() {
         return this.nonExistent;
+    }
+
+    public MockHolder getHolder() {
+        return this.holder;
     }
 }

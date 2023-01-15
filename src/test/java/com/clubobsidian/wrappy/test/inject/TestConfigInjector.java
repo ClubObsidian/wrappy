@@ -135,6 +135,13 @@ public class TestConfigInjector {
     }
 
     @Test
+    public void testInjectorMockHolder() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(5, mock.getHolder().getNum());
+    }
+
+    @Test
     public void testInjectorKey() {
         ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
         config.inject(mock);

@@ -15,6 +15,7 @@
  */
 package com.clubobsidian.wrappy.inject;
 
+import com.clubobsidian.wrappy.ConfigHolder;
 import com.clubobsidian.wrappy.ConfigurationSection;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
 
@@ -43,6 +44,7 @@ public class ConfigurationInjector {
         }
         for(Field field: injectClazz.getDeclaredFields()) {
             for(Node node : field.getAnnotationsByType(Node.class)) {
+                field.setAccessible(true);
                 Class<?> fieldClazz = field.getType();
                 String nodePath = node.value();
                 Object nodeValue;
@@ -50,7 +52,14 @@ public class ConfigurationInjector {
                     this.setField(field, this.config.getName());
                     break;
                 }
-                if(fieldClazz.equals(Map.class)) {
+                if (this.isConfigHolder(fieldClazz)) {
+                    Object holder = this.getField(field);
+                    System.out.println(holder.getClass().getName());
+                    ConfigurationSection pathSection = this.config.getConfigurationSection(nodePath);
+                    System.out.println(pathSection.getKeys());
+                    new ConfigurationInjector(pathSection, holder).inject(transformers);
+                    break;
+                } else if(fieldClazz.equals(Map.class)) {
                     nodeValue = this.config.getMap(nodePath, node.type(), node.valueType());
                 } else if(fieldClazz.equals(List.class)) {
                     nodeValue = this.config.getList(nodePath, node.type());
@@ -68,6 +77,23 @@ public class ConfigurationInjector {
                 break;
             }
         }
+    }
+
+    private Object getField(Field field) {
+        try {
+            return field.get(this.injectInto instanceof Class ? null : this.injectInto);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isConfigHolder(Class<?> clazz) {
+        for (Class<?> i : clazz.getInterfaces()) {
+            if (i.equals(ConfigHolder.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setField(Field field, Object nodeValue) {
