@@ -19,6 +19,7 @@ import com.clubobsidian.wrappy.inject.Node;
 
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ConfigHolderNonStaticMock {
@@ -38,6 +39,9 @@ public class ConfigHolderNonStaticMock {
     @Node("non-existent")
     private String nonExistent;
 
+    @Node(value = "day-map", type = DayOfWeek.class, valueType = Integer.class)
+    private Map<DayOfWeek, Integer> dayMap;
+
     public String getFoo() {
         return this.foo;
     }
@@ -56,6 +60,10 @@ public class ConfigHolderNonStaticMock {
 
     public List<DayOfWeek> getDayList() {
         return this.dayList;
+    }
+
+    public Map<DayOfWeek, Integer> getDayMap() {
+        return this.dayMap;
     }
 
     public String getKey() {

@@ -22,4 +22,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Node {
     String value();
     Class<?> type() default Object.class;
+
+    Class<?> valueType() default Object.class;
 }

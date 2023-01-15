@@ -7,3 +7,5 @@ test:
   day-list:
     - "FRIDAY"
     - "SATURDAY"
+  day-map:
+    FRIDAY: 5

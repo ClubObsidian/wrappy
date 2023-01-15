@@ -19,6 +19,7 @@ import com.clubobsidian.wrappy.helper.NodeHelper;
 import com.clubobsidian.wrappy.inject.ConfigurationInjector;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
 import com.clubobsidian.wrappy.util.NodeUtil;
+import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -71,12 +72,32 @@ public class ConfigurationSection {
 		return new NodeHelper<T>(this).get(path, clazz, defaultValue);
 	}
 
+	@Deprecated
 	public <K, V> Map<K, V> getMap(String path) {
 		Object objMap = this.get(path);
 		if(objMap == null || !(objMap instanceof Map)) {
 			return null;
 		}
 		return (Map<K, V>) objMap;
+	}
+
+	public <K, V> Map<K, V> getMap(String path, Class<K> keyType, Class<V> valueType) {
+		ConfigurationSection virtual = new ConfigurationSection();
+		virtual.node = BasicConfigurationNode.factory().createNode();
+		ConfigurationSection section = this.getConfigurationSection(path);
+		Collection<String> keys = section.getKeys();
+		if(keys.size() == 0) {
+			return null;
+		}
+		Map<K, V> map = new HashMap<>();
+		for (String key : keys) {
+			V mapValue = (V) section.get(key, valueType);
+			String uuid = UUID.randomUUID().toString();
+			virtual.set(uuid, key);
+			K mapKey = (K) virtual.get(uuid, keyType);
+			map.put(mapKey, mapValue);
+		}
+		return map;
 	}
 	
 	public String getString(String path) {

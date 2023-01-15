@@ -29,6 +29,7 @@ import java.io.File;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -122,6 +123,15 @@ public class TestConfigInjector {
         ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
         config.inject(mock);
         assertEquals(DayOfWeek.FRIDAY, mock.getDayList().get(0));
+    }
+
+    @Test
+    public void testInjectorEnumMap() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        Map<DayOfWeek, Integer> dayMap = mock.getDayMap();
+        assertEquals(1, dayMap.size());
+        assertEquals(5, (int) dayMap.get(DayOfWeek.FRIDAY));
     }
 
     @Test
