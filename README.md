@@ -27,7 +27,7 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
-compile 'com.github.clubobsidian:wrappy:2.5.0'
+compile 'com.github.clubobsidian:wrappy:2.5.1'
 ```
 
 ### Maven
@@ -43,7 +43,7 @@ compile 'com.github.clubobsidian:wrappy:2.5.0'
 <dependency>
 	<groupId>com.github.clubobsidian</groupId>
 	<artifactId>wrappy</artifactId>
-	<version>2.5.0</version>
+	<version>2.5.1</version>
 </dependency>
 ```
 

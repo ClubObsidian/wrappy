@@ -54,9 +54,7 @@ public class ConfigurationInjector {
                 }
                 if (this.isConfigHolder(fieldClazz)) {
                     Object holder = this.getField(field);
-                    System.out.println(holder.getClass().getName());
                     ConfigurationSection pathSection = this.config.getConfigurationSection(nodePath);
-                    System.out.println(pathSection.getKeys());
                     new ConfigurationInjector(pathSection, holder).inject(transformers);
                     break;
                 } else if(fieldClazz.equals(Map.class)) {
