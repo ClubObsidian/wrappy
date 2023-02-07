@@ -154,4 +154,11 @@ public class TestConfigInjector {
         config.inject(mock);
         assertEquals(null, mock.getNonExistent());
     }
+
+    @Test
+    public void testInjectorNonExistentFloat() {
+        ConfigHolderNonStaticMock mock = new ConfigHolderNonStaticMock();
+        config.inject(mock);
+        assertEquals(0.0f, mock.getNonExistentFloat(), 0.01f);
+    }
 }

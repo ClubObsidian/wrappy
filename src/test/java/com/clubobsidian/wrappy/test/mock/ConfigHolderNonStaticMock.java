@@ -40,6 +40,9 @@ public class ConfigHolderNonStaticMock implements ConfigHolder {
     @Node("non-existent")
     private String nonExistent;
 
+    @Node("non-existent-float")
+    private float nonExistentFloat;
+
     @Node(value = "day-map", type = DayOfWeek.class, valueType = Integer.class)
     private Map<DayOfWeek, Integer> dayMap;
 
@@ -76,6 +79,10 @@ public class ConfigHolderNonStaticMock implements ConfigHolder {
 
     public String getNonExistent() {
         return this.nonExistent;
+    }
+
+    public float getNonExistentFloat() {
+        return this.nonExistentFloat;
     }
 
     public MockHolder getHolder() {
