@@ -34,10 +34,15 @@ public class ConfigurationSection {
 
 	private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap() {{
 		put(int.class, 0);
+		put(Integer.class, 0);
 		put(long.class, 0l);
-		put(float.class, 0f);
+		put(Long.class, 0l);
+		put(float.class, 0.0f);
+		put(Float.class, 0.0f);
 		put(boolean.class, false);
+		put(Boolean.class, false);
 		put(double.class, 0.0);
+		put(Double.class, 0.0);
 	}};
 
 	protected ConfigurationNode node;
