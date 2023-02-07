@@ -46,6 +46,7 @@ public class ConfigurationInjector {
             for(Node node : field.getAnnotationsByType(Node.class)) {
                 field.setAccessible(true);
                 Class<?> fieldClazz = field.getType();
+                fieldClazz = fieldClazz == Object.class ? field.getType() : fieldClazz;
                 String nodePath = node.value();
                 Object nodeValue;
                 if(nodePath.equals("%key%")) {
