@@ -32,6 +32,14 @@ import java.util.regex.Pattern;
 
 public class ConfigurationSection {
 
+	private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap() {{
+		put(int.class, 0);
+		put(long.class, 0l);
+		put(float.class, 0f);
+		put(boolean.class, false);
+		put(double.class, 0.0);
+	}};
+
 	protected ConfigurationNode node;
 	protected ConfigurationLoader<?> loader;
 	
@@ -65,7 +73,8 @@ public class ConfigurationSection {
 	}
 	
 	public <T> T get(String path, Class<T> clazz) {
-		return this.get(path, clazz, null);
+		Object def = DEFAULT_VALUES.get(clazz);
+		return this.get(path, clazz, def == null ? null : (T) def);
 	}
 	
 	public <T> T get(String path, Class<T> clazz, T defaultValue) {
@@ -105,27 +114,27 @@ public class ConfigurationSection {
 	}
 	
 	public int getInteger(String path) {
-		return this.get(path, int.class, 0);
+		return this.get(path, int.class);
 	}
 	
 	public long getLong(String path) {
-		return this.get(path, long.class, 0L);
+		return this.get(path, long.class);
 	}
 	
 	public float getFloat(String path) {
-		return this.get(path, float.class, 0f);
+		return this.get(path, float.class);
 	}
 	
 	public boolean getBoolean(String path) {
-		return this.get(path, boolean.class, false);
+		return this.get(path, boolean.class);
 	}
 	
 	public double getDouble(String path) {
-		return this.get(path, double.class, 0.0);
+		return this.get(path, double.class);
 	}
 
 	public <T extends Enum> T getEnum(String path, Class<T> enumClass) {
-		return this.get(path, enumClass, null);
+		return this.get(path, enumClass);
 	}
 	
 	public URI getURI(String path) {
