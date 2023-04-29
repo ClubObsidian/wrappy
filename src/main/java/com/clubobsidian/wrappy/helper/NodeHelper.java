@@ -32,21 +32,18 @@ public class NodeHelper<T> {
 		this.section = section;
 	}
 	
-	public T get(String path, Class<T> clazz, T defaultValue) {
+	public T get(Object path, Class<T> clazz, T defaultValue) {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
 			TypeToken<T> type = TypeToken.get(clazz);
-			if(defaultValue == null) {
-				return parsed.get(type);
-			}
-			return parsed.get(type, defaultValue);
+			return defaultValue == null ? parsed.get(type) : parsed.get(type, defaultValue);
 		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public List<T> getList(String path, Class<T> clazz) {
+	public List<T> getList(Object path, Class<T> clazz) {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
 			return parsed.getList(TypeToken.get(clazz));

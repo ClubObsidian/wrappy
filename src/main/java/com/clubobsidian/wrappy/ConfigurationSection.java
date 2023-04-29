@@ -73,21 +73,21 @@ public class ConfigurationSection {
 		return (String) this.node.key();
 	}
 
-	public Object get(String path) {
+	public Object get(Object path) {
 		return this.get(path, Object.class);
 	}
 	
-	public <T> T get(String path, Class<T> clazz) {
+	public <T> T get(Object path, Class<T> clazz) {
 		Object def = DEFAULT_VALUES.get(clazz);
 		return this.get(path, clazz, def == null ? null : (T) def);
 	}
 	
-	public <T> T get(String path, Class<T> clazz, T defaultValue) {
+	public <T> T get(Object path, Class<T> clazz, T defaultValue) {
 		return new NodeHelper<T>(this).get(path, clazz, defaultValue);
 	}
 
 	@Deprecated
-	public <K, V> Map<K, V> getMap(String path) {
+	public <K, V> Map<K, V> getMap(Object path) {
 		Object objMap = this.get(path);
 		if(objMap == null || !(objMap instanceof Map)) {
 			return null;
@@ -95,16 +95,16 @@ public class ConfigurationSection {
 		return (Map<K, V>) objMap;
 	}
 
-	public <K, V> Map<K, V> getMap(String path, Class<K> keyType, Class<V> valueType) {
+	public <K, V> Map<K, V> getMap(Object path, Class<K> keyType, Class<V> valueType) {
 		ConfigurationSection virtual = new ConfigurationSection();
 		virtual.node = BasicConfigurationNode.factory().createNode();
 		ConfigurationSection section = this.getConfigurationSection(path);
-		Collection<String> keys = section.getKeys();
+		Collection<Object> keys = section.getKeys();
 		if(keys.size() == 0) {
 			return null;
 		}
 		Map<K, V> map = new HashMap<>();
-		for (String key : keys) {
+		for (Object key : keys) {
 			V mapValue = (V) section.get(key, valueType);
 			String uuid = UUID.randomUUID().toString();
 			virtual.set(uuid, key);
@@ -114,103 +114,103 @@ public class ConfigurationSection {
 		return map;
 	}
 	
-	public String getString(String path) {
+	public String getString(Object path) {
 		return this.get(path, String.class);
 	}
 	
-	public int getInteger(String path) {
+	public int getInteger(Object path) {
 		return this.get(path, int.class);
 	}
 	
-	public long getLong(String path) {
+	public long getLong(Object path) {
 		return this.get(path, long.class);
 	}
 	
-	public float getFloat(String path) {
+	public float getFloat(Object path) {
 		return this.get(path, float.class);
 	}
 	
-	public boolean getBoolean(String path) {
+	public boolean getBoolean(Object path) {
 		return this.get(path, boolean.class);
 	}
 	
-	public double getDouble(String path) {
+	public double getDouble(Object path) {
 		return this.get(path, double.class);
 	}
 
-	public <T extends Enum> T getEnum(String path, Class<T> enumClass) {
+	public <T extends Enum> T getEnum(Object path, Class<T> enumClass) {
 		return this.get(path, enumClass);
 	}
 	
-	public URI getURI(String path) {
+	public URI getURI(Object path) {
 		return this.get(path, URI.class);
 	}
 	
-	public URL getURL(String path) {
+	public URL getURL(Object path) {
 		return this.get(path, URL.class);
 	}
 	
-	public UUID getUUID(String path) {
+	public UUID getUUID(Object path) {
 		return this.get(path, UUID.class);
 	}
 	
-	public Pattern getPattern(String path) {
+	public Pattern getPattern(Object path) {
 		return this.get(path, Pattern.class);
 	}
 
-	public List<String> getStringList(String path) {
+	public List<String> getStringList(Object path) {
 		return this.getList(path, String.class);
 	}
 	
-	public List<Integer> getIntegerList(String path) {
+	public List<Integer> getIntegerList(Object path) {
 		return this.getList(path, Integer.class);
 	}
 	
-	public List<Long> getLongList(String path) {
+	public List<Long> getLongList(Object path) {
 		return this.getList(path, Long.class);
 	}
 	
-	public List<Float> getFloatList(String path) {
+	public List<Float> getFloatList(Object path) {
 		return this.getList(path, Float.class);
 	}
 	
-	public List<Boolean> getBooleanList(String path) {
+	public List<Boolean> getBooleanList(Object path) {
 		return this.getList(path, Boolean.class);
 	}
 	
-	public List<Double> getDoubleList(String path) {
+	public List<Double> getDoubleList(Object path) {
 		return this.getList(path, Double.class);
 	}
 
-	public <T extends Enum> List<T> getEnumList(String path, Class<T> enumClass) {
+	public <T extends Enum> List<T> getEnumList(Object path, Class<T> enumClass) {
 		return this.getList(path, enumClass);
 	}
 	
-	public List<URI> getURIList(String path) {
+	public List<URI> getURIList(Object path) {
 		return this.getList(path, URI.class);
 	}
 	
-	public List<URL> getURLList(String path) {
+	public List<URL> getURLList(Object path) {
 		return this.getList(path, URL.class);
 	}
 	
-	public List<UUID> getUUIDList(String path) {
+	public List<UUID> getUUIDList(Object path) {
 		return this.getList(path, UUID.class);
 	}
 	
-	public List<Pattern> getPatternList(String path) {
+	public List<Pattern> getPatternList(Object path) {
 		return this.getList(path, Pattern.class);
 	}
 	
-	public <T> List<T> getList(String path, Class<T> clazz) {
+	public <T> List<T> getList(Object path, Class<T> clazz) {
 		return new NodeHelper<T>(this).getList(path, clazz);
 	}
 	
-	public ConfigurationSection createConfigurationSection(String path) {
+	public ConfigurationSection createConfigurationSection(Object path) {
 		return this.getConfigurationSection(path);
 	}
 	
-	public ConfigurationSection getConfigurationSection(String path) {
+	public ConfigurationSection getConfigurationSection(Object path) {
 		ConfigurationSection section = new ConfigurationSection();
 		section.node = NodeUtil.parsePath(this.node, path);
 		return section;
@@ -221,11 +221,11 @@ public class ConfigurationSection {
 		return this;
 	}
 	
-	public boolean exists(String path) {
+	public boolean exists(Object path) {
 		return !NodeUtil.parsePath(this.node, path).virtual();
 	}
 	
-	public void set(String path, Object toSave) {
+	public void set(Object path, Object toSave) {
 		Object saveToPath = toSave;
 		if(saveToPath instanceof List) {
 			saveToPath = this.convertList(saveToPath);
@@ -239,17 +239,17 @@ public class ConfigurationSection {
 		}
 	}
 	
-	public List<String> getKeys() {	
-		List<String> keys = new ArrayList<>();
-		this.node.childrenMap().keySet().forEach(n -> keys.add((String) n));
+	public List<Object> getKeys() {
+		List<Object> keys = new ArrayList<>();
+		this.node.childrenMap().keySet().forEach(n -> keys.add(n));
 		return keys;
 	}
-	
+
 	public boolean isEmpty() {
 		return this.getKeys().size() == 0;
 	}
 	
-	public boolean hasKey(String key) {
+	public boolean hasKey(Object key) {
 		return this.getKeys().contains(key);
 	}
 

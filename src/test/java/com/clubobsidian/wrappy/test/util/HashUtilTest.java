@@ -31,7 +31,7 @@ public class HashUtilTest {
 		try {
 			Method method = HashUtil.class.getDeclaredMethod("getHash", String.class, byte[].class);
 			method.setAccessible(true);
-			byte[] invoked = (byte[]) method.invoke(null, "INVALID", String.valueOf("test").getBytes());
+			byte[] invoked = (byte[]) method.invoke(null, "INVALID", "test".getBytes());
 			assertTrue(invoked.length == 0);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();

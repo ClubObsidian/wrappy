@@ -183,7 +183,7 @@ public class TestConfigurationYaml {
 	@Test
 	public void testGetKeys() {
 		config = Configuration.load(testFile);
-		List<String> keys = config.getKeys();
+		List<Object> keys = config.getKeys();
 		assertTrue(keys.size() > 0);
 	}
 	

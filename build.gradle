@@ -21,9 +21,9 @@ dependencies {
 }
 
 shadowJar {
-   baseName = 'wrappy'
-   classifier = null
-   version = '2.6.1'
+   archiveBaseName.set('wrappy')
+   archiveClassifier.set('')
+   archiveVersion.set('3.0.0')
 }
 
 artifacts {

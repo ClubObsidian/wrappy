@@ -22,10 +22,14 @@ public final class NodeUtil {
 
 	private NodeUtil() {}
 	
-	public static ConfigurationNode parsePath(ConfigurationNode node, String path) {
+	public static ConfigurationNode parsePath(ConfigurationNode node, Object path) {
+		if (!(path instanceof String)) {
+			return node.node(path);
+		}
+		String pathStr = (String) path;
 		Object[] ar = new Object[1];
-		if(path.contains(".")) {
-			String[] split = path.split("\\.");
+		if(pathStr.contains(".")) {
+			String[] split = pathStr.split("\\.");
 			ar = new Object[split.length];
 			for(int i = 0; i < split.length; i++) {
 				ar[i] = split[i];
