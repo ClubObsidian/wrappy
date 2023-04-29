@@ -23,4 +23,10 @@ public class TestNonStringKeys {
     public void testGetKeys() {
         assertTrue(config.getKeys().size() > 0);
     }
+
+    @Test
+    public void testSetKey() {
+        config.set(123, 124);
+        assertTrue(124 == config.getInteger(123));
+    }
 }
