@@ -285,6 +285,9 @@ public class ConfigurationSection {
 	}
 	
 	private boolean isSpecial(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 		Class<?> clazz = obj.getClass();
 		return !clazz.isPrimitive() && !clazz.equals(String.class);
 	}
