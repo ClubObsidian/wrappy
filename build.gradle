@@ -23,7 +23,7 @@ dependencies {
 shadowJar {
    archiveBaseName.set('wrappy')
    archiveClassifier.set('')
-   archiveVersion.set('3.0.1')
+   archiveVersion.set('3.0.2')
 }
 
 artifacts {
