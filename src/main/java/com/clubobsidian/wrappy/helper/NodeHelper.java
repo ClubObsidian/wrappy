@@ -36,7 +36,8 @@ public class NodeHelper<T> {
 		try {
 			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
 			TypeToken<T> type = TypeToken.get(clazz);
-			return defaultValue == null ? parsed.get(type) : parsed.get(type, defaultValue);
+			return defaultValue == null ? parsed.get(clazz) :
+					parsed.empty() ? defaultValue : parsed.get(type, defaultValue);
 		} catch (SerializationException e) {
 			e.printStackTrace();
 		}
