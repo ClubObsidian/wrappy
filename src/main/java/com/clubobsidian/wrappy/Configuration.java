@@ -54,7 +54,7 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static Configuration load(Path path) {
-		return new Configuration.Builder().source(path).build();
+		return new Configuration.Builder().path(path).build();
 	}
 
 	public static Configuration load(URL url, File backupFile) {
@@ -73,54 +73,12 @@ public class Configuration extends ConfigurationSection {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 
-	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite) {
-		try  {
-			if(file != null && file.exists() && file.length() > 0 && !overwrite) {
-				return Configuration.load(file);
-			}
-			if(!file.exists()) {
-				file.createNewFile();
-			}
-
-			URLConnection connection = url.openConnection();
-			connection.setConnectTimeout(connectionTimeout);
-			connection.setReadTimeout(readTimeout);
-			connection.setDoInput(true);
-			connection.setUseCaches(false);
-			Iterator<Entry<String,String>> it = requestProperties.entrySet().iterator();
-			while(it.hasNext()) {
-				Entry<String,String> next = it.next();
-				connection.setRequestProperty(next.getKey(), next.getValue());
-			}
-
-			InputStream inputStream = connection.getInputStream();
-			InputStreamReader reader = new InputStreamReader(inputStream);
-			StringBuilder sb = new StringBuilder();
-			int read = -1;
-			while((read = reader.read()) != -1) {
-				sb.append((char) read);
-			}
-
-			byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
-			byte[] tempMD5 = HashUtil.getMD5(data);
-			byte[] backupMD5 = HashUtil.getMD5(file);
-			if(data.length > 0 && tempMD5 != backupMD5) {
-				if(file.exists()) {
-					file.delete();
-				}
-
-				file.createNewFile();
-				Files.write(file.toPath(), data, StandardOpenOption.WRITE);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if(file.exists()) {
-			return Configuration.load(file);
-		}
-
-		return new Configuration();
+	public static Configuration load(URL url, File writeTo,
+									 int connectionTimeout, int readTimeout,
+									 Map<String,String> requestProperties, boolean overwrite) {
+		return new Configuration.Builder().url(url, writeTo,
+				connectionTimeout, readTimeout,
+				requestProperties, overwrite).build();
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type) {
@@ -168,7 +126,10 @@ public class Configuration extends ConfigurationSection {
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
 		Configuration config = new Configuration();
-		modifyNode(config, loader);
+		boolean modified = modifyNode(config, loader);
+		if(!modified) {
+			return null;
+		}
 		return config;
 	}
 
@@ -187,34 +148,81 @@ public class Configuration extends ConfigurationSection {
 
 		private ConfigurationLoader<?> loader;
 		private ConfigurationType type;
-		private Object source;
 
 		public Builder type(ConfigurationType type) {
 			this.type = type;
 			return this;
 		}
 
-		public <T> Builder source(T source) {
-			AbstractConfigurationLoader loader = null;
-			if (source instanceof File) {
-				loader = this.loadPathSource(((File) source).toPath());
-			} else if (source instanceof Path) {
-				loader = this.loadPathSource((Path) source);
-			}
-			this.loader = loader;
+		public Builder path(Path path) {
+			this.loader = this.createPathLoader(path);
 			return this;
 		}
 
-		public Configuration build() {
-			Configuration config = new Configuration();
-			boolean modified = modifyNode(config, this.loader);
-			if(!modified) {
-				return null;
-			}
-			return config;
+		public Builder url(URL url, File writeTo,
+						   int connectionTimeout, int readTimeout,
+						   Map<String,String> requestProperties, boolean overwrite) {
+			this.loader = this.createURLLoader(url, writeTo,
+					connectionTimeout, readTimeout,
+					requestProperties, overwrite);
+			return this;
 		}
 
-		private AbstractConfigurationLoader loadPathSource(Path path) {
+		private ConfigurationLoader<?> createURLLoader(URL url, File writeTo,
+													   int connectionTimeout, int readTimeout,
+													   Map<String, String> requestProperties, boolean overwrite) {
+			try  {
+				if(writeTo != null && writeTo.exists() && writeTo.length() > 0 && !overwrite) {
+					return Configuration.load(writeTo).loader;
+				}
+				if(!writeTo.exists()) {
+					writeTo.createNewFile();
+				}
+
+				URLConnection connection = url.openConnection();
+				connection.setConnectTimeout(connectionTimeout);
+				connection.setReadTimeout(readTimeout);
+				connection.setDoInput(true);
+				connection.setUseCaches(false);
+				Iterator<Entry<String,String>> it = requestProperties.entrySet().iterator();
+				while(it.hasNext()) {
+					Entry<String,String> next = it.next();
+					connection.setRequestProperty(next.getKey(), next.getValue());
+				}
+
+				InputStream inputStream = connection.getInputStream();
+				InputStreamReader reader = new InputStreamReader(inputStream);
+				StringBuilder sb = new StringBuilder();
+				int read;
+				while((read = reader.read()) != -1) {
+					sb.append((char) read);
+				}
+
+				byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
+				byte[] tempMD5 = HashUtil.getMD5(data);
+				byte[] backupMD5 = HashUtil.getMD5(writeTo);
+				if(data.length > 0 && tempMD5 != backupMD5) {
+					if(writeTo.exists()) {
+						writeTo.delete();
+					}
+					writeTo.createNewFile();
+					Files.write(writeTo.toPath(), data, StandardOpenOption.WRITE);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if(writeTo.exists()) {
+				return this.createPathLoader(writeTo.toPath());
+			}
+			return null;
+		}
+
+		public Configuration build() {
+			return Configuration.load(this.loader);
+		}
+
+		private AbstractConfigurationLoader createPathLoader(Path path) {
 			String fileName = path.getFileName().toString().toLowerCase(Locale.ROOT);
 			ConfigurationType type = null;
 			for (Entry<String, ConfigurationType> entry : EXTENSION_TO_TYPE.entrySet()) {
