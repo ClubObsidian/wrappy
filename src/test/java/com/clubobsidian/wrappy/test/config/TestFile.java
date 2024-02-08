@@ -25,53 +25,53 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestFile { 
+public class TestFile {
 
-	@Test
-	public void testLoadYaml() {
-		Configuration config = Configuration.load(new File("test.yml"));
-		assertTrue(config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.yml"));
-		assertTrue(config.getKeys().size() == 0);
-	}
+    @Test
+    public void testLoadYaml() {
+        Configuration config = Configuration.load(new File("test.yml"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.yml"));
+        assertTrue(config.getKeys().size() == 0);
+    }
 
-	@Test
-	public void testLoadJson() {
-		Configuration config = Configuration.load(new File("test.json"));
-		assertTrue(config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.json"));
-		assertTrue(config.getKeys().size() == 0);
-	}
-	
-	@Test
-	public void testLoadHocon() {
-		Configuration config = Configuration.load(new File("test.conf"));
-		assertTrue(config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.conf"));
-		assertTrue(config.getKeys().size() == 0);
-	}
-	
-	
-	@Test
-	public void testLoadXml() {
-		Configuration config = Configuration.load(new File("test.xml"));
-		assertTrue(config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.xml"));
-		assertTrue(config.getKeys().size() == 0);
-	}
+    @Test
+    public void testLoadJson() {
+        Configuration config = Configuration.load(new File("test.json"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.json"));
+        assertTrue(config.getKeys().size() == 0);
+    }
 
-	@Test
-	public void testUnknownFileTypeException() {
-		AtomicReference<Configuration> config = new AtomicReference<>();
-		assertThrows(UnknownFileTypeException.class, () ->
-				config.set(Configuration.load(new File("test.jibberish")))
-		);
-		assertTrue(config.get() == null);
-	}
-	
-	@Test
-	public void testPath() {
-		Configuration config = Configuration.load(new File("test.yml").toPath());
-		assertTrue(config.getKeys().size() > 0);
-	}
+    @Test
+    public void testLoadHocon() {
+        Configuration config = Configuration.load(new File("test.conf"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.conf"));
+        assertTrue(config.getKeys().size() == 0);
+    }
+
+
+    @Test
+    public void testLoadXml() {
+        Configuration config = Configuration.load(new File("test.xml"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.xml"));
+        assertTrue(config.getKeys().size() == 0);
+    }
+
+    @Test
+    public void testUnknownFileTypeException() {
+        AtomicReference<Configuration> config = new AtomicReference<>();
+        assertThrows(UnknownFileTypeException.class, () ->
+                config.set(Configuration.load(new File("test.jibberish")))
+        );
+        assertTrue(config.get() == null);
+    }
+
+    @Test
+    public void testPath() {
+        Configuration config = Configuration.load(new File("test.yml").toPath());
+        assertTrue(config.getKeys().size() > 0);
+    }
 }

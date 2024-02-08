@@ -26,31 +26,31 @@ import java.util.List;
 
 public class NodeHelper<T> {
 
-	private final ConfigurationSection section;
-	
-	public NodeHelper(ConfigurationSection section) {
-		this.section = section;
-	}
-	
-	public T get(Object path, Class<T> clazz, T defaultValue) {
-		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
-			TypeToken<T> type = TypeToken.get(clazz);
-			return defaultValue == null ? parsed.get(clazz) :
-					parsed.empty() ? defaultValue : parsed.get(type, defaultValue);
-		} catch (SerializationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public List<T> getList(Object path, Class<T> clazz) {
-		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
-			return parsed.getList(TypeToken.get(clazz));
-		} catch (SerializationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    private final ConfigurationSection section;
+
+    public NodeHelper(ConfigurationSection section) {
+        this.section = section;
+    }
+
+    public T get(Object path, Class<T> clazz, T defaultValue) {
+        try {
+            ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
+            TypeToken<T> type = TypeToken.get(clazz);
+            return defaultValue == null ? parsed.get(clazz) :
+                    parsed.empty() ? defaultValue : parsed.get(type, defaultValue);
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<T> getList(Object path, Class<T> clazz) {
+        try {
+            ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
+            return parsed.getList(TypeToken.get(clazz));
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

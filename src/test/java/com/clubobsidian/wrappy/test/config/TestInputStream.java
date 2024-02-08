@@ -29,63 +29,63 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestInputStream {
 
-	@Test
-	public void testLoadYaml() {
-		try {
-			InputStream input = new FileInputStream(new File("test.yml"));
-			Configuration config = Configuration.load(input, ConfigurationType.YAML);
-			assertTrue(config.getKeys().size() > 0);
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void testLoadYaml() {
+        try {
+            InputStream input = new FileInputStream(new File("test.yml"));
+            Configuration config = Configuration.load(input, ConfigurationType.YAML);
+            assertTrue(config.getKeys().size() > 0);
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Test
-	public void testLoadJson() {
-		try {
-			InputStream input = new FileInputStream(new File("test.json"));
-			Configuration config = Configuration.load(input, ConfigurationType.JSON);
-			assertTrue(config.getKeys().size() > 0);
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testLoadHocon() {
-		try {
-			InputStream input = new FileInputStream(new File("test.conf"));
-			Configuration config = Configuration.load(input, ConfigurationType.HOCON);
-			assertTrue(config.getKeys().size() > 0);
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testLoadXml() {
-		try {
-			InputStream input = new FileInputStream(new File("test.xml"));
-			Configuration config = Configuration.load(input, ConfigurationType.XML);
-			assertTrue(config.getKeys().size() > 0);
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testInputStreamSaving() {
-		try {
-			InputStream input = new FileInputStream(new File("test.yml"));
-			Configuration config = Configuration.load(input, ConfigurationType.YAML);
-			assertFalse(config.save());
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void testLoadJson() {
+        try {
+            InputStream input = new FileInputStream(new File("test.json"));
+            Configuration config = Configuration.load(input, ConfigurationType.JSON);
+            assertTrue(config.getKeys().size() > 0);
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testLoadHocon() {
+        try {
+            InputStream input = new FileInputStream(new File("test.conf"));
+            Configuration config = Configuration.load(input, ConfigurationType.HOCON);
+            assertTrue(config.getKeys().size() > 0);
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testLoadXml() {
+        try {
+            InputStream input = new FileInputStream(new File("test.xml"));
+            Configuration config = Configuration.load(input, ConfigurationType.XML);
+            assertTrue(config.getKeys().size() > 0);
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testInputStreamSaving() {
+        try {
+            InputStream input = new FileInputStream(new File("test.yml"));
+            Configuration config = Configuration.load(input, ConfigurationType.YAML);
+            assertFalse(config.save());
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

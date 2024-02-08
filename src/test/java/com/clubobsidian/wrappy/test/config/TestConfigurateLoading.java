@@ -33,11 +33,11 @@ public class TestConfigurateLoading {
     @Test
     public void loadConfigurate() {
         ConfigurationLoader<?> loader = YamlConfigurationLoader
-                    .builder()
-                    .nodeStyle(NodeStyle.BLOCK)
-                    .indent(2)
-                    .path(testFile.toPath())
-                    .build();
+                .builder()
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .path(testFile.toPath())
+                .build();
         Configuration config = Configuration.load(loader);
         assertEquals("value", config.getString("key"));
     }

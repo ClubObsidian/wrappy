@@ -27,15 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HashUtilTest {
 
-	@Test
-	public void getInvalidHash() {
-		try {
-			Method method = HashUtil.class.getDeclaredMethod("getHash", String.class, byte[].class);
-			method.setAccessible(true);
-			byte[] invoked = (byte[]) method.invoke(null, "INVALID", "test".getBytes());
-			assertTrue(invoked.length == 0);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void getInvalidHash() {
+        try {
+            Method method = HashUtil.class.getDeclaredMethod("getHash", String.class, byte[].class);
+            method.setAccessible(true);
+            byte[] invoked = (byte[]) method.invoke(null, "INVALID", "test".getBytes());
+            assertTrue(invoked.length == 0);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }

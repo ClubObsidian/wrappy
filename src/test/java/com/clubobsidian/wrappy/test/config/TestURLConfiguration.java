@@ -29,78 +29,78 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestURLConfiguration {
 
-	@Test
-	public void testUrlLoading() {
-		File testFile = new File("test.yml");
-		File copyTo = new File("backup.yml");
-		try {
-			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo);
-			assertTrue(config.getKeys().size() > 0);
-			config.set("test", 1);
-			config = Configuration.load(testFile.toURI().toURL(), copyTo);
-			assertTrue(config.getKeys().size() > 0);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		if(copyTo.exists()) {
-			copyTo.delete();
-		}	
-	}
-	
-	@Test
-	public void testUrlLoadingWithProperties() {
-		File copyTo = new File("backup.yml");
-		try {
-			Map<String, String> properties = new HashMap<>();
-			URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/test.yml");
-			Configuration config = Configuration.load(url, copyTo, properties);
-			assertTrue(config.getInteger("rows") == 5);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		if(copyTo.exists()) {
-			copyTo.delete();
-		}	
-	}
-	
-	@Test
-	public void testUrlLoadingBigFile() {
-		File copyTo = new File("backup.yml");
-		try {
-			Map<String, String> properties = new HashMap<>();
-			URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/bigtest%2Cyml");
-			Configuration config = Configuration.load(url, copyTo, properties);
-			assertTrue(config.getInteger("rows") == 7);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		if(copyTo.exists()) {
-			copyTo.delete();
-		}	
-	}
-	
-	@Test
-	public void backupTest() {
-		File backupFile = new File("backup.yml");
-		try {
-			backupFile.createNewFile();
-			Configuration config = Configuration.load(backupFile);
-			config.set("key", "value");
-			config.save();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			File testFile = new File("test.yml");
-			Configuration config = Configuration.load(testFile.toURI().toURL(), backupFile, false);
-			assertTrue(config.getKeys().size() == 1);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+    @Test
+    public void testUrlLoading() {
+        File testFile = new File("test.yml");
+        File copyTo = new File("backup.yml");
+        try {
+            Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo);
+            assertTrue(config.getKeys().size() > 0);
+            config.set("test", 1);
+            config = Configuration.load(testFile.toURI().toURL(), copyTo);
+            assertTrue(config.getKeys().size() > 0);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
-		if(backupFile.exists()) {
-			backupFile.delete();
-		}
-	}
+        if (copyTo.exists()) {
+            copyTo.delete();
+        }
+    }
+
+    @Test
+    public void testUrlLoadingWithProperties() {
+        File copyTo = new File("backup.yml");
+        try {
+            Map<String, String> properties = new HashMap<>();
+            URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/test.yml");
+            Configuration config = Configuration.load(url, copyTo, properties);
+            assertTrue(config.getInteger("rows") == 5);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if (copyTo.exists()) {
+            copyTo.delete();
+        }
+    }
+
+    @Test
+    public void testUrlLoadingBigFile() {
+        File copyTo = new File("backup.yml");
+        try {
+            Map<String, String> properties = new HashMap<>();
+            URL url = new URL("https://raw.githubusercontent.com/ClubObsidian/wrappy-test-files/master/bigtest%2Cyml");
+            Configuration config = Configuration.load(url, copyTo, properties);
+            assertTrue(config.getInteger("rows") == 7);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if (copyTo.exists()) {
+            copyTo.delete();
+        }
+    }
+
+    @Test
+    public void backupTest() {
+        File backupFile = new File("backup.yml");
+        try {
+            backupFile.createNewFile();
+            Configuration config = Configuration.load(backupFile);
+            config.set("key", "value");
+            config.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            File testFile = new File("test.yml");
+            Configuration config = Configuration.load(testFile.toURI().toURL(), backupFile, false);
+            assertTrue(config.getKeys().size() == 1);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        if (backupFile.exists()) {
+            backupFile.delete();
+        }
+    }
 }

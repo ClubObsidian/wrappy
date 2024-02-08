@@ -22,7 +22,6 @@ import com.clubobsidian.wrappy.test.mock.ConfigHolderNonStaticMock;
 import com.clubobsidian.wrappy.test.mock.ConfigHolderStaticMock;
 import com.clubobsidian.wrappy.test.mock.StringNodeTransformerMock;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

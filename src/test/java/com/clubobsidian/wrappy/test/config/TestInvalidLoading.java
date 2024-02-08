@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestInvalidLoading {
 
-	@Test
-	public void testLoadingIOException() {
-		Configuration config = Configuration.load(new File("test-invalid.yml"));
-		assertTrue(config == null);
-	}
+    @Test
+    public void testLoadingIOException() {
+        Configuration config = Configuration.load(new File("test-invalid.yml"));
+        assertTrue(config == null);
+    }
 }

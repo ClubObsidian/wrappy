@@ -11,16 +11,16 @@ float: 0.8
 boolean: true
 double: 0.7
 string-list:
-- asdf
+  - asdf
 integer-list:
-- '2'
-- '7'
+  - '2'
+  - '7'
 long-list:
-- '5'
+  - '5'
 float-list:
-- 0.05
+  - 0.05
 boolean-list:
-- true
-- false
+  - true
+  - false
 double-list:
-- 1.01
+  - 1.01

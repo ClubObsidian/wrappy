@@ -17,9 +17,9 @@ package com.clubobsidian.wrappy;
 
 public enum ConfigurationType {
 
-	YAML,
-	JSON,
-	HOCON,
-	XML;
+    YAML,
+    JSON,
+    HOCON,
+    XML;
 
 }

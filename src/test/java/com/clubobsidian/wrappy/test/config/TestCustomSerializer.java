@@ -18,7 +18,7 @@ public class TestCustomSerializer {
     @BeforeEach
     public void before() {
         this.testFolder = new File("test");
-        if(!testFolder.exists()) {
+        if (!testFolder.exists()) {
             testFolder.mkdirs();
         }
     }

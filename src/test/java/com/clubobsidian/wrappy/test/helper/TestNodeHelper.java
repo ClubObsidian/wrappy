@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class TestNodeHelper {
-	
-	@Test
-	public void testInvalidWithDefault() {
-		Configuration config = Configuration.load(new File("test.yml"));
-		NodeHelper<Double> helper = new NodeHelper<>(config);
-		assertTrue(helper.get("key", Double.class, null) == null);
-	}
+
+    @Test
+    public void testInvalidWithDefault() {
+        Configuration config = Configuration.load(new File("test.yml"));
+        NodeHelper<Double> helper = new NodeHelper<>(config);
+        assertTrue(helper.get("key", Double.class, null) == null);
+    }
 }

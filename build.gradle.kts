@@ -13,8 +13,8 @@ java {
 tasks {
     jacocoTestReport {
         reports {
-            xml.required =  true
-            html.required =  false
+            xml.required = true
+            html.required = false
         }
     }
 
