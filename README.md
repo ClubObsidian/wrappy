@@ -74,4 +74,4 @@ compile 'com.github.clubobsidian:wrappy:4.0.0'
 
 ### Building
 
-`gradlew shadowJar`
+`gradlew build`
