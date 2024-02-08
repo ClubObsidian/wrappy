@@ -40,7 +40,6 @@ import java.util.function.Supplier;
 
 public class Configuration extends ConfigurationSection {
 
-
 	public static Configuration load(File file) {
 		return load(file, new HashMap<>());
 	}

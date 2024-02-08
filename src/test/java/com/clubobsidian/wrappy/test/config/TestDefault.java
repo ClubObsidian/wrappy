@@ -17,12 +17,12 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestDefault {
 
@@ -31,7 +31,7 @@ public class TestDefault {
 
     @Test
     public void testNodeNotNull() {
-        assertTrue("Configurate node was null", config.getNode() != null);
+        assertTrue(config.getNode() != null);
     }
 
     @Test

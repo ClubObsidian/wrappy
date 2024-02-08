@@ -16,25 +16,24 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.UnknownFileTypeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestUnkownFileTypeException {
+public class TestUnknownFileTypeException {
 
 	@Test
 	public void testFileConstructor() {
 		UnknownFileTypeException ex = new UnknownFileTypeException(new File("test.yml"));
-		assertTrue("Message is not \"Unknown file type for configuration file test.yml\"", 
-		ex.getMessage().equals("Unknown file type for configuration file test.yml"));
+		assertEquals("Unknown file type for configuration file test.yml", ex.getMessage());
 	}
 	
 	@Test
 	public void testStringConstructor() {
 		UnknownFileTypeException ex = new UnknownFileTypeException("test.yml");
-		assertTrue("Message is not \"Unknown file type for configuration file test.yml\"", 
-		ex.getMessage().equals("Unknown file type for configuration file test.yml"));
+		assertEquals("Unknown file type for configuration file test.yml", ex.getMessage());
 	}
 }

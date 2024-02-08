@@ -3,20 +3,19 @@ package com.clubobsidian.wrappy.test.config;
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.test.mock.FooBarMock;
 import com.clubobsidian.wrappy.test.mock.FooBarSerializerMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.time.DayOfWeek;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestCustomSerializer {
 
     private File testFolder;
 
-    @Before
+    @BeforeEach
     public void before() {
         this.testFolder = new File("test");
         if(!testFolder.exists()) {

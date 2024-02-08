@@ -16,7 +16,7 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestURLConfiguration {
 
@@ -35,10 +35,10 @@ public class TestURLConfiguration {
 		File copyTo = new File("backup.yml");
 		try {
 			Configuration config = Configuration.load(testFile.toURI().toURL(), copyTo);
-			assertTrue("Backup configuration is not empty", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 			config.set("test", 1);
 			config = Configuration.load(testFile.toURI().toURL(), copyTo);
-			assertTrue("Backup configuration is empty delete occured", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -94,7 +94,7 @@ public class TestURLConfiguration {
 		try {
 			File testFile = new File("test.yml");
 			Configuration config = Configuration.load(testFile.toURI().toURL(), backupFile, false);
-			assertTrue("Config was overwritten", config.getKeys().size() == 1);
+			assertTrue(config.getKeys().size() == 1);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

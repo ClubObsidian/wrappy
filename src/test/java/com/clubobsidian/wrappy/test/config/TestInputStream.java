@@ -17,15 +17,15 @@ package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.ConfigurationType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestInputStream {
 
@@ -34,7 +34,7 @@ public class TestInputStream {
 		try {
 			InputStream input = new FileInputStream(new File("test.yml"));
 			Configuration config = Configuration.load(input, ConfigurationType.YAML);
-			assertTrue("Yml configuration is empty", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -46,7 +46,7 @@ public class TestInputStream {
 		try {
 			InputStream input = new FileInputStream(new File("test.json"));
 			Configuration config = Configuration.load(input, ConfigurationType.JSON);
-			assertTrue("Json configuration is empty", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,7 +58,7 @@ public class TestInputStream {
 		try {
 			InputStream input = new FileInputStream(new File("test.conf"));
 			Configuration config = Configuration.load(input, ConfigurationType.HOCON);
-			assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,7 +70,7 @@ public class TestInputStream {
 		try {
 			InputStream input = new FileInputStream(new File("test.xml"));
 			Configuration config = Configuration.load(input, ConfigurationType.XML);
-			assertTrue("XML configuration is empty", config.getKeys().size() > 0);
+			assertTrue(config.getKeys().size() > 0);
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();

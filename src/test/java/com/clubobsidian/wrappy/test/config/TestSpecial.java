@@ -17,8 +17,8 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,14 +31,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestSpecial {
 
 	private File testFolder;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.testFolder = new File("test");
 		if(!testFolder.exists()) {

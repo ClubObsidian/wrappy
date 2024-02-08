@@ -18,11 +18,12 @@ package com.clubobsidian.wrappy.test.helper;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.helper.NodeHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class TestNodeHelper {
 	
