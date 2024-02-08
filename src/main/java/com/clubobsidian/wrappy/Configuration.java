@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
+import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -32,52 +33,27 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
 public class Configuration extends ConfigurationSection {
 
+	private static final Map<String, ConfigurationType> EXTENSION_TO_TYPE = new HashMap<String, ConfigurationType>() {{
+		put(".yml", ConfigurationType.YAML);
+		put(".conf", ConfigurationType.HOCON);
+		put(".json", ConfigurationType.JSON);
+		put(".xml", ConfigurationType.XML);
+	}};
+
+
 	public static Configuration load(File file) {
 		return Configuration.load(file.toPath());
 	}
 
 	public static Configuration load(Path path) {
-		Configuration config = new Configuration();
-		String fileName = path.getFileName().toString();
-		ConfigurationLoader<?> loader = null;
-
-		if(fileName.endsWith(".yml")) {
-			loader = YamlConfigurationLoader
-					.builder()
-					.nodeStyle(NodeStyle.BLOCK)
-					.indent(2)
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".conf")) {
-			loader = HoconConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".json")) {
-			loader = JacksonConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else if(fileName.endsWith(".xml")) {
-			loader = XmlConfigurationLoader
-					.builder()
-					.path(path)
-					.build();
-		} else {
-			throw new UnknownFileTypeException(fileName);
-		}
-		boolean modified = modifyNode(config, loader);
-		if(!modified) {
-			return null;
-		}
-
-		return config;
+		return new Configuration.Builder().source(path).build();
 	}
 
 	public static Configuration load(URL url, File backupFile) {
@@ -91,11 +67,11 @@ public class Configuration extends ConfigurationSection {
 	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties) {
 		return load(url, backupFile, 10000, 10000, requestProperties, true);
 	}
-	
+
 	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties, boolean overwrite) {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
-	
+
 	public static Configuration load(URL url, File file, int connectionTimeout, int readTimeout, Map<String,String> requestProperties, boolean overwrite) {
 		try  {
 			if(file != null && file.exists() && file.length() > 0 && !overwrite) {
@@ -104,7 +80,7 @@ public class Configuration extends ConfigurationSection {
 			if(!file.exists()) {
 				file.createNewFile();
 			}
-			
+
 			URLConnection connection = url.openConnection();
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(readTimeout);
@@ -115,7 +91,7 @@ public class Configuration extends ConfigurationSection {
 				Entry<String,String> next = it.next();
 				connection.setRequestProperty(next.getKey(), next.getValue());
 			}
-			
+
 			InputStream inputStream = connection.getInputStream();
 			InputStreamReader reader = new InputStreamReader(inputStream);
 			StringBuilder sb = new StringBuilder();
@@ -123,7 +99,7 @@ public class Configuration extends ConfigurationSection {
 			while((read = reader.read()) != -1) {
 				sb.append((char) read);
 			}
-			
+
 			byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
 			byte[] tempMD5 = HashUtil.getMD5(data);
 			byte[] backupMD5 = HashUtil.getMD5(file);
@@ -131,14 +107,14 @@ public class Configuration extends ConfigurationSection {
 				if(file.exists()) {
 					file.delete();
 				}
-				
+
 				file.createNewFile();
 				FileUtils.writeByteArrayToFile(file, data);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		if(file.exists()) {
 			return Configuration.load(file);
 		}
@@ -203,6 +179,67 @@ public class Configuration extends ConfigurationSection {
 		} catch (ConfigurateException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	public static class Builder {
+
+		private ConfigurationLoader<?> loader;
+		private ConfigurationType type;
+		private Object source;
+
+		public Builder type(ConfigurationType type) {
+			this.type = type;
+			return this;
+		}
+
+		public <T> Builder source(T source) {
+			AbstractConfigurationLoader loader = null;
+			if (source instanceof File) {
+				loader = this.loadPathSource(((File) source).toPath());
+			} else if (source instanceof Path) {
+				loader = this.loadPathSource((Path) source);
+			}
+			this.loader = loader;
+			return this;
+		}
+
+		public Configuration build() {
+			Configuration config = new Configuration();
+			boolean modified = modifyNode(config, this.loader);
+			if(!modified) {
+				return null;
+			}
+			return config;
+		}
+
+		private AbstractConfigurationLoader loadPathSource(Path path) {
+			String fileName = path.getFileName().toString().toLowerCase(Locale.ROOT);
+			ConfigurationType type = null;
+			for (Entry<String, ConfigurationType> entry : EXTENSION_TO_TYPE.entrySet()) {
+				if (fileName.endsWith(entry.getKey())) {
+					type = entry.getValue();
+					break;
+				}
+			}
+			if (type == null) {
+				throw new UnknownFileTypeException(fileName);
+			}
+			return this.getBuilderFromType(type).path(path).build();
+		}
+
+		private AbstractConfigurationLoader.Builder getBuilderFromType(ConfigurationType type) {
+			switch(type) {
+				case YAML:
+					return YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2);
+				case HOCON:
+					return HoconConfigurationLoader.builder();
+				case JSON:
+					return JacksonConfigurationLoader.builder();
+				case XML:
+					return XmlConfigurationLoader.builder();
+			}
+			return null;
 		}
 	}
 }
