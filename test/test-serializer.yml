@@ -1,1 +1,4 @@
 foobar: "test"
+foobarlist:
+  - "test1"
+  - "test2"

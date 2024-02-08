@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.time.DayOfWeek;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,4 +35,16 @@ public class TestCustomSerializer {
         assertEquals("test", foo.getFoobar());
     }
 
+    @Test
+    public void testCustomSerializerList() {
+        File file = new File(this.testFolder, "test-serializer.yml");
+        Configuration config = new Configuration.Builder()
+                .file(file)
+                .serializer(FooBarMock.class, new FooBarSerializerMock())
+                .build();
+        List<FooBarMock> fooList = config.getList("foobarlist", FooBarMock.class);
+        assertEquals(2, fooList.size());
+        assertEquals("test1", fooList.get(0).getFoobar());
+        assertEquals("test2", fooList.get(1).getFoobar());
+    }
 }
