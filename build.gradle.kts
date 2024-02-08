@@ -3,11 +3,17 @@ plugins {
     id("jacoco")
     id("idea")
     id("eclipse")
+    id("org.cadixdev.licenser") version "0.6.1"
 }
 
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+license {
+    header.set(resources.text.fromFile(file("HEADER.txt")))
+    include("**/*.java")
 }
 
 tasks {
