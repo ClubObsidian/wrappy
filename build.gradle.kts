@@ -3,9 +3,12 @@ plugins {
     id("jacoco")
     id("idea")
     id("eclipse")
+    id("maven-publish")
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
+group = "com.github.clubobsidian"
+version = "4.0.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(11))
@@ -14,6 +17,17 @@ java {
 license {
     header.set(resources.text.fromFile(file("HEADER.txt")))
     include("**/*.java")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            from(components["java"])
+        }
+    }
 }
 
 tasks {
