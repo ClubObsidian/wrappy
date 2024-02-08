@@ -63,7 +63,7 @@ repositories {
 }
 
 var configurateVersion = "4.1.2"
-var junitVersion = "5.9.1"
+var junitVersion = "5.10.2"
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
