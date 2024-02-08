@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,24 +17,26 @@
 package com.clubobsidian.wrappy.test.util;
 
 import com.clubobsidian.wrappy.util.HashUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class HashUtilTest {
 
-	@Test
-	public void getInvalidHash() {
-		try {
-			Method method = HashUtil.class.getDeclaredMethod("getHash", String.class, byte[].class);
-			method.setAccessible(true);
-			byte[] invoked = (byte[]) method.invoke(null, "INVALID", "test".getBytes());
-			assertTrue(invoked.length == 0);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void getInvalidHash() {
+        try {
+            Method method = HashUtil.class.getDeclaredMethod("getHash", String.class, byte[].class);
+            method.setAccessible(true);
+            byte[] invoked = (byte[]) method.invoke(null, "INVALID", "test".getBytes());
+            assertTrue(invoked.length == 0);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }

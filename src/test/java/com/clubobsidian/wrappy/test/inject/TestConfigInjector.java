@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy.test.inject;
 
 import com.clubobsidian.wrappy.Configuration;
@@ -22,8 +23,8 @@ import com.clubobsidian.wrappy.test.mock.ConfigHolderNonStaticMock;
 import com.clubobsidian.wrappy.test.mock.ConfigHolderStaticMock;
 import com.clubobsidian.wrappy.test.mock.StringNodeTransformerMock;
 import com.clubobsidian.wrappy.transformer.NodeTransformer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.time.DayOfWeek;
@@ -32,13 +33,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestConfigInjector {
 
     private static ConfigurationSection config;
 
-    @Before
+    @BeforeEach
     public void setup() {
         config = Configuration.load(new File("test", "test-inject.yml"));
         config = config.getConfigurationSection("test");

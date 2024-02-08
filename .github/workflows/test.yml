@@ -11,19 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [8, 11]
+        java: [11]
     steps:
-    - uses: actions/checkout@v2
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew  
-    - name: Set up JDK
-      uses: actions/setup-java@v2.5.0
-      with:
-        distribution: 'zulu'
-        java-version: ${{ matrix.java }}
-    - run: ./gradlew clean
-    - run: ./gradlew test  
-    - name: Gradle jacoco test report
-      run: ./gradlew jacocoTestReport
-    - name: Code coverage   
-      uses: codecov/codecov-action@v1
+      - uses: actions/checkout@v2
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Set up JDK
+        uses: actions/setup-java@v2.5.0
+        with:
+          distribution: 'zulu'
+          java-version: ${{ matrix.java }}
+      - run: ./gradlew clean
+      - run: ./gradlew test
+      - name: Gradle jacoco test report
+        run: ./gradlew jacocoTestReport
+      - name: Code coverage
+        uses: codecov/codecov-action@v1

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,18 +18,19 @@ package com.clubobsidian.wrappy.test.helper;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.helper.NodeHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class TestNodeHelper {
-	
-	@Test
-	public void testInvalidWithDefault() {
-		Configuration config = Configuration.load(new File("test.yml"));
-		NodeHelper<Double> helper = new NodeHelper<>(config);
-		assertTrue(helper.get("key", Double.class, null) == null);
-	}
+
+    @Test
+    public void testInvalidWithDefault() {
+        Configuration config = Configuration.load(new File("test.yml"));
+        NodeHelper<Double> helper = new NodeHelper<>(config);
+        assertTrue(helper.get("key", Double.class, null) == null);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy;
 
 import java.io.File;
 
 public class UnknownFileTypeException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5825723878989203063L;
-	
-	public UnknownFileTypeException(File file) {
-		this(file.getName());
-	}
-	
-	public UnknownFileTypeException(String fileName) {
-		super("Unknown file type for configuration file " + fileName);
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5825723878989203063L;
+
+    public UnknownFileTypeException(File file) {
+        this(file.getName());
+    }
+
+    public UnknownFileTypeException(String fileName) {
+        super("Unknown file type for configuration file " + fileName);
+    }
 }

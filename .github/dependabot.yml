@@ -1,14 +1,14 @@
 version: 2
 updates:
-- package-ecosystem: gradle
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: junit:junit
-    versions:
-    - 4.13.1
-  - dependency-name: com.github.johnrengelman.shadow
-    versions:
-    - 6.1.0
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: junit:junit
+        versions:
+          - 4.13.1
+      - dependency-name: com.github.johnrengelman.shadow
+        versions:
+          - 6.1.0

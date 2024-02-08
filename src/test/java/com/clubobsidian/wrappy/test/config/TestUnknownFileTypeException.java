@@ -16,19 +16,24 @@
 
 package com.clubobsidian.wrappy.test.config;
 
-import com.clubobsidian.wrappy.Configuration;
+import com.clubobsidian.wrappy.UnknownFileTypeException;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-public class TestInvalidLoading {
+public class TestUnknownFileTypeException {
 
     @Test
-    public void testLoadingIOException() {
-        Configuration config = Configuration.load(new File("test-invalid.yml"));
-        assertTrue(config == null);
+    public void testFileConstructor() {
+        UnknownFileTypeException ex = new UnknownFileTypeException(new File("test.yml"));
+        assertEquals("Unknown file type for configuration file test.yml", ex.getMessage());
+    }
+
+    @Test
+    public void testStringConstructor() {
+        UnknownFileTypeException ex = new UnknownFileTypeException("test.yml");
+        assertEquals("Unknown file type for configuration file test.yml", ex.getMessage());
     }
 }

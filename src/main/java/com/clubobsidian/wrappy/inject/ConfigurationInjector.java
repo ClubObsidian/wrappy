@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy.inject;
 
 import com.clubobsidian.wrappy.ConfigHolder;
@@ -36,20 +37,20 @@ public class ConfigurationInjector {
 
     public void inject(Collection<NodeTransformer> transformers) {
         Class<?> injectClazz;
-        if(this.injectInto instanceof Class) {
+        if (this.injectInto instanceof Class) {
             injectClazz = (Class<?>) injectInto;
             this.injectInto = null;
         } else {
             injectClazz = this.injectInto.getClass();
         }
-        for(Field field: injectClazz.getDeclaredFields()) {
-            for(Node node : field.getAnnotationsByType(Node.class)) {
+        for (Field field : injectClazz.getDeclaredFields()) {
+            for (Node node : field.getAnnotationsByType(Node.class)) {
                 field.setAccessible(true);
                 Class<?> fieldClazz = field.getType();
                 fieldClazz = fieldClazz == Object.class ? field.getType() : fieldClazz;
                 String nodePath = node.value();
                 Object nodeValue;
-                if(nodePath.equals("%key%")) {
+                if (nodePath.equals("%key%")) {
                     this.setField(field, this.config.getName());
                     break;
                 }
@@ -58,14 +59,14 @@ public class ConfigurationInjector {
                     ConfigurationSection pathSection = this.config.getConfigurationSection(nodePath);
                     new ConfigurationInjector(pathSection, holder).inject(transformers);
                     break;
-                } else if(fieldClazz.equals(Map.class)) {
+                } else if (fieldClazz.equals(Map.class)) {
                     nodeValue = this.config.getMap(nodePath, node.type(), node.valueType());
-                } else if(fieldClazz.equals(List.class)) {
+                } else if (fieldClazz.equals(List.class)) {
                     nodeValue = this.config.getList(nodePath, node.type());
                 } else {
                     nodeValue = this.config.get(nodePath, fieldClazz);
                 }
-                if(nodeValue != null) {
+                if (nodeValue != null) {
                     for (NodeTransformer transformer : transformers) {
                         if (transformer.getClassToTransform().equals(fieldClazz)) {
                             nodeValue = transformer.transform(nodeValue);

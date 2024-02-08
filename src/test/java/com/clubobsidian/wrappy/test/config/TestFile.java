@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,60 +13,66 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
 import com.clubobsidian.wrappy.UnknownFileTypeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestFile { 
+public class TestFile {
 
-	@Test
-	public void testLoadYaml() {
-		Configuration config = Configuration.load(new File("test.yml"));
-		assertTrue("Yml configuration is empty", config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.yml"));
-		assertTrue("Empty yaml configuration is not empty", config.getKeys().size() == 0);
-	}
+    @Test
+    public void testLoadYaml() {
+        Configuration config = Configuration.load(new File("test.yml"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.yml"));
+        assertTrue(config.getKeys().size() == 0);
+    }
 
-	@Test
-	public void testLoadJson() {
-		Configuration config = Configuration.load(new File("test.json"));
-		assertTrue("Json configuration is empty", config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.json"));
-		assertTrue("Empty json configuration is not empty", config.getKeys().size() == 0);
-	}
-	
-	@Test
-	public void testLoadHocon() {
-		Configuration config = Configuration.load(new File("test.conf"));
-		assertTrue("Hocon configuration is empty", config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.conf"));
-		assertTrue("Empty hocon configuration is not empty", config.getKeys().size() == 0);
-	}
-	
-	
-	@Test
-	public void testLoadXml() {
-		Configuration config = Configuration.load(new File("test.xml"));
-		assertTrue("Xml configuration is empty", config.getKeys().size() > 0);
-		config = Configuration.load(new File("doesnotexist.xml"));
-		assertTrue("Empty xml configuration is not empty", config.getKeys().size() == 0);
-	}
-	
-	@Test(expected = UnknownFileTypeException.class)
-	public void testUnknownFileTypeException() {
-		Configuration config = Configuration.load(new File("test.jibberish"));
-		assertTrue("Configuration was not empty for a non-existent file type", config.getKeys().size() == 0);
-	}
-	
-	@Test
-	public void testPath() {
-		Configuration config = Configuration.load(new File("test.yml").toPath());
-		assertTrue("Path config is empty", config.getKeys().size() > 0);
-	}
+    @Test
+    public void testLoadJson() {
+        Configuration config = Configuration.load(new File("test.json"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.json"));
+        assertTrue(config.getKeys().size() == 0);
+    }
+
+    @Test
+    public void testLoadHocon() {
+        Configuration config = Configuration.load(new File("test.conf"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.conf"));
+        assertTrue(config.getKeys().size() == 0);
+    }
+
+
+    @Test
+    public void testLoadXml() {
+        Configuration config = Configuration.load(new File("test.xml"));
+        assertTrue(config.getKeys().size() > 0);
+        config = Configuration.load(new File("doesnotexist.xml"));
+        assertTrue(config.getKeys().size() == 0);
+    }
+
+    @Test
+    public void testUnknownFileTypeException() {
+        AtomicReference<Configuration> config = new AtomicReference<>();
+        assertThrows(UnknownFileTypeException.class, () ->
+                config.set(Configuration.load(new File("test.jibberish")))
+        );
+        assertTrue(config.get() == null);
+    }
+
+    @Test
+    public void testPath() {
+        Configuration config = Configuration.load(new File("test.yml").toPath());
+        assertTrue(config.getKeys().size() > 0);
+    }
 }

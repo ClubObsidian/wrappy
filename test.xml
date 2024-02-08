@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <section>
-    <value>7</value>
-  </section>
-  <key>value</key>
-  <integer>5</integer>
-  <long>6</long>
-  <float>0.8</float>
-  <boolean>true</boolean>
-  <double>0.7</double>
-  <string-list configurate-type="list">
-    <element>asdf</element>
-  </string-list>
-  <integer-list configurate-type="list">
-    <element>2</element>
-    <element>7</element>
-  </integer-list>
-  <long-list configurate-type="list">
-    <element>5</element>
-  </long-list>
-  <float-list configurate-type="list">
-    <element>0.05</element>
-  </float-list>
-  <boolean-list configurate-type="list">
-    <element>true</element>
-    <element>false</element>
-  </boolean-list>
-  <double-list configurate-type="list">
-    <element>1.01</element>
-  </double-list>
+    <section>
+        <value>7</value>
+    </section>
+    <key>value</key>
+    <integer>5</integer>
+    <long>6</long>
+    <float>0.8</float>
+    <boolean>true</boolean>
+    <double>0.7</double>
+    <string-list configurate-type="list">
+        <element>asdf</element>
+    </string-list>
+    <integer-list configurate-type="list">
+        <element>2</element>
+        <element>7</element>
+    </integer-list>
+    <long-list configurate-type="list">
+        <element>5</element>
+    </long-list>
+    <float-list configurate-type="list">
+        <element>0.05</element>
+    </float-list>
+    <boolean-list configurate-type="list">
+        <element>true</element>
+        <element>false</element>
+    </boolean-list>
+    <double-list configurate-type="list">
+        <element>1.01</element>
+    </double-list>
 </root>

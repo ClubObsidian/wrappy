@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestDefault {
 
@@ -31,7 +31,7 @@ public class TestDefault {
 
     @Test
     public void testNodeNotNull() {
-        assertTrue("Configurate node was null", config.getNode() != null);
+        assertTrue(config.getNode() != null);
     }
 
     @Test

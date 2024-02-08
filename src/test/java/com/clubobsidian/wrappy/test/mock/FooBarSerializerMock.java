@@ -16,17 +16,22 @@
 
 package com.clubobsidian.wrappy.test.mock;
 
-import com.clubobsidian.wrappy.ConfigHolder;
-import com.clubobsidian.wrappy.inject.Node;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
 
-import java.time.DayOfWeek;
-import java.util.List;
+import java.lang.reflect.Type;
 
-public class ConfigHolderStaticMock implements ConfigHolder {
+public class FooBarSerializerMock implements TypeSerializer<FooBarMock> {
 
-    @Node("foo")
-    public static String foo;
+    @Override
+    public FooBarMock deserialize(Type type, ConfigurationNode node) {
+        return new FooBarMock(node.getString());
+    }
 
-    @Node(value = "day-list", type = DayOfWeek.class)
-    public static List<DayOfWeek> dayList;
+    @Override
+    public void serialize(Type type, @Nullable FooBarMock obj, ConfigurationNode node) throws SerializationException {
+        node.set(obj.getFoobar());
+    }
 }

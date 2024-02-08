@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package com.clubobsidian.wrappy.helper;
 
 import com.clubobsidian.wrappy.ConfigurationSection;
@@ -26,31 +27,31 @@ import java.util.List;
 
 public class NodeHelper<T> {
 
-	private final ConfigurationSection section;
-	
-	public NodeHelper(ConfigurationSection section) {
-		this.section = section;
-	}
-	
-	public T get(Object path, Class<T> clazz, T defaultValue) {
-		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
-			TypeToken<T> type = TypeToken.get(clazz);
-			return defaultValue == null ? parsed.get(clazz) :
-					parsed.empty() ? defaultValue : parsed.get(type, defaultValue);
-		} catch (SerializationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public List<T> getList(Object path, Class<T> clazz) {
-		try {
-			ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
-			return parsed.getList(TypeToken.get(clazz));
-		} catch (SerializationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    private final ConfigurationSection section;
+
+    public NodeHelper(ConfigurationSection section) {
+        this.section = section;
+    }
+
+    public T get(Object path, Class<T> clazz, T defaultValue) {
+        try {
+            ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
+            TypeToken<T> type = TypeToken.get(clazz);
+            return defaultValue == null ? parsed.get(clazz) :
+                    parsed.empty() ? defaultValue : parsed.get(type, defaultValue);
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<T> getList(Object path, Class<T> clazz) {
+        try {
+            ConfigurationNode parsed = NodeUtil.parsePath(this.section.getNode(), path);
+            return parsed.getList(TypeToken.get(clazz));
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

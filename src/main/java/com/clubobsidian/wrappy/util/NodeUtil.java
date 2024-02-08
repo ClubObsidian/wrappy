@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,23 +20,24 @@ import org.spongepowered.configurate.ConfigurationNode;
 
 public final class NodeUtil {
 
-	private NodeUtil() {}
-	
-	public static ConfigurationNode parsePath(ConfigurationNode node, Object path) {
-		if (!(path instanceof String)) {
-			return node.node(path);
-		}
-		String pathStr = (String) path;
-		Object[] ar = new Object[1];
-		if(pathStr.contains(".")) {
-			String[] split = pathStr.split("\\.");
-			ar = new Object[split.length];
-			for(int i = 0; i < split.length; i++) {
-				ar[i] = split[i];
-			}
-		} else {
-			ar[0] = path;
-		}
-		return node.node(ar);
-	}
+    private NodeUtil() {
+    }
+
+    public static ConfigurationNode parsePath(ConfigurationNode node, Object path) {
+        if (!(path instanceof String)) {
+            return node.node(path);
+        }
+        String pathStr = (String) path;
+        Object[] ar = new Object[1];
+        if (pathStr.contains(".")) {
+            String[] split = pathStr.split("\\.");
+            ar = new Object[split.length];
+            for (int i = 0; i < split.length; i++) {
+                ar[i] = split[i];
+            }
+        } else {
+            ar[0] = path;
+        }
+        return node.node(ar);
+    }
 }

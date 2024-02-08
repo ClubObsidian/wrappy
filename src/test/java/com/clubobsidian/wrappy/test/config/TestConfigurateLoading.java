@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021 Club Obsidian and contributors.
+ *    Copyright 2018-2024 virustotalop
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package com.clubobsidian.wrappy.test.config;
 
 import com.clubobsidian.wrappy.Configuration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestConfigurateLoading {
 
@@ -33,11 +33,11 @@ public class TestConfigurateLoading {
     @Test
     public void loadConfigurate() {
         ConfigurationLoader<?> loader = YamlConfigurationLoader
-                    .builder()
-                    .nodeStyle(NodeStyle.BLOCK)
-                    .indent(2)
-                    .path(testFile.toPath())
-                    .build();
+                .builder()
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .path(testFile.toPath())
+                .build();
         Configuration config = Configuration.load(loader);
         assertEquals("value", config.getString("key"));
     }
