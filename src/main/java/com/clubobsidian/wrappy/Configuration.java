@@ -120,14 +120,14 @@ public class Configuration extends ConfigurationSection {
     public static class Builder {
 
         private static final Map<String, ConfigurationType> EXTENSION_TO_TYPE =
-                new HashMap<String, ConfigurationType>() {{
+                new HashMap<>() {{
                     put(".yml", ConfigurationType.YAML);
                     put(".conf", ConfigurationType.HOCON);
                     put(".json", ConfigurationType.JSON);
                     put(".xml", ConfigurationType.XML);
                 }};
         private static final Map<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder>> TYPE_TO_BUILDER =
-                new HashMap<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder>>() {{
+                new HashMap<>() {{
                     put(ConfigurationType.YAML,
                             () -> YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2));
                     put(ConfigurationType.HOCON,
