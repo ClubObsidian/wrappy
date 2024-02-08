@@ -48,11 +48,19 @@ public class Configuration extends ConfigurationSection {
 
 
 	public static Configuration load(File file) {
-		return new Configuration.Builder().file(file).build();
+		return load(file, new HashMap<>());
+	}
+
+	public static Configuration load(File file, Map<Class, TypeSerializer> serializers) {
+		return new Configuration.Builder().file(file).serializer(serializers).build();
 	}
 
 	public static Configuration load(Path path) {
-		return new Configuration.Builder().path(path).build();
+		return load(path, new HashMap<>());
+	}
+
+	public static Configuration load(Path path, Map<Class, TypeSerializer> serializers) {
+		return new Configuration.Builder().path(path).serializer(serializers).build();
 	}
 
 	public static Configuration load(URL url, File backupFile) {
@@ -67,20 +75,36 @@ public class Configuration extends ConfigurationSection {
 		return load(url, backupFile, 10000, 10000, requestProperties, true);
 	}
 
-	public static Configuration load(URL url, File backupFile, Map<String,String> requestProperties, boolean overwrite) {
+	public static Configuration load(URL url, File backupFile,
+									 Map<String,String> requestProperties, boolean overwrite) {
 		return load(url, backupFile, 10000, 10000, requestProperties, overwrite);
 	}
 
 	public static Configuration load(URL url, File writeTo,
 									 int connectionTimeout, int readTimeout,
 									 Map<String,String> requestProperties, boolean overwrite) {
-		return new Configuration.Builder().url(url, writeTo,
+		return load(url, writeTo, connectionTimeout, readTimeout, requestProperties, overwrite, new HashMap<>());
+	}
+
+	public static Configuration load(URL url, File writeTo,
+									 int connectionTimeout, int readTimeout,
+									 Map<String,String> requestProperties, boolean overwrite,
+									 Map<Class, TypeSerializer> serializer) {
+		return new Configuration.Builder()
+				.url(url, writeTo,
 				connectionTimeout, readTimeout,
-				requestProperties, overwrite).build();
+				requestProperties, overwrite)
+				.serializer(serializer).build();
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type) {
-		return new Configuration.Builder().stream(stream, type).build();
+		return load(stream, type, new HashMap<>());
+	}
+
+	public static Configuration load(InputStream stream,
+									 ConfigurationType type,
+									 Map<Class, TypeSerializer> serializer) {
+		return new Configuration.Builder().stream(stream, type).serializer(serializer).build();
 	}
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
@@ -131,6 +155,11 @@ public class Configuration extends ConfigurationSection {
 
 		public Builder serializer(Class clazz, TypeSerializer serializer) {
 			this.serializers.put(clazz, serializer);
+			return this;
+		}
+
+		public Builder serializer(Map<Class, TypeSerializer> serializers) {
+			this.serializers.putAll(serializers);
 			return this;
 		}
 
