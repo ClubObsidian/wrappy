@@ -36,15 +36,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 public class Configuration extends ConfigurationSection {
-
-	private static final Map<String, ConfigurationType> EXTENSION_TO_TYPE = new HashMap<String, ConfigurationType>() {{
-		put(".yml", ConfigurationType.YAML);
-		put(".conf", ConfigurationType.HOCON);
-		put(".json", ConfigurationType.JSON);
-		put(".xml", ConfigurationType.XML);
-	}};
 
 
 	public static Configuration load(File file) {
@@ -125,6 +119,26 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static class Builder {
+
+		private static final Map<String, ConfigurationType> EXTENSION_TO_TYPE =
+				new HashMap<String, ConfigurationType>() {{
+			put(".yml", ConfigurationType.YAML);
+			put(".conf", ConfigurationType.HOCON);
+			put(".json", ConfigurationType.JSON);
+			put(".xml", ConfigurationType.XML);
+		}};
+		private static final Map<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder>> TYPE_TO_BUILDER =
+				new HashMap<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder>>() {{
+					put(ConfigurationType.YAML,
+							() -> YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2));
+					put(ConfigurationType.HOCON,
+							() -> HoconConfigurationLoader.builder());
+					put(ConfigurationType.JSON,
+							() -> JacksonConfigurationLoader.builder());
+					put(ConfigurationType.XML,
+							() -> XmlConfigurationLoader.builder());
+		}};
+
 
 		private AbstractConfigurationLoader.Builder configBuilder;
 		private Runnable finalizingStep;
@@ -263,17 +277,8 @@ public class Configuration extends ConfigurationSection {
 		}
 
 		private AbstractConfigurationLoader.Builder getBuilderFromType(ConfigurationType type) {
-			switch(type) {
-				case YAML:
-					return YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2);
-				case HOCON:
-					return HoconConfigurationLoader.builder();
-				case JSON:
-					return JacksonConfigurationLoader.builder();
-				case XML:
-					return XmlConfigurationLoader.builder();
-			}
-			return null;
+			Supplier<AbstractConfigurationLoader.Builder> supplier = TYPE_TO_BUILDER.get(type);
+			return supplier == null ? null : supplier.get();
 		}
 	}
 }
