@@ -16,7 +16,6 @@
 package com.clubobsidian.wrappy;
 
 import com.clubobsidian.wrappy.util.HashUtil;
-import org.apache.commons.io.FileUtils;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
@@ -30,7 +29,9 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -109,7 +110,7 @@ public class Configuration extends ConfigurationSection {
 				}
 
 				file.createNewFile();
-				FileUtils.writeByteArrayToFile(file, data);
+				Files.write(file.toPath(), data, StandardOpenOption.WRITE);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
