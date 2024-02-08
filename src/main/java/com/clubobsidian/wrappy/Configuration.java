@@ -21,6 +21,8 @@ import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.serialize.TypeSerializer;
+import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -32,10 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class Configuration extends ConfigurationSection {
@@ -85,9 +84,9 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
-		Configuration.Builder builder = new Configuration.Builder();
-		builder.loader = loader;
-		return builder.build();
+		Configuration config = new Configuration();
+		boolean modified = modifyNode(config, loader);
+		return modified ? config : null;
 	}
 
 	private static boolean modifyNode(Configuration config, ConfigurationLoader<?> loader) {
@@ -103,48 +102,61 @@ public class Configuration extends ConfigurationSection {
 
 	public static class Builder {
 
-		private ConfigurationLoader<?> loader;
+		private AbstractConfigurationLoader.Builder configBuilder;
 		private Runnable finalizingStep;
+		private final Map<Class, TypeSerializer> serializers = new LinkedHashMap<>();
 
 		public Builder file(File file) {
 			return this.path(file.toPath());
 		}
 
 		public Builder path(Path path) {
-			this.loader = this.createPathLoader(path);
+			this.configBuilder = this.createPathBuilder(path);
 			return this;
 		}
 
 		public Builder url(URL url, File writeTo,
 						   int connectionTimeout, int readTimeout,
 						   Map<String,String> requestProperties, boolean overwrite) {
-			this.loader = this.createURLLoader(url, writeTo,
+			this.configBuilder = this.createURLLoader(url, writeTo,
 					connectionTimeout, readTimeout,
 					requestProperties, overwrite);
 			return this;
 		}
 
 		public Builder stream(InputStream stream, ConfigurationType type) {
-			this.loader = this.createStreamLoader(stream, type);
+			this.configBuilder = this.createStreamBuilder(stream, type);
+			return this;
+		}
+
+		public Builder serializer(Class clazz, TypeSerializer serializer) {
+			this.serializers.put(clazz, serializer);
 			return this;
 		}
 
 		public Configuration build() {
 			Configuration config = new Configuration();
-			boolean modified = modifyNode(config, loader);
+			TypeSerializerCollection.Builder serializerBuilder = TypeSerializerCollection.defaults().childBuilder();
+			//Apply serializers
+			for (Entry<Class, TypeSerializer> entry : this.serializers.entrySet()) {
+				serializerBuilder.register(entry.getKey(), entry.getValue());
+			}
+			this.configBuilder.defaultOptions(
+					this.configBuilder.defaultOptions()
+							.shouldCopyDefaults(true)
+							.serializers(serializerBuilder.build())
+			);
+			//Build and apply loader
+			boolean modified = modifyNode(config, this.configBuilder.build());
 			if (this.finalizingStep != null) {
 				this.finalizingStep.run();
 			}
-			if(!modified) {
-				return null;
-			}
-			return config;
+			return modified ? config : null;
 		}
 
-		private ConfigurationLoader<?> createStreamLoader(InputStream stream, ConfigurationType type) {
-			AbstractConfigurationLoader.Builder builder = this.getBuilderFromType(type);
+		private AbstractConfigurationLoader.Builder createStreamBuilder(InputStream stream, ConfigurationType type) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			ConfigurationLoader<?> loader = builder.source(() -> reader).build();
+			AbstractConfigurationLoader.Builder builder = this.getBuilderFromType(type).source(() -> reader);
 			//This isn't really elegant but the streams should be closed after the file is loaded in
 			this.finalizingStep = () -> {
 				try {
@@ -154,60 +166,59 @@ public class Configuration extends ConfigurationSection {
 					e.printStackTrace();
 				}
 			};
-			return loader;
+			return builder;
 		}
 
-		private ConfigurationLoader<?> createURLLoader(URL url, File writeTo,
+		private AbstractConfigurationLoader.Builder createURLLoader(URL url, File writeTo,
 													   int connectionTimeout, int readTimeout,
 													   Map<String, String> requestProperties, boolean overwrite) {
-			try  {
-				if(writeTo != null && writeTo.exists() && writeTo.length() > 0 && !overwrite) {
-					return Configuration.load(writeTo).loader;
-				}
-				if(!writeTo.exists()) {
-					writeTo.createNewFile();
-				}
-
-				URLConnection connection = url.openConnection();
-				connection.setConnectTimeout(connectionTimeout);
-				connection.setReadTimeout(readTimeout);
-				connection.setDoInput(true);
-				connection.setUseCaches(false);
-				Iterator<Entry<String,String>> it = requestProperties.entrySet().iterator();
-				while(it.hasNext()) {
-					Entry<String,String> next = it.next();
-					connection.setRequestProperty(next.getKey(), next.getValue());
-				}
-
-				InputStream inputStream = connection.getInputStream();
-				InputStreamReader reader = new InputStreamReader(inputStream);
-				StringBuilder sb = new StringBuilder();
-				int read;
-				while((read = reader.read()) != -1) {
-					sb.append((char) read);
-				}
-
-				byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
-				byte[] tempMD5 = HashUtil.getMD5(data);
-				byte[] backupMD5 = HashUtil.getMD5(writeTo);
-				if(data.length > 0 && tempMD5 != backupMD5) {
-					if(writeTo.exists()) {
-						writeTo.delete();
+			try {
+				if (!writeTo.exists() && (writeTo.length() == 0 || !overwrite)) {
+					if (!writeTo.exists()) {
+						writeTo.createNewFile();
 					}
-					writeTo.createNewFile();
-					Files.write(writeTo.toPath(), data, StandardOpenOption.WRITE);
+
+					URLConnection connection = url.openConnection();
+					connection.setConnectTimeout(connectionTimeout);
+					connection.setReadTimeout(readTimeout);
+					connection.setDoInput(true);
+					connection.setUseCaches(false);
+					Iterator<Entry<String, String>> it = requestProperties.entrySet().iterator();
+					while (it.hasNext()) {
+						Entry<String, String> next = it.next();
+						connection.setRequestProperty(next.getKey(), next.getValue());
+					}
+
+					InputStream inputStream = connection.getInputStream();
+					InputStreamReader reader = new InputStreamReader(inputStream);
+					StringBuilder sb = new StringBuilder();
+					int read;
+					while ((read = reader.read()) != -1) {
+						sb.append((char) read);
+					}
+
+					byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
+					byte[] tempMD5 = HashUtil.getMD5(data);
+					byte[] backupMD5 = HashUtil.getMD5(writeTo);
+					if (data.length > 0 && tempMD5 != backupMD5) {
+						if (writeTo.exists()) {
+							writeTo.delete();
+						}
+						writeTo.createNewFile();
+						Files.write(writeTo.toPath(), data, StandardOpenOption.WRITE);
+					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				} catch(IOException e){
+					e.printStackTrace();
+				}
 
 			if(writeTo.exists()) {
-				return this.createPathLoader(writeTo.toPath());
+				return this.createPathBuilder(writeTo.toPath());
 			}
 			return null;
 		}
 
-		private AbstractConfigurationLoader createPathLoader(Path path) {
+		private AbstractConfigurationLoader.Builder createPathBuilder(Path path) {
 			String fileName = path.getFileName().toString().toLowerCase(Locale.ROOT);
 			ConfigurationType type = null;
 			for (Entry<String, ConfigurationType> entry : EXTENSION_TO_TYPE.entrySet()) {
@@ -219,7 +230,7 @@ public class Configuration extends ConfigurationSection {
 			if (type == null) {
 				throw new UnknownFileTypeException(fileName);
 			}
-			return this.getBuilderFromType(type).path(path).build();
+			return this.getBuilderFromType(type).path(path);
 		}
 
 		private AbstractConfigurationLoader.Builder getBuilderFromType(ConfigurationType type) {
