@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 
 public class Configuration extends ConfigurationSection {
 
@@ -82,55 +81,13 @@ public class Configuration extends ConfigurationSection {
 	}
 
 	public static Configuration load(InputStream stream, ConfigurationType type) {
-		ConfigurationLoader<?> loader = null;
-		Configuration config = new Configuration();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-		Callable<BufferedReader> callable = () -> reader;
-		if(type == ConfigurationType.YAML) {
-			loader = YamlConfigurationLoader
-					.builder()
-					.source(callable)
-					.nodeStyle(NodeStyle.BLOCK)
-					.indent(2)
-					.build();
-		} else if(type == ConfigurationType.HOCON) {
-			loader = HoconConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		} else if(type == ConfigurationType.JSON) {
-			loader = JacksonConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		} else {
-			loader = XmlConfigurationLoader
-					.builder()
-					.source(callable)
-					.build();
-		}
-		boolean modified = modifyNode(config, loader);
-		try {
-			reader.close();
-			stream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(!modified) {
-			return null;
-		}
-
-		return config;
+		return new Configuration.Builder().stream(stream, type).build();
 	}
 
 	public static Configuration load(ConfigurationLoader<?> loader) {
-		Configuration config = new Configuration();
-		boolean modified = modifyNode(config, loader);
-		if(!modified) {
-			return null;
-		}
-		return config;
+		Configuration.Builder builder = new Configuration.Builder();
+		builder.loader = loader;
+		return builder.build();
 	}
 
 	private static boolean modifyNode(Configuration config, ConfigurationLoader<?> loader) {
@@ -147,12 +104,7 @@ public class Configuration extends ConfigurationSection {
 	public static class Builder {
 
 		private ConfigurationLoader<?> loader;
-		private ConfigurationType type;
-
-		public Builder type(ConfigurationType type) {
-			this.type = type;
-			return this;
-		}
+		private Runnable finalizingStep;
 
 		public Builder file(File file) {
 			return this.path(file.toPath());
@@ -170,6 +122,39 @@ public class Configuration extends ConfigurationSection {
 					connectionTimeout, readTimeout,
 					requestProperties, overwrite);
 			return this;
+		}
+
+		public Builder stream(InputStream stream, ConfigurationType type) {
+			this.loader = this.createStreamLoader(stream, type);
+			return this;
+		}
+
+		public Configuration build() {
+			Configuration config = new Configuration();
+			boolean modified = modifyNode(config, loader);
+			if (this.finalizingStep != null) {
+				this.finalizingStep.run();
+			}
+			if(!modified) {
+				return null;
+			}
+			return config;
+		}
+
+		private ConfigurationLoader<?> createStreamLoader(InputStream stream, ConfigurationType type) {
+			AbstractConfigurationLoader.Builder builder = this.getBuilderFromType(type);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			ConfigurationLoader<?> loader = builder.source(() -> reader).build();
+			//This isn't really elegant but the streams should be closed after the file is loaded in
+			this.finalizingStep = () -> {
+				try {
+					reader.close();
+					stream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			};
+			return loader;
 		}
 
 		private ConfigurationLoader<?> createURLLoader(URL url, File writeTo,
@@ -220,10 +205,6 @@ public class Configuration extends ConfigurationSection {
 				return this.createPathLoader(writeTo.toPath());
 			}
 			return null;
-		}
-
-		public Configuration build() {
-			return Configuration.load(this.loader);
 		}
 
 		private AbstractConfigurationLoader createPathLoader(Path path) {
