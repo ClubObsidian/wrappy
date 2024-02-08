@@ -50,7 +50,7 @@ public class Configuration extends ConfigurationSection {
 
 
 	public static Configuration load(File file) {
-		return Configuration.load(file.toPath());
+		return new Configuration.Builder().file(file).build();
 	}
 
 	public static Configuration load(Path path) {
@@ -152,6 +152,10 @@ public class Configuration extends ConfigurationSection {
 		public Builder type(ConfigurationType type) {
 			this.type = type;
 			return this;
+		}
+
+		public Builder file(File file) {
+			return this.path(file.toPath());
 		}
 
 		public Builder path(Path path) {
