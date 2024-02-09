@@ -31,7 +31,7 @@ public class TestConfigurateLoading {
     private static File testFile = new File("test.yml");
 
     @Test
-    public void loadConfigurate() {
+    public void loadConfigurateLoader() {
         ConfigurationLoader<?> loader = YamlConfigurationLoader
                 .builder()
                 .nodeStyle(NodeStyle.BLOCK)
@@ -40,5 +40,18 @@ public class TestConfigurateLoading {
                 .build();
         Configuration config = Configuration.load(loader);
         assertEquals("value", config.getString("key"));
+    }
+
+    @Test
+    public void loadConfigurateNode() {
+        ConfigurationLoader<?> loader = YamlConfigurationLoader
+                .builder()
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .path(testFile.toPath())
+                .build();
+        Configuration config = Configuration.load(loader);
+        Configuration copied = Configuration.load(config.getNode());
+        assertEquals("value", copied.getString("key"));
     }
 }

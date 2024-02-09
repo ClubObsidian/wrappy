@@ -18,6 +18,7 @@ package com.clubobsidian.wrappy;
 
 import com.clubobsidian.wrappy.util.HashUtil;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
@@ -105,6 +106,12 @@ public class Configuration extends ConfigurationSection {
         Configuration config = new Configuration();
         boolean modified = modifyNode(config, loader);
         return modified ? config : null;
+    }
+
+    public static Configuration load(ConfigurationNode node) {
+        Configuration config = new Configuration();
+        config.node = node;
+        return config;
     }
 
     private static boolean modifyNode(Configuration config, ConfigurationLoader<?> loader) {

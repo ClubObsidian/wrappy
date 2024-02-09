@@ -50,16 +50,15 @@ public class ConfigurationSection {
     protected ConfigurationLoader<?> loader;
 
     public boolean save() {
-        if (!this.loader.canSave()) {
-            return false;
+        if (this.loader != null && this.loader.canSave()) {
+            try {
+                this.loader.save(this.node);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            this.loader.save(this.node);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return false;
     }
 
     public ConfigurationNode getNode() {

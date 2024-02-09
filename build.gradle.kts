@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.clubobsidian"
-version = "4.0.0"
+version = "4.1.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(11))
