@@ -36,12 +36,12 @@ public class TestNonStringKeys {
 
     @Test
     public void testGetKeys() {
-        assertTrue(config.getKeys().size() > 0);
+        assertTrue(!config.getKeys().isEmpty());
     }
 
     @Test
     public void testSetKey() {
         config.set(123, 124);
-        assertTrue(124 == config.getInteger(123));
+        assertEquals(124, config.getInteger(123));
     }
 }

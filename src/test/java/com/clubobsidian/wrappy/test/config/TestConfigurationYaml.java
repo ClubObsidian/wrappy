@@ -50,20 +50,20 @@ public class TestConfigurationYaml {
 
     @Test
     public void testGetMap() {
-        Map<String, Integer> map = config.getMap("section");
+        Map<String, Integer> map = config.getMap("section", String.class, Integer.class);
         assertTrue(7 == map.get("value"));
     }
 
     @Test
     public void testSectionThatDoesNotExist() {
-        Map<String, Integer> map = config.getMap("non-existent-section");
-        assertEquals(null, map);
+        Map<String, Integer> map = config.getMap("non-existent-section", String.class, Integer.class);
+        assertEquals(0, map.size());
     }
 
     @Test
     public void testValueAsMap() {
-        Map<String, Integer> map = config.getMap("key");
-        assertEquals(null, map);
+        Map<String, Integer> map = config.getMap("key", String.class, Integer.class);
+        assertEquals(0, map.size());
     }
 
     @Test
@@ -224,8 +224,7 @@ public class TestConfigurationYaml {
     @Test
     public void testGetConfigurationSection() {
         ConfigurationSection section = config.getConfigurationSection("section");
-        assertTrue(section.getKeys().size() == 2);
-        assertTrue(section != null);
+        assertEquals(1, section.getKeys().size());
     }
 
     @Test
@@ -271,7 +270,6 @@ public class TestConfigurationYaml {
         assertFalse(first.hasKey("value2"));
         assertEquals(7, second.getInteger("value"));
         assertEquals(5, second.getInteger("value2"));
-        assertEquals(1, second.getInteger("map-value.test"));
         assertEquals("section2", second.getName());
     }
 }

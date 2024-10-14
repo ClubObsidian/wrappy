@@ -16,11 +16,7 @@
 
 package com.clubobsidian.wrappy;
 
-import com.clubobsidian.wrappy.helper.NodeHelper;
-import com.clubobsidian.wrappy.inject.ConfigurationInjector;
-import com.clubobsidian.wrappy.transformer.NodeTransformer;
 import com.clubobsidian.wrappy.util.NodeUtil;
-import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -33,11 +29,11 @@ import java.util.regex.Pattern;
 
 public class ConfigurationSection {
 
-    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap() {{
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{
         put(int.class, 0);
         put(Integer.class, 0);
-        put(long.class, 0l);
-        put(Long.class, 0l);
+        put(long.class, 0L);
+        put(Long.class, 0L);
         put(float.class, 0.0f);
         put(Float.class, 0.0f);
         put(boolean.class, false);
@@ -83,35 +79,31 @@ public class ConfigurationSection {
     }
 
     public <T> T get(Object path, Class<T> clazz, T defaultValue) {
-        return new NodeHelper<T>(this).get(path, clazz, defaultValue);
-    }
-
-    @Deprecated
-    public <K, V> Map<K, V> getMap(Object path) {
-        Object objMap = this.get(path);
-        if (objMap == null || !(objMap instanceof Map)) {
-            return null;
+        try {
+            ConfigurationNode parsedNode = NodeUtil.parsePath(this.node, path);
+            return parsedNode.isNull() ? defaultValue : parsedNode.get(clazz, defaultValue);
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
         }
-        return (Map<K, V>) objMap;
     }
 
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getMap(Object path, Class<K> keyType, Class<V> valueType) {
-        ConfigurationSection virtual = new ConfigurationSection();
-        virtual.node = BasicConfigurationNode.factory().createNode();
-        ConfigurationSection section = this.getConfigurationSection(path);
-        Collection<Object> keys = section.getKeys();
-        if (keys.size() == 0) {
-            return null;
+        Map<K, V> map = new LinkedHashMap<>();
+        ConfigurationNode parsedNode = NodeUtil.parsePath(this.node, path);
+        if (!parsedNode.isNull()) {
+            parsedNode.childrenMap().forEach((key1, value) -> {
+                try {
+                    K key = (K) (keyType.equals(String.class) ?
+                            String.valueOf(key1) :
+                            key1);
+                    map.put(key, value.get(valueType));
+                } catch (SerializationException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
-        Map<K, V> map = new HashMap<>();
-        for (Object key : keys) {
-            V mapValue = (V) section.get(key, valueType);
-            String uuid = UUID.randomUUID().toString();
-            virtual.set(uuid, key);
-            K mapKey = (K) virtual.get(uuid, keyType);
-            map.put(mapKey, mapValue);
-        }
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     public String getString(Object path) {
@@ -119,23 +111,23 @@ public class ConfigurationSection {
     }
 
     public int getInteger(Object path) {
-        return this.get(path, int.class);
+        return this.get(path, Integer.class);
     }
 
     public long getLong(Object path) {
-        return this.get(path, long.class);
+        return this.get(path, Long.class);
     }
 
     public float getFloat(Object path) {
-        return this.get(path, float.class);
+        return this.get(path, Float.class);
     }
 
     public boolean getBoolean(Object path) {
-        return this.get(path, boolean.class);
+        return this.get(path, Boolean.class);
     }
 
     public double getDouble(Object path) {
-        return this.get(path, double.class);
+        return this.get(path, Double.class);
     }
 
     public <T extends Enum> T getEnum(Object path, Class<T> enumClass) {
@@ -203,7 +195,16 @@ public class ConfigurationSection {
     }
 
     public <T> List<T> getList(Object path, Class<T> clazz) {
-        return new NodeHelper<T>(this).getList(path, clazz);
+        try {
+            ConfigurationNode parsedNode = NodeUtil.parsePath(this.node, path);
+            return Collections.unmodifiableList(
+                    parsedNode.isNull()
+                    ? new ArrayList<>()
+                    : Objects.requireNonNull(parsedNode.getList(clazz))
+            );
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ConfigurationSection createConfigurationSection(Object path) {
@@ -216,24 +217,26 @@ public class ConfigurationSection {
         return section;
     }
 
-    public ConfigurationSection combine(ConfigurationSection from) {
+    public void combine(ConfigurationSection from) {
         this.node.mergeFrom(from.node);
-        return this;
     }
 
     public boolean exists(Object path) {
         return !NodeUtil.parsePath(this.node, path).virtual();
     }
 
-    public void set(Object path, Object toSave) {
-        Object saveToPath = toSave;
-        if (saveToPath instanceof List) {
-            saveToPath = this.convertList(saveToPath);
-        } else if (this.isSpecial(saveToPath)) {
-            saveToPath = saveToPath.toString();
-        }
+    public <T> void set(Object path, Object toSave) {
         try {
-            NodeUtil.parsePath(this.node, path).set(saveToPath);
+            ConfigurationNode parsed = NodeUtil.parsePath(this.node, path);
+            if (toSave instanceof List) {
+                List<?> list = ((List<?>) toSave);
+                if (!list.isEmpty()) {
+                    Class<T> listClazz = (Class<T>) list.get(0).getClass();
+                    parsed.setList(listClazz, (List<T>) list);
+                }
+            } else {
+                parsed.set(toSave);
+            }
         } catch (SerializationException e) {
             e.printStackTrace();
         }
@@ -246,49 +249,10 @@ public class ConfigurationSection {
     }
 
     public boolean isEmpty() {
-        return this.getKeys().size() == 0;
+        return this.getKeys().isEmpty();
     }
 
     public boolean hasKey(Object key) {
         return this.getKeys().contains(key);
-    }
-
-    public void inject(Class<?> injectInto) {
-        this.inject(injectInto, new ArrayList<>());
-    }
-
-    public void inject(Class<?> injectInto, Collection<NodeTransformer> transformers) {
-        this.inject((Object) injectInto, transformers);
-    }
-
-    public void inject(Object injectInto) {
-        this.inject(injectInto, new ArrayList<>());
-    }
-
-    public void inject(Object injectInto, Collection<NodeTransformer> transformers) {
-        ConfigurationInjector injector = new ConfigurationInjector(this, injectInto);
-        injector.inject(transformers);
-    }
-
-    private List<?> convertList(Object obj) {
-        List<?> convertList = (List<?>) obj;
-        if (convertList.size() == 0 || !this.isSpecial(convertList.get(0))) {
-            return convertList;
-        }
-        List<String> newList = new ArrayList<>();
-        if (convertList.size() > 0) {
-            for (Object o : convertList) {
-                newList.add(o.toString());
-            }
-        }
-        return newList;
-    }
-
-    private boolean isSpecial(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        Class<?> clazz = obj.getClass();
-        return !clazz.isPrimitive() && !clazz.equals(String.class);
     }
 }
