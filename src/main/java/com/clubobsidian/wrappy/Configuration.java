@@ -46,7 +46,7 @@ public class Configuration extends ConfigurationSection {
         return load(file, new HashMap<>());
     }
 
-    public static Configuration load(File file, Map<Class, TypeSerializer> serializers) {
+    public static Configuration load(File file, Map<Class<?>, TypeSerializer<?>> serializers) {
         return new Configuration.Builder().file(file).serializer(serializers).build();
     }
 
@@ -54,7 +54,7 @@ public class Configuration extends ConfigurationSection {
         return load(path, new HashMap<>());
     }
 
-    public static Configuration load(Path path, Map<Class, TypeSerializer> serializers) {
+    public static Configuration load(Path path, Map<Class<?>, TypeSerializer<?>> serializers) {
         return new Configuration.Builder().path(path).serializer(serializers).build();
     }
 
@@ -84,7 +84,7 @@ public class Configuration extends ConfigurationSection {
     public static Configuration load(URL url, File writeTo,
                                      int connectionTimeout, int readTimeout,
                                      Map<String, String> requestProperties, boolean overwrite,
-                                     Map<Class, TypeSerializer> serializer) {
+                                     Map<Class<?>, TypeSerializer<?>> serializer) {
         return new Configuration.Builder()
                 .url(url, writeTo,
                         connectionTimeout, readTimeout,
@@ -98,7 +98,7 @@ public class Configuration extends ConfigurationSection {
 
     public static Configuration load(InputStream stream,
                                      ConfigurationType type,
-                                     Map<Class, TypeSerializer> serializer) {
+                                     Map<Class<?>, TypeSerializer<?>> serializer) {
         return new Configuration.Builder().stream(stream, type).serializer(serializer).build();
     }
 
@@ -134,22 +134,22 @@ public class Configuration extends ConfigurationSection {
                     put(".json", ConfigurationType.JSON);
                     put(".xml", ConfigurationType.XML);
                 }};
-        private static final Map<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder>> TYPE_TO_BUILDER =
+        private static final Map<ConfigurationType, Supplier<AbstractConfigurationLoader.Builder<?, ?>>> TYPE_TO_BUILDER =
                 new HashMap<>() {{
                     put(ConfigurationType.YAML,
                             () -> YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2));
                     put(ConfigurationType.HOCON,
-                            () -> HoconConfigurationLoader.builder());
+                            HoconConfigurationLoader::builder);
                     put(ConfigurationType.JSON,
-                            () -> JacksonConfigurationLoader.builder());
+                            JacksonConfigurationLoader::builder);
                     put(ConfigurationType.XML,
-                            () -> XmlConfigurationLoader.builder());
+                            XmlConfigurationLoader::builder);
                 }};
 
 
-        private AbstractConfigurationLoader.Builder configBuilder;
+        private AbstractConfigurationLoader.Builder<?, ?> configBuilder;
         private Runnable finalizingStep;
-        private final Map<Class, TypeSerializer> serializers = new LinkedHashMap<>();
+        private final Map<Class<?>, TypeSerializer<?>> serializers = new LinkedHashMap<>();
 
         public Builder file(File file) {
             return this.path(file.toPath());
@@ -174,22 +174,23 @@ public class Configuration extends ConfigurationSection {
             return this;
         }
 
-        public Builder serializer(Class clazz, TypeSerializer serializer) {
+        public Builder serializer(Class<?> clazz, TypeSerializer<?> serializer) {
             this.serializers.put(clazz, serializer);
             return this;
         }
 
-        public Builder serializer(Map<Class, TypeSerializer> serializers) {
+        public Builder serializer(Map<Class<?>, TypeSerializer<?>> serializers) {
             this.serializers.putAll(serializers);
             return this;
         }
 
+        @SuppressWarnings("unchecked")
         public Configuration build() {
             Configuration config = new Configuration();
             TypeSerializerCollection.Builder serializerBuilder = TypeSerializerCollection.defaults().childBuilder();
             //Apply serializers
-            for (Entry<Class, TypeSerializer> entry : this.serializers.entrySet()) {
-                serializerBuilder.register(entry.getKey(), entry.getValue());
+            for (Entry<Class<?>, TypeSerializer<?>> entry : this.serializers.entrySet()) {
+                serializerBuilder.register((Class) entry.getKey(), (TypeSerializer) entry.getValue());
             }
             this.configBuilder.defaultOptions(
                     this.configBuilder.defaultOptions()
@@ -204,24 +205,27 @@ public class Configuration extends ConfigurationSection {
             return modified ? config : null;
         }
 
-        private AbstractConfigurationLoader.Builder createStreamBuilder(InputStream stream, ConfigurationType type) {
+        private AbstractConfigurationLoader.Builder<?, ?> createStreamBuilder(InputStream stream, ConfigurationType type) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            AbstractConfigurationLoader.Builder builder = this.getBuilderFromType(type).source(() -> reader);
+            AbstractConfigurationLoader.Builder<?, ?> builder = this.getBuilderFromType(type).source(() -> reader);
             //This isn't really elegant but the streams should be closed after the file is loaded in
             this.finalizingStep = () -> {
                 try {
                     reader.close();
                     stream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             };
             return builder;
         }
 
-        private AbstractConfigurationLoader.Builder createURLLoader(URL url, File writeTo,
-                                                                    int connectionTimeout, int readTimeout,
-                                                                    Map<String, String> requestProperties, boolean overwrite) {
+        private AbstractConfigurationLoader.Builder<?, ?> createURLLoader(URL url,
+                                                                    File writeTo,
+                                                                    int connectionTimeout,
+                                                                    int readTimeout,
+                                                                    Map<String, String> requestProperties,
+                                                                    boolean overwrite) {
             try {
                 if (!writeTo.exists() && (writeTo.length() == 0 || !overwrite)) {
                     if (!writeTo.exists()) {
@@ -233,9 +237,7 @@ public class Configuration extends ConfigurationSection {
                     connection.setReadTimeout(readTimeout);
                     connection.setDoInput(true);
                     connection.setUseCaches(false);
-                    Iterator<Entry<String, String>> it = requestProperties.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Entry<String, String> next = it.next();
+                    for (Entry<String, String> next : requestProperties.entrySet()) {
                         connection.setRequestProperty(next.getKey(), next.getValue());
                     }
 
@@ -268,7 +270,7 @@ public class Configuration extends ConfigurationSection {
             return null;
         }
 
-        private AbstractConfigurationLoader.Builder createPathBuilder(Path path) {
+        private AbstractConfigurationLoader.Builder<?, ?> createPathBuilder(Path path) {
             String fileName = path.getFileName().toString().toLowerCase(Locale.ROOT);
             ConfigurationType type = null;
             for (Entry<String, ConfigurationType> entry : EXTENSION_TO_TYPE.entrySet()) {
@@ -283,8 +285,8 @@ public class Configuration extends ConfigurationSection {
             return this.getBuilderFromType(type).path(path);
         }
 
-        private AbstractConfigurationLoader.Builder getBuilderFromType(ConfigurationType type) {
-            Supplier<AbstractConfigurationLoader.Builder> supplier = TYPE_TO_BUILDER.get(type);
+        private AbstractConfigurationLoader.Builder<?, ?> getBuilderFromType(ConfigurationType type) {
+            Supplier<AbstractConfigurationLoader.Builder<?, ?>> supplier = TYPE_TO_BUILDER.get(type);
             return supplier == null ? null : supplier.get();
         }
     }
