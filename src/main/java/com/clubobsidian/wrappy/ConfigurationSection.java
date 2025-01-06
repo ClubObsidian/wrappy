@@ -238,6 +238,14 @@ public class ConfigurationSection {
             e.printStackTrace();
         }
     }
+    
+    public <T> void set(Object path, T toSave, Class<T> saveType) {
+        try {
+            NodeUtil.parsePath(this.node, path).set(saveType, toSave);
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public List<Object> getKeys() {
         List<Object> keys = new ArrayList<>();
